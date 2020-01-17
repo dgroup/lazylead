@@ -1,0 +1,31 @@
+assets:
+  rubygems.yml: dgroup/ossrh#rubygems.yml
+install: |
+  export GEM_HOME=~/.ruby
+  export GEM_PATH=$GEM_HOME:$GEM_PATH
+  sudo apt-get -y update
+  sudo apt-get -y install libcurl4-openssl-dev
+  sudo gem install pdd -v 0.20.5
+release:
+  script: |-
+    export RUBYOPT="-W0"
+    [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
+    sed -i "s/0\.0\.0/${tag}/g" lib/lazylead/version.rb
+    bundle install --no-color
+    rake --quiet
+    git add lib/lazylead/version.rb
+    git commit -m "version set to ${tag}"
+    gem build lazylead.gemspec
+    chmod 0600 ../rubygems.yml
+    gem push *.gem --config-file ../rubygems.yml
+architect:
+- dgroup
+merge:
+  script: |-
+    bundle install
+    rake --quiet
+    pdd -f /dev/null -v
+deploy:
+  script: |-
+    echo "There is nothing to deploy"
+    exit -1

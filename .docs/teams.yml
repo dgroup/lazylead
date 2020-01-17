@@ -1,0 +1,64 @@
+version: 1.0
+
+teams:
+
+  - id: 100
+    name:     BSS dream team
+    lead:
+      id:     boma1708
+      name:   Bob Marley
+      email:  bob.marley@dreamteam.com
+    cc:
+      - id:     bibo1
+        name:   Big Boss №1
+        email:  big.boss1@dreamteam.com
+      - id:     bibo2
+        name:   Big Boss №2
+        email:  big.boss2@dreamteam.com
+      - id:     bibo3
+        name:   Big Boss №3
+        email:  big.boss3@dreamteam.com
+    tasks:
+      - name:   Remind about tickets with obsolete/expiring due dates
+        cron:   "0 0 3 * * MON-FRI"
+        system: jira
+        action: o.d.l.j.a.DueDateInPastOrSeemsToExpireSoon
+      - name:   Print team capacity to newly raised tickets
+        cron:   "0 0/5 * * * *"
+        system: jira
+        action: o.g.l.j.a.PrintTeamCapacityToNewlyCreatedTickets
+    properties:
+      "Expiring(ed) due date: email subject":  "RE: [LL] Expired due dates"
+      "Missing time spent on completed tasks":  "5805450"
+
+  - id: 200
+    name:     OSS dream team
+    lead:
+      id:     juve1206
+      name:   Jules Verne
+      email:  jules.verne@dreamteam.com
+    cc:
+      - id:     bibo4
+        name:   Big Boss №4
+        email:  big.boss4@dreamteam.com
+      - id:     bibo5
+        name:   Big Boss №5
+        email:  big.boss5@dreamteam.com
+    tasks:
+      - name:   Remind about tickets with obsolete/expiring due dates
+        cron:   "0 0 3 * * MON-FRI"
+        system: jira
+        action: o.d.l.j.a.DueDateInPastOrSeemsToExpireSoon
+      - name:   Print team capacity to newly raised tickets
+        cron:   "0 0/5 * * * *"
+        system: jira
+        action: o.g.l.j.a.PrintTeamCapacityToNewlyCreatedTickets
+    properties:
+      "Team capacity: active issues":  "4983228"
+      "Team capacity: dashboard url":  "https://xxx.xxx.com/page?id=37706"
+
+# Global properties available for all tasks
+properties:
+  "JIRA_URL":   "https://xxx.xxx.com"
+  "JIRA_USER":  "lazylead"
+  "JIRA_PASS":  "ssap"

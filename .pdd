@@ -1,0 +1,5 @@
+--source=.
+--verbose
+--exclude target/**/*
+--exclude coverage/**/*
+--rule min-words:10

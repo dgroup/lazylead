@@ -1,0 +1,10 @@
+# do daily/weekly/monthly maintenance
+# min   hour    day     month   weekday command
+*/15    *       *       *       *       run-parts /etc/periodic/15min
+0       *       *       *       *       run-parts /etc/periodic/hourly
+0       2       *       *       *       run-parts /etc/periodic/daily
+0       3       *       *       6       run-parts /etc/periodic/weekly
+0       5       1       *       *       run-parts /etc/periodic/monthly
+*/5     *       *       *       *       jstack -l $(pgrep java) 2>&1 >> "/lazylead/dumps/thread-dump_$(date +\%Y-\%m-\%d-\%H).log"
+# Don't remove the empty line at the end of this file. It is required to run the cron job
+

@@ -1,0 +1,16 @@
+# @todo #/DEV Enable Travis CI as second CI server once the project
+#  became a public. This might be alternative for Circle CI (just in case)
+
+# @todo #/DEV Explain in readme.md how to use the project,
+#  add more instructions and generic guide.
+
+# @todo #/DEV There a lot of badges in readme which aren't enabled for now.
+#  Let's enable them. Examples you may find here:
+#  - https://github.com/dgroup/lazylead/blob/0.0.0-alpha-java/readme.md
+#  - https://github.com/dgroup/docker-unittests/blob/master/readme.md
+
+# @todo #/DEV Migrate to ruby 2.7.0. For now the project has 2.6.5.
+#  The project is new, it shouldn't be so expensive.
+
+# @todo #/DEV Enable DepShield badge for inspection. Example you may find
+#  [![DepShield Badge](https://depshield.sonatype.org/badges/dgroup/lazylead/depshield.svg)](https://depshield.github.io)

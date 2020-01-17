@@ -1,0 +1,37 @@
+version: '2.3'
+
+# @todo #/DEV Define openshift template
+services:
+
+  lazylead:
+    image: dgroup/lazylead:latest
+    container_name: lazylead
+    mem_limit: 256m
+    build:
+      context: ../
+      dockerfile: .docker/Dockerfile
+    environment:
+      # @todo #/DEV The logs(including GC) should be placed into STDOUT in order to store it externally with sharding etc...
+      JVM_OPTS: |-
+        -Xmx128m
+        -verbose:gc -Xlog:gc* -Xlog:gc:logs/gc.log
+        -Dsun.management.jmxremote.level=FINEST
+        -Dsun.management.jmxremote.handlers=java.util.logging.ConsoleHandler
+        -Djava.util.logging.ConsoleHandler.level=FINEST
+        -Dcom.sun.management.jmxremote.local.only=false
+        -Dcom.sun.management.jmxremote.ssl=false
+        -Dcom.sun.management.jmxremote.authenticate=false
+        -Dcom.sun.management.jmxremote.port=1282
+        -Dcom.sun.management.jmxremote.rmi.port=1282
+        -Dcom.sun.management.jmxremote.host=0.0.0.0
+        -Djava.rmi.server.hostname=0.0.0.0
+        -XX:HeapDumpPath=/lazylead/dumps/
+        -XX:+HeapDumpOnOutOfMemoryError
+        -XX:-UseGCOverheadLimit
+    ports:
+      - 82:8080
+      - 1082:1082 # remote debug
+      - 1282:1282 # JMX connection for jvisualvm debug
+    volumes:
+      - .local/dumps:/lazylead/dumps
+      - .local/logs:/lazylead/logs
