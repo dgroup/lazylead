@@ -24,6 +24,7 @@ Metrics/BlockLength:
     - "*.gemspec"
     - "Rakefile"
     - "bin/lazylead"
+    - "test/lazylead/cli/start_test.rb"
 
 Metrics/ClassLength:
   Exclude:

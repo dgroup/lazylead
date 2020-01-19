@@ -28,6 +28,14 @@ require "date"
 require "rdoc"
 require "rake/clean"
 
+# @todo #/DEV Investigate the possibility of using migrations from active_record
+#  - Rake tasks https://gist.github.com/schickling/6762581
+#  - Gem for rake tasks https://github.com/thuss/standalone-migrations
+#  - basic example of active_record https://gist.github.com/unnitallman/944011
+#  For now standalone-migrations looks complex and needs
+#  - complex files structure
+#  - manual specification of version(?) thus no auto-apply available
+
 def name
   @name ||= File.basename(Dir["*.gemspec"].first, ".*")
 end
