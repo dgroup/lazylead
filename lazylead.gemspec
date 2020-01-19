@@ -49,6 +49,7 @@ Gem::Specification.new do |s|
   s.test_files = s.files.grep(%r{^(test|features)/})
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = ["readme.md", "license.txt"]
+  s.add_runtime_dependency "activerecord", ">=6.0"
   s.add_runtime_dependency "backtrace", ">=0.3"
   s.add_runtime_dependency "concurrent-ruby", "1.1.5"
   s.add_runtime_dependency "diffy", "3.3.0"

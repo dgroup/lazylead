@@ -22,44 +22,22 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "time"
-require "openssl"
-require "backtrace"
+require "active_record"
 
 # The particular task within the team
 module Lazylead
-  # The particular task within the team
-  class Task
-    def initialize(name, cron, system, action, db)
-      @name = name
-      @cron = cron
-      @system = system
-      @action = action
-      @db = db
+  module Model
+    class Task < ActiveRecord::Base
     end
-
-    def remove
-      puts "Remove from database"
+    class Teams < ActiveRecord::Base
     end
-
-    def start
-      puts "Task #{@name} started"
+    class Person < ActiveRecord::Base
     end
-
-    def stop
-      puts "Task #{@name} stopped"
+    class CC < ActiveRecord::Base
     end
-
-    def load
-      puts "Load from database"
+    class System < ActiveRecord::Base
     end
-
-    def save(list)
-      puts "Save to database #{list}"
+    class Properties < ActiveRecord::Base
     end
-  end
-
-  def to_s
-    "#{@cron} #{@system} #{@name} #{@action}"
   end
 end

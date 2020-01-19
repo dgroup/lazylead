@@ -22,4 +22,4 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-insert into system(name) values('https://jira.spring.io')
+insert into systems(name) values('https://jira.spring.io')

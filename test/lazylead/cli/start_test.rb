@@ -20,9 +20,9 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../../test"
 require_relative "../../sqlite_test"
 require_relative "../../../lib/lazylead/cli/start"
+require_relative "../../../lib/lazylead/model"
 
 module Lazylead
   module CLI
@@ -32,15 +32,16 @@ module Lazylead
         Lazylead::CLI::Start.new(log).run(
           home: ".",
           sqlite: file,
-          vcs4sql: "upgrades/sqlite"
+          vcs4sql: "upgrades/sqlite",
+          testdata: true
         )
         assert_tables(
           {
-            person: %w[id name email],
-            team: %w[id name lead properties],
+            persons: %w[id name email],
+            teams: %w[id name lead properties],
             cc: %w[id team_id person_id],
-            system: %w[id name properties],
-            task: %w[id name cron system action team_id description],
+            systems: %w[id name properties],
+            tasks: %w[id name cron system action team_id description],
             properties: %w[key value type]
           },
           file
@@ -48,11 +49,14 @@ module Lazylead
         assert_fk(
           %w[cc team_id team id],
           %w[cc person_id person id],
-          %w[task system system id],
-          %w[task team_id team id],
-          %w[team lead person id],
+          %w[tasks system system id],
+          %w[tasks team_id team id],
+          %w[teams lead person id],
           file
         )
+        assert_equal "https://jira.spring.io",
+                     Lazylead::Model::System.find(1).name,
+                     "Required system record wasn't found in the database"
       end
     end
   end

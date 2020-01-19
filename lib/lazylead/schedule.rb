@@ -23,7 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "json"
-require_relative "task"
+require_relative "model"
 
 # The tasks schedule
 #

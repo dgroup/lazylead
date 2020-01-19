@@ -23,14 +23,14 @@
  */
 --  @todo #/DEV Add description to each column using ANSI column command.
 --   Potentially switch to h2 is required.
-create table if not exists person
+create table if not exists persons
 (
     id    text primary key,
     name  text not null,
     email text not null
 );
 -- @todo #/DEV team.properties - column should be a json map(key,value).
-create table if not exists team
+create table if not exists teams
 (
     id         integer primary key autoincrement,
     name       text not null,
@@ -47,14 +47,14 @@ create table if not exists cc
     foreign key (person_id) references person (id) on delete cascade
 );
 -- @todo #/DEV system.properties - column should be a json map(key,value)
-create table if not exists system
+create table if not exists systems
 (
     id         integer primary key autoincrement,
     name       text not null,
     properties text
 );
 -- @todo #/DEV task.cron - add regexp verification of cron expression.
-create table if not exists task
+create table if not exists tasks
 (
     id          integer primary key autoincrement,
     name        text not null,
@@ -65,6 +65,7 @@ create table if not exists task
     description text,
     foreign key (system) references system (id) on delete cascade,
     foreign key (team_id) references team (id) on delete cascade
+-- @todo #/DEV task.enabled - add a flag which shows should we schedule task or not.
 );
 -- @todo #/DEV properties.type - add check function in order to restrict the supported types
 create table if not exists properties

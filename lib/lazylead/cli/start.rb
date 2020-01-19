@@ -34,10 +34,25 @@ module Lazylead
       #  For now vcs4sql wasn't released yet.
       #  Also, the vcs4sql should be removed from ./Gemfile.
       def run(opts)
-        db = File.expand_path(opts[:home]) + "/" + opts[:sqlite]
-        vcs = File.expand_path(opts[:home]) + "/" + opts[:vcs4sql]
-        Vcs4sql::Sqlite::Migration.new(db).upgrade vcs, opts[:testdata]
+        @opts = opts
+        apply_vcs_migration
+        enable_active_record
         # @todo #/DEV Try to use Rufus-scheduler in order to define tasks
+      end
+
+      private
+
+      def apply_vcs_migration
+        @db = File.expand_path(@opts[:home]) + "/" + @opts[:sqlite]
+        vcs = File.expand_path(@opts[:home]) + "/" + @opts[:vcs4sql]
+        Vcs4sql::Sqlite::Migration.new(@db).upgrade vcs, @opts[:testdata]
+      end
+
+      def enable_active_record
+        ActiveRecord::Base.establish_connection(
+          adapter: "sqlite3",
+          database: @db
+        )
       end
     end
   end
