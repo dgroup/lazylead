@@ -29,7 +29,7 @@ create table if not exists person
     name  text not null,
     email text not null
 );
--- @todo #/DEV team.properties - column should be a json map(key,value)
+-- @todo #/DEV team.properties - column should be a json map(key,value).
 create table if not exists team
 (
     id         integer primary key autoincrement,

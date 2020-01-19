@@ -1,6 +1,6 @@
 version: '2.3'
 
-# @todo #/DEV Define openshift template
+# @todo #/DEV Define openshift template in order to deploy into Openshift/Kubernetes/etcN environment.
 services:
 
   lazylead:

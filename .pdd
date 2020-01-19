@@ -2,4 +2,4 @@
 --verbose
 --exclude target/**/*
 --exclude coverage/**/*
---rule min-words:10
+--rule min-words:5
