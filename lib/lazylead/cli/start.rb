@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -22,39 +20,25 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../../lazylead/schedule"
-require "vcs4sql"
+require_relative "../schedule"
+require_relative "../../../../vcs4sql/lib/vcs4sql/sqlite/migration"
 
-# Show particular task details
 module Lazylead
-  # Show particular task details
-  class Start
-    def initialize(conn:, log: FakeLog::NULL)
-      @conn = conn
-      @log = log
-    end
-
-    def run(args: [])
-      opts = Slop.parse(args, help: true, suppress_errors: true) do |o|
-        o.banner = "Usage: lazylead start [options]"
-        o.string "--detach",
-                 "Detached mode: Schedule all tasks in the background.",
-                 require: true, default: true
-        o.bool "--help", "Print instructions"
+  module CLI
+    class Start
+      def initialize(log)
+        @log = log
       end
-      Vcs4sql::Migration.new(@conn).upgrade
-      to_remove(opts)
-    end
 
-    # @todo #/DEV Remove this method as its for debug purpose only for quick
-    #  development/debug
-    def to_remove(opts)
-      @conn.query("select * from changelog").each { |r| @log.debug(r) }
-      puts opts
-      # tasks = Lazylead::Tasks.new(@conn)
-      # tasks.load
-      # schedule = Lazylead::Schedule.new
-      # puts "#{schedule.schedule(tasks)}"
+      # @todo #/DEV Use vcs4sql from rubygems.org instead of local build.
+      #  For now vcs4sql wasn't released yet.
+      #  Also, the vcs4sql should be removed from ./Gemfile.
+      def run(opts)
+        db = File.expand_path(opts[:home]) + "/" + opts[:sqlite]
+        vcs = File.expand_path(opts[:home]) + "/" + opts[:vcs4sql]
+        Vcs4sql::Sqlite::Migration.new(db).upgrade vcs, opts[:testdata]
+        # @todo #/DEV Try to use Rufus-scheduler in order to define tasks
+      end
     end
   end
 end

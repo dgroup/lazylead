@@ -26,14 +26,14 @@
 # to the underlying operating system and is not buffered internally.
 STDOUT.sync = true
 
-# Application start time
-start = Time.now
-
 require "slop"
 require "sqlite3"
 require "rainbow"
 require "backtrace"
 require "memory_profiler"
+require_relative "../lib/lazylead/allocated"
+require_relative "../lib/lazylead/fake_log"
+require_relative "../lib/lazylead/cli/start"
 
 Thread.current.name = "main"
 Encoding.default_external = Encoding::UTF_8
@@ -48,32 +48,8 @@ Encoding.default_internal = Encoding::UTF_8
 #  For now FakeLog is used.
 log = Lazylead::FakeLog.new
 
-# @todo #/DEV Move ll database file configuration to default arguments
-#  which can be overridden using CLI/EVN arguments.
-conn = SQLite3::Database.new("../lazylead.db")
-conn.results_as_hash = true
-
 opts = Slop.parse(ARGV, strict: false, suppress_errors: true) do |o|
-  o.banner = "Usage: lazylead [options] command [arguments]
-Available commands:
-  #{Rainbow('start').green}
-    Start all scheduled tasks
-  #{Rainbow('stop').green}
-    Stop all scheduled tasks
-  #{Rainbow('run').green} command [options]
-    Run the task once
-  #{Rainbow('teams').green} [options]
-    Show all registered teams
-  #{Rainbow('team').green} [ID...] [options]
-    Show team details with scheduled tasks
-  #{Rainbow('systems').green} [options]
-    Show all defined ticketing systems
-  #{Rainbow('system').green} [ID...] [options]
-    Show ticketing system details
-  #{Rainbow('tasks').green} [options]
-    Show all scheduled tasks
-  #{Rainbow('task').green} [ID...] [options]
-    Show particular task details
+  o.banner = "Usage: lazylead [options]
 Available options:"
   o.bool "-h", "--help", "Show these instructions"
   o.bool "--trace", "Show full stack trace in case of a problem"
@@ -86,70 +62,40 @@ Available options:"
   o.on "--no-colors", "Disable colors in the output" do
     Rainbow.enabled = false
   end
+  o.string "--home",
+           "Home directory (default: #{Dir.pwd})",
+           default: ENV["LL_HOME"].nil? ? Dir.pwd : ENV["LL_HOME"]
+  o.string "--sqlite",
+           "SQLite database file name",
+           default: "lazylead.db"
+  o.string "--vcs4sql",
+           "Home directory with database version control(vcs) scripts",
+           default: "upgrades/sqlite"
+  o.bool "--testdata",
+         "Apply the database vcs test data with migration scripts",
+         default: false
   o.on "--verbose", "Enable extra logging information" do
     log.verbose
   end
   o.on "-v", "--version", "Show current version" do
-    log.debug "v0.0.0"
+    log.debug Lazylead::VERSION
     exit
   end
 end
-
-commands = opts.arguments.reject { |a| a.start_with?("-") }
-command = commands[0]
-if command.nil?
-  raise "A command required, try --help" unless opts.help?
-
-  log.debug(opts.to_s)
-  exit
-end
-args = opts.arguments
-args << "--help" if opts.help?
-
-log.debug("Memory footprint at start is #{Lazylead::Allocated}")
-
+log.debug("Memory footprint at start is #{Lazylead::Allocated.new}")
 cmd = lambda do
-  case command
-  when "start"
-    require_relative "../lib/lazylead/command/start"
-    Lazylead::Start.new(conn: conn, log: log).run(args)
-  when "ps"
-    log.debug "ps"
-  when "stop"
-    log.debug("stop")
-  when "run"
-    log.debug("run")
-  when "teams"
-    log.debug("team")
-  when "tasks"
-    log.debug("tasks")
-  when "task"
-    log.debug("tasks")
-  when "systems"
-    log.debug("systems")
-  when "system"
-    log.debug("system")
-  else
-    raise "Command '#{command}' is not supported"
-  end
+  Lazylead::CLI::Start.new(log).run(opts.to_h)
   return 0
 rescue StandardError => e
   log.error("#{e.message} (#{e.class.name})")
   log.error(Backtrace.new(e)) if opts["trace"]
   return -1
 end
-
 code = 0
 if opts["memory-dump"]
   MemoryProfiler.report(top: 20) { code = cmd.call }.pretty_print
 else
   code = cmd.call
 end
-log.debug("Memory footprint at the end is #{Lazylead::Allocated}")
-
-if code.zero?
-  log.debug("Successfully finished in #{Lazylead::Age.new(start)}")
-else
-  log.debug("Failed in #{Lazylead::Age.new(start)}")
-  exit(code)
-end
+log.debug("Memory footprint at the end is #{Lazylead::Allocated.new}")
+exit(code) unless code.zero?

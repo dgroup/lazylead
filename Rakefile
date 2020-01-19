@@ -88,3 +88,7 @@ task :copyright do
     --include \"Rakefile\" \
     ."
 end
+
+task :clean do
+  Dir.glob("test/resources/**/*.db").each { |f| File.delete(f) }
+end

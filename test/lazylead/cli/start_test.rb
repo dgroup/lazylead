@@ -3,7 +3,7 @@
 # Copyright (c) 2019-2020 Yurii Dubinka
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"),
+# of this software and associated documentation files (the "Software"],
 # to deal in the Software without restriction, including without limitation
 # the rights to use, copy, modify, merge, publish, distribute, sublicense,
 # and/or sell copies of the Software, and to permit persons to whom
@@ -20,29 +20,40 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../test"
-require_relative "../../lib/lazylead/allocated"
+require_relative "../../test"
+require_relative "../../sqlite_test"
+require_relative "../../../lib/lazylead/cli/start"
 
 module Lazylead
-  class AllocatedTest < Lazylead::Test
-    test "bytes transformed to string has necessary labels (B, KB, MB, etc)" do
-      {
-        "1B": 1,
-        "1KB": 1024,
-        "1MB": 1024 * 1024,
-        "1GB": 1024 * 1024 * 1024,
-        "1024GB": 1024 * 1024 * 1024 * 1024
-      }.each do |label, b|
-        assert_equal(label.to_s, Lazylead::Allocated.new(bytes: b).to_s)
+  module CLI
+    class StartTest < Lazylead::SqliteTest
+      test "LL database structure installed successfully" do
+        file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
+        Lazylead::CLI::Start.new(log).run(
+          home: ".",
+          sqlite: file,
+          vcs4sql: "upgrades/sqlite"
+        )
+        assert_tables(
+          {
+            person: %w[id name email],
+            team: %w[id name lead properties],
+            cc: %w[id team_id person_id],
+            system: %w[id name properties],
+            task: %w[id name cron system action team_id description],
+            properties: %w[key value type]
+          },
+          file
+        )
+        assert_fk(
+          %w[cc team_id team id],
+          %w[cc person_id person id],
+          %w[task system system id],
+          %w[task team_id team id],
+          %w[team lead person id],
+          file
+        )
       end
-    end
-
-    test "default ctor evaluates a memory" do
-      greater_then(Lazylead::Allocated.new.to_i, 0)
-    end
-
-    test "pass a nil (null) value" do
-      assert_equal("?", Lazylead::Allocated.new(bytes: nil).to_s)
     end
   end
 end

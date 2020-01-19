@@ -5,3 +5,5 @@ Gemfile.lock
 .bundle/
 .DS_Store
 rdoc/
+*.db
+*.lock

@@ -37,11 +37,17 @@ require "minitest/reporters"
 require "concurrent"
 require "timeout"
 require "active_support"
+require_relative "../lib/lazylead/fake_log"
 
 STDOUT.sync = true
 Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
 
 module Lazylead
+  # A basic lazylead test based on Minitest.
+  # By default it defines
+  #  - the timeout for each test
+  #  - additional generic asserts
+  #  - test logger
   class Test < ActiveSupport::TestCase
     include Minitest::Hooks
 
@@ -56,6 +62,17 @@ module Lazylead
 
     def greater_then(fst, sec)
       assert fst > sec, "'#{fst}' is expected to be greater than '#{sec}'"
+    end
+
+    def log
+      return @flog if defined? @flog
+
+      @flog = FakeLog.new
+    end
+
+    # Gives file name without extension (.rb)
+    def no_ext(path)
+      File.basename(path, ".rb")
     end
   end
 end

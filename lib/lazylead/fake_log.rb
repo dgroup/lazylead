@@ -23,21 +23,21 @@
 module Lazylead
   class FakeLog
     def debug(msg)
-      log "DEBUG", msg
+      log("DEBUG", msg)
     end
 
     def error(msg)
-      log "ERROR", msg
+      log("ERROR", msg)
     end
 
     def verbose
       @verbose = true
     end
-  end
 
-  private
+    private
 
-  def log(level, msg)
-    puts "#{Time.now} #{level} #{msg}"
+    def log(level, msg)
+      puts "#{Time.now} #{level} #{msg}"
+    end
   end
 end

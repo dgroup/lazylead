@@ -27,10 +27,6 @@ require "English"
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-# @todo #/DEV Use vcs4sql from rubygems.org instead of local build.
-#  For now vcs4sql wasn't released yet.
-embedded_gemspec = Gem::Specification::load("/Users/yurii.dubinka/projects/vcs4sql/vcs4sql.gemspec")
-
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.rubygems_version = "2.2"
@@ -48,7 +44,7 @@ Gem::Specification.new do |s|
   Stay in touch with the community in Telegram: https://t.me/lazylead
   Follow us on Twitter: https://twitter.com/lazylead
   If you have any issues, report to our GitHub repo: https://github.com/dgroup/lazylead"
-  s.files = `git ls-files`.split($RS) + embedded_gemspec.files
+  s.files = `git ls-files`.split($RS)
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.test_files = s.files.grep(%r{^(test|features)/})
   s.rdoc_options = ["--charset=UTF-8"]
@@ -75,8 +71,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "total", ">=0.3"
   s.add_runtime_dependency "typhoeus", "1.3.1"
   s.add_runtime_dependency "usagewatch_ext", "0.2.1"
-  s.add_runtime_dependency "zache", ">=0.12"
   s.add_runtime_dependency "vcs4sql"
+  s.add_runtime_dependency "zache", ">=0.12"
   s.add_development_dependency "codecov", "0.1.14"
   s.add_development_dependency "cucumber", "3.1.2"
   s.add_development_dependency "guard", "2.15.0"
