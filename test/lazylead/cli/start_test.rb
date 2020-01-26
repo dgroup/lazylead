@@ -22,41 +22,44 @@
 
 require_relative "../../sqlite_test"
 require_relative "../../../lib/lazylead/cli/start"
-require_relative "../../../lib/lazylead/model"
+require_relative "../../../lib/lazylead/orm/model"
 
 module Lazylead
   module CLI
     class StartTest < Lazylead::SqliteTest
       test "LL database structure installed successfully" do
         file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-        Lazylead::CLI::Start.new(log).run(
-          home: ".",
-          sqlite: file,
-          vcs4sql: "upgrades/sqlite",
-          testdata: true
-        )
+        stdout = capture_io do
+          Lazylead::CLI::Start.new(log).run(
+            home: ".",
+            sqlite: file,
+            vcs4sql: "upgrades/sqlite",
+            testdata: true
+          )
+        end
         assert_tables(
           {
             persons: %w[id name email],
             teams: %w[id name lead properties],
             cc: %w[id team_id person_id],
             systems: %w[id name properties],
-            tasks: %w[id name cron system action team_id description],
+            tasks: %w[id name cron system action team_id description enabled],
             properties: %w[key value type]
           },
           file
         )
-        assert_fk(
-          %w[cc team_id team id],
-          %w[cc person_id person id],
-          %w[tasks system system id],
-          %w[tasks team_id team id],
-          %w[teams lead person id],
-          file
-        )
+        assert_fk %w[cc team_id team id],
+                  %w[cc person_id person id],
+                  %w[tasks system system id],
+                  %w[tasks team_id team id],
+                  %w[teams lead person id],
+                  file
         assert_equal "https://jira.spring.io",
-                     Lazylead::Model::System.find(1).name,
+                     Lazylead::ORM::System.find(1).name,
                      "Required system record wasn't found in the database"
+        assert_match "Lazylead::Task::Echo id='1', name='BA squad', lead='4'",
+                     stdout.join,
+                     "App stdout has required record about executed task"
       end
     end
   end

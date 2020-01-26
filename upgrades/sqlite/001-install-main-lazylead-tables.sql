@@ -21,11 +21,17 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
+-- @todo #/DEV Add indexes to all columns which have foreign keys in order to
+--  avoid full table scans.
+
 --  @todo #/DEV Add description to each column using ANSI column command.
 --   Potentially switch to h2 is required.
+
+-- @todo #/DEV Add index by name to table persons in order to avoid full table
+--  scans during access by name.
 create table if not exists persons
 (
-    id    text primary key,
+    id    integer primary key autoincrement,
     name  text not null,
     email text not null
 );
@@ -33,16 +39,16 @@ create table if not exists persons
 create table if not exists teams
 (
     id         integer primary key autoincrement,
-    name       text not null,
-    lead       text,
+    name       text    not null,
+    lead       integer not null,
     properties text,
     foreign key (lead) references person (id) on delete cascade
 );
 create table if not exists cc
 (
     id        integer primary key autoincrement,
-    team_id   integer,
-    person_id text,
+    team_id   integer not null,
+    person_id integer not null,
     foreign key (team_id) references team (id) on delete cascade,
     foreign key (person_id) references person (id) on delete cascade
 );
@@ -57,15 +63,16 @@ create table if not exists systems
 create table if not exists tasks
 (
     id          integer primary key autoincrement,
-    name        text not null,
-    cron        text not null,
-    system      integer,
-    action      text not null,
-    team_id     integer,
+    name        text    not null,
+    cron        text    not null,
+    system      integer not null,
+    action      text    not null,
+    team_id     integer not null,
     description text,
+    enabled     text,
+-- @todo #/DEV tasks.enabled - add index for future search. Research is required.
     foreign key (system) references system (id) on delete cascade,
     foreign key (team_id) references team (id) on delete cascade
--- @todo #/DEV task.enabled - add a flag which shows should we schedule task or not.
 );
 -- @todo #/DEV properties.type - add check function in order to restrict the supported types
 create table if not exists properties

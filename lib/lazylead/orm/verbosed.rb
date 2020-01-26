@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -22,22 +20,12 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "active_record"
+module Lazylead::Verbosed
+  def to_s
+    attributes.map { |k, v| "#{k}='#{v}'" }.join(", ")
+  end
 
-# The particular task within the team
-module Lazylead
-  module Model
-    class Task < ActiveRecord::Base
-    end
-    class Teams < ActiveRecord::Base
-    end
-    class Person < ActiveRecord::Base
-    end
-    class CC < ActiveRecord::Base
-    end
-    class System < ActiveRecord::Base
-    end
-    class Properties < ActiveRecord::Base
-    end
+  def inspect
+    to_s
   end
 end

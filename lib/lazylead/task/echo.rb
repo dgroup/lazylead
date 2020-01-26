@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -22,37 +20,12 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "json"
-require_relative "orm/model"
-
-# The tasks schedule
-#
-# Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-# Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-# License:: MIT
 module Lazylead
-  class Schedule
-    def initialize
-      @data = {
-        is_claimed: true,
-        rating: 3.5,
-        mobile_url: "http://m.yelp.com/biz/rudys-barbershop-seattle"
-      }
-    end
-
-    def schedule(tasks)
-      raise "tasks can\"t be a null" unless tasks.nil?
-
-      result = JSON.pretty_generate(@data)
-      result
-    end
-
-    def ps
-      @data.to_s
-    end
-
-    def stop
-      "Stopped."
+  module Task
+    class Echo
+      def run(team)
+        puts "#{self.class} #{team}"
+      end
     end
   end
 end

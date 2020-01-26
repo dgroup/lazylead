@@ -27,6 +27,8 @@ require "English"
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
+# @todo #/DEV Use single approach for defining versions
+#  in case of '~>xxx' vs '>=xxx'
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.rubygems_version = "2.2"
@@ -61,6 +63,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "mimic", "0.4.4"
   s.add_runtime_dependency "openssl", "2.1.2"
   s.add_runtime_dependency "rainbow", "3.0.0"
+  s.add_runtime_dependency "require_all", ">=3.0.0"
   s.add_runtime_dependency "rufus-scheduler", ">=3.6.0"
   s.add_runtime_dependency "semantic", "1.6.1"
   s.add_runtime_dependency "sinatra", "2.0.5"

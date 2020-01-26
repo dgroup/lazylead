@@ -22,37 +22,39 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "json"
-require_relative "orm/model"
+require "active_record"
+require "require_all"
+require_rel "../task"
+require_rel "verbosed"
 
-# The tasks schedule
-#
-# Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-# Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-# License:: MIT
+# @todo #/DEV Setup the relations between classes has_many, has_one, etc, more
+#  here https://www.rubydoc.info/gems/activerecord/5.0.0.1.
 module Lazylead
-  class Schedule
-    def initialize
-      @data = {
-        is_claimed: true,
-        rating: 3.5,
-        mobile_url: "http://m.yelp.com/biz/rudys-barbershop-seattle"
-      }
+  # @todo #/DEV Add validations to the columns. More details described here
+  #  https://www.rubydoc.info/gems/activerecord/5.0.0.1.
+  module ORM
+    class Task < ActiveRecord::Base
+      include Verbosed
+      belongs_to :team, foreign_key: "team_id"
+
+      def exec
+        action.constantize.new.run team
+      end
     end
-
-    def schedule(tasks)
-      raise "tasks can\"t be a null" unless tasks.nil?
-
-      result = JSON.pretty_generate(@data)
-      result
+    class Team < ActiveRecord::Base
+      include Verbosed
     end
-
-    def ps
-      @data.to_s
+    class Person < ActiveRecord::Base
+      include Verbosed
     end
-
-    def stop
-      "Stopped."
+    class CC < ActiveRecord::Base
+      include Verbosed
+    end
+    class System < ActiveRecord::Base
+      include Verbosed
+    end
+    class Properties < ActiveRecord::Base
+      include Verbosed
     end
   end
 end
