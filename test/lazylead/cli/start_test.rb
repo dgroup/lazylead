@@ -26,17 +26,19 @@ require_relative "../../../lib/lazylead/orm/model"
 
 module Lazylead
   module CLI
+    # @todo #/DEV Move Thread.new to separate method with
+    #  - timeout support;
+    #  - reporting in case of errors.
+    #  It allow to avoid the code duplication  where we need the threads.
+    #  Also, remove the 'Thread.new' statement from all current/future tests.
     class StartTest < Lazylead::SqliteTest
       test "LL database structure installed successfully" do
         file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-        stdout = capture_io do
-          Lazylead::CLI::Start.new(log).run(
-            home: ".",
-            sqlite: file,
-            vcs4sql: "upgrades/sqlite",
-            testdata: true
-          )
-        end
+        Lazylead::CLI::Start.new(log, Lazylead::Schedule.new(cling: false)).run(
+          home: ".",
+          sqlite: file,
+          vcs4sql: "upgrades/sqlite"
+        )
         assert_tables(
           {
             persons: %w[id name email],
@@ -54,12 +56,31 @@ module Lazylead
                   %w[tasks team_id team id],
                   %w[teams lead person id],
                   file
+      end
+
+      test "activesupport is activated for access to domain entities" do
+        file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
+        Lazylead::CLI::Start.new(log, Lazylead::Schedule.new(cling: false)).run(
+          home: ".",
+          sqlite: file,
+          vcs4sql: "upgrades/sqlite",
+          testdata: true
+        )
         assert_equal "https://jira.spring.io",
                      Lazylead::ORM::System.find(1).name,
                      "Required system record wasn't found in the database"
-        assert_match "Lazylead::Task::Echo id='1', name='BA squad', lead='4'",
-                     stdout.join,
-                     "App stdout has required record about executed task"
+      end
+
+      # @todo #10/DEV Think about using "timecop" >v0.9.1 gem in order to make
+      #  E2E application skeleton https://stackoverflow.com/questions/59955571.
+      #  The depedency for gemspec should be after *thin* in .gemspec
+      #  ..
+      #  s.add_runtime_dependency "thin", "1.7.2"
+      #  s.add_runtime_dependency "timecop", "0.9.1"
+      #  ..
+      #  More https://github.com/travisjeffery/timecop
+      test "scheduled task was triggered successfully" do
+        assert true, "Not implemented yet"
       end
     end
   end

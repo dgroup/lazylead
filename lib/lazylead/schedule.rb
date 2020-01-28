@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "json"
+require "rufus-scheduler"
 require_relative "orm/model"
 
 # The tasks schedule
@@ -32,27 +33,35 @@ require_relative "orm/model"
 # License:: MIT
 module Lazylead
   class Schedule
-    def initialize
-      @data = {
-        is_claimed: true,
-        rating: 3.5,
-        mobile_url: "http://m.yelp.com/biz/rudys-barbershop-seattle"
-      }
+    def initialize(log: FakeLog.new, trigger: Rufus::Scheduler.new, cling: true)
+      @log = log
+      @trigger = trigger
+      @cling = cling
     end
 
-    def schedule(tasks)
-      raise "tasks can\"t be a null" unless tasks.nil?
+    # @todo #/DEV error code is required for reach 'raise' statement within the
+    #  application.
+    def register(task)
+      raise "task can't be a null" if task.nil?
 
-      result = JSON.pretty_generate(@data)
-      result
+      @trigger.cron task.cron do
+        task.exec
+      end
     end
 
+    # @todo #/DEV inspect the current execution status. This method should
+    #  support several format for output, by default is `json`.
     def ps
-      @data.to_s
     end
 
+    def join
+      @trigger.join if @cling
+    end
+
+    # @todo #/DEV stop the execution of current jobs (shutdown?).
+    #  The test is required.
     def stop
-      "Stopped."
+      @trigger.shutdown(:kill)
     end
   end
 end

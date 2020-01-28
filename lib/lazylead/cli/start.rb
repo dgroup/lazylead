@@ -20,15 +20,15 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "rufus-scheduler"
 require_relative "../schedule"
 require_relative "../../../../vcs4sql/lib/vcs4sql/sqlite/migration"
 
 module Lazylead
   module CLI
     class Start
-      def initialize(log)
+      def initialize(log, schedule = Lazylead::Schedule.new)
         @log = log
+        @schedule = schedule
       end
 
       # @todo #/DEV Use vcs4sql from rubygems.org instead of local build.
@@ -38,15 +38,10 @@ module Lazylead
         @opts = opts
         apply_vcs_migration
         enable_active_record
-        # @todo #/DEV Try to use Rufus-scheduler in order to define tasks
         schedule_tasks
       end
 
       private
-
-      def schedule_tasks
-        Lazylead::ORM::Task.where(enabled: "true").find_each(&:exec)
-      end
 
       def apply_vcs_migration
         @db = File.expand_path(@opts[:home]) + "/" + @opts[:sqlite]
@@ -59,6 +54,13 @@ module Lazylead
           adapter: "sqlite3",
           database: @db
         )
+      end
+
+      def schedule_tasks
+        Lazylead::ORM::Task.where(enabled: "true").find_each do |task|
+          @schedule.register task
+        end
+        @schedule.join
       end
     end
   end

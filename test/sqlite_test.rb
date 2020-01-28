@@ -65,7 +65,7 @@ module Lazylead
       ).map { |f| Array.new(f) }
       fks.each do |f|
         assert schema.any? { |fk| fk.sort == f.sort },
-               "No foreign key found for #{f}"
+               "No foreign key found from #{f[0]}.#{f[1]} to #{f[2]}.#{f[3]}"
       end
     end
 

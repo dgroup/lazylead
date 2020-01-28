@@ -1,3 +1,5 @@
+# @todo #/DEV Review the .rubocop.yml rights and enable disabled rules if required.
+
 require:
   - rubocop-minitest
   - rubocop-performance
@@ -46,9 +48,6 @@ Layout/HashAlignment:
   EnforcedHashRocketStyle:
     - table
     - key
-
-Layout/SpaceAroundEqualsInParameterDefault:
-  EnforcedStyle: no_space
 
 Naming/MemoizedInstanceVariableName:
   Enabled: false

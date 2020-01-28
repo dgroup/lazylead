@@ -65,6 +65,10 @@ create table if not exists tasks
     id          integer primary key autoincrement,
     name        text    not null,
     cron        text    not null,
+-- @todo #/DEV task.cron - add support for non-cron based schedule like at, once, every.
+--  More details:
+--  https://github.com/jmettraux/rufus-scheduler
+--  https://stackoverflow.com/questions/46691666/using-constantize-to-invoke-both-a-class-and-method-from-separate-strings
     system      integer not null,
     action      text    not null,
     team_id     integer not null,
