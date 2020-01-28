@@ -26,17 +26,17 @@ require "json"
 require "rufus-scheduler"
 require_relative "orm/model"
 
-# The tasks schedule
-#
-# Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-# Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-# License:: MIT
 module Lazylead
+  # The tasks schedule
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
   class Schedule
-    def initialize(log: FakeLog.new, trigger: Rufus::Scheduler.new, cling: true)
+    def initialize(log: FakeLog.new, trgr: Rufus::Scheduler.new, cling: true)
       @log = log
-      @trigger = trigger
       @cling = cling
+      @trigger = trgr
     end
 
     # @todo #/DEV error code is required for reach 'raise' statement within the

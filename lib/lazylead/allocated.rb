@@ -23,6 +23,11 @@
 require "get_process_mem"
 
 module Lazylead
+  # Human readable format of allocated bytes within current process.
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
   class Allocated
     def initialize(bytes: GetProcessMem.new.bytes.to_i)
       @bytes = bytes

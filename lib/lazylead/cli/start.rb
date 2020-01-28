@@ -25,6 +25,15 @@ require_relative "../../../../vcs4sql/lib/vcs4sql/sqlite/migration"
 
 module Lazylead
   module CLI
+    #
+    # APP start command.
+    #
+    # By default, the app will check the version of the database structure and
+    #  apply the missing change sets (more https://github.com/dgroup/vcs4sql).
+    #
+    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+    # License:: MIT
     class Start
       def initialize(log, schedule = Lazylead::Schedule.new)
         @log = log

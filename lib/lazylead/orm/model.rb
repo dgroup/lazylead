@@ -33,6 +33,12 @@ module Lazylead
   # @todo #/DEV Add validations to the columns. More details described here
   #  https://www.rubydoc.info/gems/activerecord/5.0.0.1.
   module ORM
+    #
+    # General lazylead task.
+    #
+    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+    # License:: MIT
     class Task < ActiveRecord::Base
       include Verbosed
       belongs_to :team, foreign_key: "team_id"
@@ -41,18 +47,54 @@ module Lazylead
         action.constantize.new.run team
       end
     end
+
+    #
+    # A team for lazylead task.
+    # Each team may have several tasks.
+    #
+    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+    # License:: MIT
     class Team < ActiveRecord::Base
       include Verbosed
     end
+
+    #
+    # Details for each team members.
+    #
+    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+    # License:: MIT
     class Person < ActiveRecord::Base
       include Verbosed
     end
+
+    #
+    # Managers details who are observing a particular team.
+    #
+    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+    # License:: MIT
     class CC < ActiveRecord::Base
       include Verbosed
     end
+
+    #
+    # Ticketing systems to monitor.
+    #
+    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+    # License:: MIT
     class System < ActiveRecord::Base
       include Verbosed
     end
+
+    #
+    # Application properties across all systems within lazylead.
+    #
+    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+    # License:: MIT
     class Properties < ActiveRecord::Base
       include Verbosed
     end

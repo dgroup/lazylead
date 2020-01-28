@@ -19,7 +19,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
-
+#
+# Makes ORM objects verbose using object's fields.
+#
+# Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+# Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+# License:: MIT
 module Lazylead::Verbosed
   def to_s
     attributes.map { |k, v| "#{k}='#{v}'" }.join(", ")

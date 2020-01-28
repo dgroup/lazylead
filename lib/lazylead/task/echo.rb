@@ -22,6 +22,11 @@
 
 module Lazylead
   module Task
+    # Lazylead task which prints to STDOUT the current class name and team.
+    #
+    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+    # License:: MIT
     class Echo
       def run(team)
         puts "#{self.class} #{team}"

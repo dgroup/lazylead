@@ -21,6 +21,11 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 module Lazylead
+  # Fake logger for unit testing purposes.
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
   class FakeLog
     def debug(msg)
       log("DEBUG", msg)
