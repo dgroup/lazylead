@@ -58,6 +58,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "futex", ">=0.8.5"
   s.add_runtime_dependency "get_process_mem", "~>0.2.5"
   s.add_runtime_dependency "haml", "5.0.4"
+  s.add_runtime_dependency "jira-ruby", "1.7.1"
   s.add_runtime_dependency "json", "2.2.0"
   s.add_runtime_dependency "memory_profiler", "0.9.13"
   s.add_runtime_dependency "mimic", "0.4.4"

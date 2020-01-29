@@ -14,3 +14,7 @@
 
 # @todo #/DEV Enable DepShield badge for inspection. Example you may find
 #  [![DepShield Badge](https://depshield.sonatype.org/badges/dgroup/lazylead/depshield.svg)](https://depshield.github.io)
+
+# @todo #/DEV Add Github integration for lazylead with the same methods as in Jira.
+
+# @todo #/DEV Add Trello integration for lazylead with the same methods as in Jira.
