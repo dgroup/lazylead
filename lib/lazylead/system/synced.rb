@@ -17,24 +17,45 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONN ECTION WITH THE SOFTWARE OR THE USE
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../test"
-require_relative "../../lib/lazylead/jira"
-
 module Lazylead
-  class JiraTest < Lazylead::Test
-    test "found jira issue by id" do
-      assert_equal 85_918,
-                   Lazylead::Jira.new(
-                     username: ENV["JIRA_USER"],
-                     password: ENV["JIRA_PASS"],
-                     site: "https://jira.spring.io",
-                     context_path: "",
-                     auth_type: :basic
-                   ).issues("key in ('DATAJDBC-480')").first.id.to_i,
-                   "Id mismatch for https://jira.spring.io/browse/DATAJDBC-480"
+  # Thread-save ticketing system.
+  class Synced
+    def initialize(sys)
+      @mutex = Mutex.new
+      @sys = sys
+    end
+
+    # @todo #/DEV Unit tests for 'issues' function the issues found by jql
+    def issues(jql)
+      @mutex.synchronize do
+        @sys.issues jql
+      end
+    end
+
+    # @todo #/DEV Unit tests for 'group_by' function the issues found by jql
+    def group_by(fnc, jql)
+      @mutex.synchronize do
+        @sys.group_by fnc, jql
+      end
+    end
+
+    # @todo #/DEV Unit tests for 'group_by_assignee' the issues found by jql
+    def group_by_assignee(jql)
+      @mutex.synchronize do
+        @sys.group_by_assignee jql
+      end
+    end
+
+    # @todo #/DEV Unit tests for 'filtered' function
+    #  Filter the issues found by jql on app side.
+    # Required for cases when filtration can't be done on ticketing system side.
+    def filtered(fnc, jql)
+      @mutex.synchronize do
+        @sys.filtered fnc, jql
+      end
     end
   end
 end
