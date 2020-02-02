@@ -20,10 +20,13 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require "mail"
 require_relative "../schedule"
 require_relative "../../../../vcs4sql/lib/vcs4sql/sqlite/migration"
 
 module Lazylead
+  # @todo #/DEV Lazylead::CLI::Args add a new class which extends hash
+  #  in order to access command-line arguments in easy manner.
   module CLI
     #
     # APP start command.
@@ -34,7 +37,7 @@ module Lazylead
     # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
-    class Start
+    class App
       def initialize(log, schedule = Lazylead::Schedule.new)
         @log = log
         @schedule = schedule
@@ -47,6 +50,7 @@ module Lazylead
         @opts = opts
         apply_vcs_migration
         enable_active_record
+        enable_email_notifications unless @opts[:email_enabled].nil?
         schedule_tasks
       end
 
@@ -63,6 +67,18 @@ module Lazylead
           adapter: "sqlite3",
           database: @db
         )
+      end
+
+      # @todo #/DEV Enable email notifications
+      #  - add TLS support from command line arguments;
+      #  - add unit tests
+      #  More:
+      #  - https://github.com/mikel/mail
+      #  - https://blog.mailtrap.io/ruby-send-email/#Wrapping_up
+      def enable_email_notifications
+        Mail.defaults do
+          delivery_method :smtp, @opts
+        end
       end
 
       def schedule_tasks

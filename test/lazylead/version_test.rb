@@ -23,6 +23,8 @@
 require_relative "../test"
 require_relative "../../lib/lazylead/version"
 
+# @todo #/DEV Rename xxx_test.rb to test_xx.rb
+#  as this naming is more clear.
 module Lazylead
   class VersionTest < Lazylead::Test
     test "gem has version" do

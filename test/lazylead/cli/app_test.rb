@@ -21,20 +21,15 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../../sqlite_test"
-require_relative "../../../lib/lazylead/cli/start"
+require_relative "../../../lib/lazylead/cli/app"
 require_relative "../../../lib/lazylead/orm/model"
 
 module Lazylead
   module CLI
-    # @todo #/DEV Move Thread.new to separate method with
-    #  - timeout support;
-    #  - reporting in case of errors.
-    #  It allow to avoid the code duplication  where we need the threads.
-    #  Also, remove the 'Thread.new' statement from all current/future tests.
-    class StartTest < Lazylead::SqliteTest
+    class AppTest < Lazylead::SqliteTest
       test "LL database structure installed successfully" do
         file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-        Lazylead::CLI::Start.new(log, Lazylead::Schedule.new(cling: false)).run(
+        Lazylead::CLI::App.new(log, Lazylead::Schedule.new(cling: false)).run(
           home: ".",
           sqlite: file,
           vcs4sql: "upgrades/sqlite"
@@ -60,7 +55,7 @@ module Lazylead
 
       test "activesupport is activated for access to domain entities" do
         file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-        Lazylead::CLI::Start.new(log, Lazylead::Schedule.new(cling: false)).run(
+        Lazylead::CLI::App.new(log, Lazylead::Schedule.new(cling: false)).run(
           home: ".",
           sqlite: file,
           vcs4sql: "upgrades/sqlite",
