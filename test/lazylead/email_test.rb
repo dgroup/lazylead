@@ -21,29 +21,41 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../test"
-require_relative "../../lib/lazylead/mail"
+require_relative "../../lib/lazylead/email"
 require_relative "../../lib/lazylead/allocated"
 
 module Lazylead
+  # @todo #43/DEV Minitest+integration test - define approach like maven profile
+  #  for java-based applications.
   class EmailTest < Lazylead::Test
-
-    # @todo #/DEV email-related properties should be exported to the CI env
-    test "test email has been sent to the remote server" do
-      Lazylead::Mail.new.enable_notifications(
-        {
-          smtp_host: ENV["LL_SMTP_HOST"],
-          smtp_port: ENV["LL_SMTP_PORT"],
-          smtp_user: ENV["LL_SMTP_USER"],
-          smtp_pass: ENV["LL_SMTP_PASS"]
-        }
-      )
+    test "test email has been sent to the fake smtp server" do
+      Lazylead::Email.new(true).enable_notifications({})
       Mail.deliver do
-        from    'jlazylead@yandex.ru'
-        to      'ydantezs@yandex.ru'
-        subject 'Testing'
-        body 'Good, it works'
+        from "mike@lazylead.com"
+        to "tom@lazylead.com"
+        subject "Fake subject"
+        body "Fake body"
       end
+      assert_equal 1, Mail::TestMailer.deliveries.length
     end
+
+    # @todo #43/DEV email-related properties should be exported to the CI env
+
+    # test "test email has been sent to the remote server" do
+    #   Lazylead::Email.new.enable_notifications(
+    #     {
+    #       smtp_host: ENV["LL_SMTP_HOST"],
+    #       smtp_port: ENV["LL_SMTP_PORT"],
+    #       smtp_user: ENV["LL_SMTP_USER"],
+    #       smtp_pass: ENV["LL_SMTP_PASS"]
+    #     }
+    #   )
+    #   Mail.deliver do
+    #     from 'jlazylead@yandex.ru'
+    #     to 'ydantezs@yandex.ru'
+    #     subject 'Testing'
+    #     body 'Good, it works'
+    #   end
+    # end
   end
 end
-

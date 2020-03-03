@@ -20,7 +20,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "mail"
+require_relative "../email"
 require_relative "../schedule"
 require_relative "../../../../vcs4sql/lib/vcs4sql/sqlite/migration"
 
@@ -38,28 +38,30 @@ module Lazylead
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
     class App
-      def initialize(log, schedule = Lazylead::Schedule.new)
+      def initialize(
+        log, schedule = Lazylead::Schedule.new, mail = Lazylead::Email.new
+      )
         @log = log
         @schedule = schedule
+        @mail = mail
       end
 
       # @todo #/DEV Use vcs4sql from rubygems.org instead of local build.
       #  For now vcs4sql wasn't released yet.
       #  Also, the vcs4sql should be removed from ./Gemfile.
       def run(opts)
-        @opts = opts
-        apply_vcs_migration
+        apply_vcs_migration opts
         enable_active_record
-        enable_email_notifications unless @opts[:email_enabled].nil?
+        @mail.enable_notifications opts
         schedule_tasks
       end
 
       private
 
-      def apply_vcs_migration
-        @db = File.expand_path(@opts[:home]) + "/" + @opts[:sqlite]
-        vcs = File.expand_path(@opts[:home]) + "/" + @opts[:vcs4sql]
-        Vcs4sql::Sqlite::Migration.new(@db).upgrade vcs, @opts[:testdata]
+      def apply_vcs_migration(opts)
+        @db = File.expand_path(opts[:home]) + "/" + opts[:sqlite]
+        vcs = File.expand_path(opts[:home]) + "/" + opts[:vcs4sql]
+        Vcs4sql::Sqlite::Migration.new(@db).upgrade vcs, opts[:testdata]
       end
 
       def enable_active_record
@@ -67,18 +69,6 @@ module Lazylead
           adapter: "sqlite3",
           database: @db
         )
-      end
-
-      # @todo #/DEV Enable email notifications
-      #  - add TLS support from command line arguments;
-      #  - add unit tests
-      #  More:
-      #  - https://github.com/mikel/mail
-      #  - https://blog.mailtrap.io/ruby-send-email/#Wrapping_up
-      def enable_email_notifications
-        Mail.defaults do
-          delivery_method :smtp, @opts
-        end
       end
 
       def schedule_tasks

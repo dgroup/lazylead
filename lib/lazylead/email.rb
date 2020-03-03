@@ -30,30 +30,37 @@ module Lazylead
   # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
-  class Mail
+  class Email
     def initialize(test = false)
       @test = test
     end
 
     def enable_notifications(opts)
       if @test
-        Mail::Mail.defaults do
-          delivery_method :test
-        end
+        enable_test_mode
       else
-        Mail.defaults do
-          delivery_method :smtp,
-                          {
-                            address: opts[:smtp_host],
-                            port: opts[:smtp_port],
-                            user_name: opts[:smtp_user],
-                            password: opts[:smtp_pass],
-                            authentication: 'plain',
-                            enable_starttls_auto: true
-                          }
-        end
+        enable_smtp_mode opts
       end
     end
 
+    private
+
+    def enable_test_mode
+      Mail.defaults do
+        delivery_method :test
+      end
+    end
+
+    def enable_smtp_mode(opts)
+      Mail.defaults do
+        delivery_method :smtp,
+                        address: opts[:smtp_host],
+                        port: opts[:smtp_port],
+                        user_name: opts[:smtp_user],
+                        password: opts[:smtp_pass],
+                        authentication: "plain",
+                        enable_starttls_auto: true
+      end
+    end
   end
 end
