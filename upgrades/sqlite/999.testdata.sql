@@ -28,8 +28,9 @@ values (1, 'Tom Marsden', 'tommarsden@mail.com'),
        (3, 'Eliot Kendall', 'elkendall@mail.com'),
        (4, 'Leela Kenny', 'leelakenny@mail.com'),
        (5, 'Macie Crane', 'maciecrane@mail.com');
-insert into systems(id, name)
-values (1, 'https://jira.spring.io');
+insert into systems(id, properties)
+values (1,
+        '{"type":"Lazylead::Jira", "username":"", "password":"", "site":"https://jira.spring.io", "context_path":""}');
 insert into teams(id, name, lead)
 values (1, 'BA squad', 4);
 insert into tasks(name, cron, enabled, id, system, team_id, action)

@@ -56,8 +56,7 @@ create table if not exists cc
 create table if not exists systems
 (
     id         integer primary key autoincrement,
-    name       text not null,
-    properties text
+    properties text not null
 );
 -- @todo #/DEV task.cron - add regexp verification of cron expression.
 create table if not exists tasks

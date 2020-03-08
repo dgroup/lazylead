@@ -39,7 +39,7 @@ module Lazylead
             persons: %w[id name email],
             teams: %w[id name lead properties],
             cc: %w[id team_id person_id],
-            systems: %w[id name properties],
+            systems: %w[id properties],
             tasks: %w[id name cron system action team_id description enabled],
             properties: %w[key value type]
           },
@@ -61,9 +61,9 @@ module Lazylead
           vcs4sql: "upgrades/sqlite",
           testdata: true
         )
-        assert_equal "https://jira.spring.io",
-                     Lazylead::ORM::System.find(1).name,
-                     "Required system record wasn't found in the database"
+        assert_equal "BA squad",
+                     Lazylead::ORM::Team.find(1).name,
+                     "Required team record wasn't found in the database"
       end
 
       # @todo #10/DEV Think about using "timecop" >v0.9.1 gem in order to make
@@ -75,7 +75,7 @@ module Lazylead
       #  ..
       #  More https://github.com/travisjeffery/timecop
       test "scheduled task was triggered successfully" do
-        assert true, "Not implemented yet"
+        skip "Not implemented yet"
       end
     end
   end

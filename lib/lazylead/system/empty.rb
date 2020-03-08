@@ -20,17 +20,30 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require "jira-ruby"
+
 module Lazylead
-  module Task
-    # Lazylead task which prints to STDOUT the current class name and team.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Echo
-      def run(team, sys)
-        puts "#{self.class} #{team} on #{sys}"
-      end
+  #
+  # A empty ticketing system
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
+  class Empty
+    def issues(_)
+      []
+    end
+
+    def group_by(_, _)
+      {}
+    end
+
+    def group_by_assignee(_)
+      {}
+    end
+
+    def filtered(_, _)
+      []
     end
   end
 end

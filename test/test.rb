@@ -74,5 +74,15 @@ module Lazylead
     def no_ext(path)
       File.basename(path, ".rb")
     end
+
+    ##
+    # Skips the current run. If run in verbose-mode, the skipped run
+    # gets listed at the end of the run but doesn't cause a failure
+    # exit code.
+    def skip(msg = nil, frame = caller)
+      msg ||= "Skipped, no message given"
+      @skip = true
+      raise Minitest::Skip, msg, frame
+    end
   end
 end

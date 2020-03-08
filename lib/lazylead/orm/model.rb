@@ -42,9 +42,10 @@ module Lazylead
     class Task < ActiveRecord::Base
       include Verbosed
       belongs_to :team, foreign_key: "team_id"
+      has_one :system, foreign_key: "id"
 
       def exec
-        action.constantize.new.run team
+        action.constantize.new.run(team, system.connect)
       end
     end
 
@@ -76,16 +77,6 @@ module Lazylead
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
     class CC < ActiveRecord::Base
-      include Verbosed
-    end
-
-    #
-    # Ticketing systems to monitor.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class System < ActiveRecord::Base
       include Verbosed
     end
 

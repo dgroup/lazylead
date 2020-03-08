@@ -54,7 +54,20 @@ module Lazylead
     def client
       return @client if defined? @client
 
+      @opts[:auth_type] = :basic if @opts[:auth_type].nil?
+      mv("site", :site)
+      mv("username", :username)
+      mv("password", :password)
+      mv("context_path", :context_path)
       @client = JIRA::Client.new(@opts)
+    end
+
+    # Move the values for non-string variables.
+    def mv(act, exp)
+      return if @opts[act].nil?
+
+      @opts[exp] = @opts[act]
+      @opts.delete act
     end
   end
 end

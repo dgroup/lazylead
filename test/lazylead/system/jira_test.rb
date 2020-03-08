@@ -21,20 +21,43 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../../test"
+require_relative "../../../lib/lazylead/cli/app"
+require_relative "../../../lib/lazylead/orm/system"
 require_relative "../../../lib/lazylead/system/jira"
 
 module Lazylead
   class JiraTest < Lazylead::Test
-    test "found jira issue by id" do
+    test "found issue by id" do
       assert_equal 85_918,
                    Lazylead::Jira.new(
                      username: ENV["JIRA_USER"],
                      password: ENV["JIRA_PASS"],
                      site: "https://jira.spring.io",
-                     context_path: "",
-                     auth_type: :basic
+                     context_path: ""
                    ).issues("key in ('DATAJDBC-480')").first.id.to_i,
                    "Id mismatch for https://jira.spring.io/browse/DATAJDBC-480"
+    end
+
+    #
+    # @todo #/DEV Avoid hard-code of credentials. To be fixed later.
+    #  For now in case if we need to check the code, we have to specify
+    #  the required credentials within System.properties column in db.
+    test "found issue by jira (ORM)" do
+      skip "The test need personal credentials. Re-implementation is required"
+      file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
+      Lazylead::CLI::App.new(log, Lazylead::Schedule.new(cling: false)).run(
+        home: ".",
+        sqlite: file,
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
+      )
+      assert_equal 86_106,
+                   Lazylead::ORM::Task.find(1)
+                                      .system
+                                      .connect
+                                      .issues("key in ('DATAJDBC-500')")
+                                      .first.id.to_i,
+                   "Id mismatch for https://jira.spring.io/browse/DATAJDBC-500"
     end
   end
 end
