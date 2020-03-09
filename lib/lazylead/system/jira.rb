@@ -38,8 +38,6 @@ module Lazylead
       raise "unsupported operation for #{fnc} and #{jql}"
     end
 
-    # @todo #/DEV Group by assignee based on internal state.
-    #  The Assignee#id should be used as equal function.
     def group_by_assignee(jql)
       issues = issues(jql)
       assigned = issues.group_by { |i| i.assignee.name }
