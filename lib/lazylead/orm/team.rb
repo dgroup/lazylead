@@ -27,56 +27,29 @@ require "require_all"
 require_rel "../task"
 require_rel "verbosed"
 
-# @todo #/DEV Setup the relations between classes has_many, has_one, etc, more
-#  here https://www.rubydoc.info/gems/activerecord/5.0.0.1.
 module Lazylead
-  # @todo #/DEV Add validations to the columns. More details described here
-  #  https://www.rubydoc.info/gems/activerecord/5.0.0.1.
   module ORM
     #
-    # General lazylead task.
+    # A team for lazylead task.
+    # Each team may have several tasks.
     #
     # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
-    class Task < ActiveRecord::Base
+    class Team < ActiveRecord::Base
       include Verbosed
-      belongs_to :team, foreign_key: "team_id"
-      has_one :system, foreign_key: "id"
 
-      def exec
-        action.constantize.new.run(team, system.connect)
+      def [](key)
+        props[key]
       end
-    end
 
-    #
-    # Details for each team members.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Person < ActiveRecord::Base
-      include Verbosed
-    end
+      private
 
-    #
-    # Managers details who are observing a particular team.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class CC < ActiveRecord::Base
-      include Verbosed
-    end
+      def props
+        return @prop if defined? @prop
 
-    #
-    # Application properties across all systems within lazylead.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Properties < ActiveRecord::Base
-      include Verbosed
+        @prop = JSON.parse(properties)
+      end
     end
   end
 end

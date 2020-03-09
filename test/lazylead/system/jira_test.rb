@@ -27,14 +27,20 @@ require_relative "../../../lib/lazylead/system/jira"
 
 module Lazylead
   class JiraTest < Lazylead::Test
+    # Build an instance of Jira client based on default parameters.
+    def jira
+      Lazylead::Jira.new(
+        username: ENV["JIRA_USER"],
+        password: ENV["JIRA_PASS"],
+        site: "https://jira.spring.io",
+        context_path: ""
+      )
+    end
+
     test "found issue by id" do
       assert_equal 85_918,
-                   Lazylead::Jira.new(
-                     username: ENV["JIRA_USER"],
-                     password: ENV["JIRA_PASS"],
-                     site: "https://jira.spring.io",
-                     context_path: ""
-                   ).issues("key in ('DATAJDBC-480')").first.id.to_i,
+                   jira.issues("key in ('DATAJDBC-480')")
+                       .first.id.to_i,
                    "Id mismatch for https://jira.spring.io/browse/DATAJDBC-480"
     end
 
@@ -58,6 +64,14 @@ module Lazylead
                                       .issues("key in ('DATAJDBC-500')")
                                       .first.id.to_i,
                    "Id mismatch for https://jira.spring.io/browse/DATAJDBC-500"
+    end
+
+    test "group by assignee" do
+      assert_equal 2,
+                   jira.group_by_assignee("filter=16743")
+                       .min_by { |a| a.first.id }
+                       .length,
+                   "Two issues found on remote Jira instance using filter"
     end
   end
 end

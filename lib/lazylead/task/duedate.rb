@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -22,57 +20,19 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
-
-require "simplecov"
-SimpleCov.start
-if ENV["CI"] == "true"
-  require "codecov"
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-end
-
-require "minitest/autorun"
-require "minitest/hooks/test"
-require "minitest/reporters"
-require "concurrent"
-require "timeout"
-require "active_support"
-require_relative "../lib/lazylead/fake_log"
-
-STDOUT.sync = true
-Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
-
 module Lazylead
-  # A basic lazylead test based on Minitest.
-  # By default it defines
-  #  - the timeout for each test
-  #  - additional generic asserts
-  #  - test logger
-  class Test < ActiveSupport::TestCase
-    include Minitest::Hooks
-
-    make_my_diffs_pretty!
-
-    def around
-      Timeout.timeout(10) do
-        Thread.current.name = "test"
-        super
+  module Task
+    # Lazylead task which sent notification about missing/expired due date.
+    #
+    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+    # License:: MIT
+    # @todo #/DEV Duedate: Send email about expired/missing due date.
+    #  Should be covered by tests.
+    class Duedate
+      def run(team, sys)
+        puts sys.group_by_assignee(team["sql"])
       end
-    end
-
-    def greater_then(fst, sec)
-      assert fst > sec, "'#{fst}' is expected to be greater than '#{sec}'"
-    end
-
-    def log
-      return @flog if defined? @flog
-
-      @flog = FakeLog.new
-    end
-
-    # Gives file name without extension (.rb)
-    def no_ext(path)
-      File.basename(path, ".rb")
     end
   end
 end
