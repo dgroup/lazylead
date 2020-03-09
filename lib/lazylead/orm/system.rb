@@ -28,8 +28,6 @@ require_rel "verbosed"
 require_rel "../task"
 require_rel "../system"
 
-# @todo #/DEV Setup the relations between classes has_many, has_one, etc, more
-#  here https://www.rubydoc.info/gems/activerecord/5.0.0.1.
 module Lazylead
   # @todo #/DEV Add validations to the columns. More details described here
   #  https://www.rubydoc.info/gems/activerecord/5.0.0.1.
