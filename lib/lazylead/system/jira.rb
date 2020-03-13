@@ -40,8 +40,8 @@ module Lazylead
 
     def group_by_assignee(jql)
       issues = issues(jql)
-      assigned = issues.group_by { |i| i.assignee.name }
-      assignee = issues.map { |i| Assignee.new(i.assignee) }
+      assigned = issues.group_by { |i| i.assignee.id }
+      assignee = issues.map(&:assignee)
                        .uniq(&:id)
                        .group_by(&:id)
       target = {}

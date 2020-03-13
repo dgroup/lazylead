@@ -37,19 +37,15 @@ module Lazylead
 
     def enable_notifications(opts)
       if @test
-        enable_test_mode
+        Mail.defaults do
+          delivery_method :test
+        end
       else
         enable_smtp_mode opts
       end
     end
 
     private
-
-    def enable_test_mode
-      Mail.defaults do
-        delivery_method :test
-      end
-    end
 
     def enable_smtp_mode(opts)
       Mail.defaults do

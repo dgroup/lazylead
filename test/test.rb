@@ -54,7 +54,9 @@ module Lazylead
     make_my_diffs_pretty!
 
     def around
-      Timeout.timeout(10) do
+      Timeout.timeout(
+        ENV["TEST_TIMEOUT"].nil? ? 10 : ENV["TEST_TIMEOUT"].to_i
+      ) do
         Thread.current.name = "test"
         super
       end

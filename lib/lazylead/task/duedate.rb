@@ -20,6 +20,8 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require "premailer"
+
 module Lazylead
   module Task
     # Lazylead task which sent notification about missing/expired due date.
@@ -27,11 +29,25 @@ module Lazylead
     # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
-    # @todo #/DEV Duedate: Send email about expired/missing due date.
-    #  Should be covered by tests.
+    # @todo #/DEV Duedate: Find a way how to generate a pretty email message.
+    #  Potentially https://github.com/alexdunae/premailer might be used.
     class Duedate
       def run(team, sys)
-        puts sys.group_by_assignee(team["sql"])
+        sys.group_by_assignee(team["duedate-sql"]).each do |a, _|
+          Mail.deliver do
+            to a.email
+            from team["from"]
+            subject team["duedate-subject"]
+
+            html_part do
+              content_type "text/html; charset=UTF-8"
+              body <<~MSG
+                <p>Hi #{a.name},</p>
+                <p>The due date for these tasks has expired.
+              MSG
+            end
+          end
+        end
       end
     end
   end

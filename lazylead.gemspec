@@ -64,6 +64,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "memory_profiler", "0.9.13"
   s.add_runtime_dependency "mimic", "0.4.4"
   s.add_runtime_dependency "openssl", "2.1.2"
+  s.add_runtime_dependency "premailer", "1.11.1"
   s.add_runtime_dependency "rainbow", "3.0.0"
   s.add_runtime_dependency "require_all", ">=3.0.0"
   s.add_runtime_dependency "rufus-scheduler", ">=3.6.0"

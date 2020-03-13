@@ -28,15 +28,18 @@ module Lazylead
   # @todo #43/DEV Minitest+integration test - define approach like maven profile
   #  for java-based applications.
   class EmailTest < Lazylead::Test
-    test "test email has been sent to the fake smtp server" do
+    test "email has been sent to the fake smtp server" do
       Lazylead::Email.new(true).enable_notifications({})
       Mail.deliver do
-        from "mike@lazylead.com"
-        to "tom@lazylead.com"
-        subject "Fake subject"
+        from "mike@fake.com"
+        to "tom@fake.com"
+        subject "The fake!"
         body "Fake body"
       end
-      assert_equal 1, Mail::TestMailer.deliveries.length
+      assert_equal 1,
+                   Mail::TestMailer.deliveries
+                                   .filter { |m| m.subject.eql? "The fake!" }
+                                   .length
     end
 
     # @todo #43/DEV email-related properties should be exported to the CI env

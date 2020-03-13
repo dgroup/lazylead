@@ -21,6 +21,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../../test"
+require_relative "../../../lib/lazylead/email"
 require_relative "../../../lib/lazylead/orm/team"
 require_relative "../../../lib/lazylead/system/jira"
 require_relative "../../../lib/lazylead/task/duedate"
@@ -28,10 +29,12 @@ require_relative "../../../lib/lazylead/task/duedate"
 module Lazylead
   class DuedateTest < Lazylead::Test
     test "issues were fetched" do
-      skip "Not implemented yet"
+      Lazylead::Email.new(true).enable_notifications({})
       Lazylead::Task::Duedate.new.run(
         {
-          "sql" => "filter=16743"
+          "from" => "fake@email.com",
+          "duedate-sql" => "filter=16743",
+          "duedate-subject" => "[DD] PDTN!"
         },
         Lazylead::Jira.new(
           username: ENV["JIRA_USER"],
@@ -40,6 +43,10 @@ module Lazylead
           context_path: ""
         )
       )
+      assert_equal 2,
+                   Mail::TestMailer.deliveries
+                                   .filter { |m| m.subject.eql? "[DD] PDTN!" }
+                                   .length
     end
   end
 end
