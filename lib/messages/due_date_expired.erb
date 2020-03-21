@@ -1,0 +1,40 @@
+<html>
+<head>
+  <style>
+    p, a, table {
+      font-family: Calibry, serif;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+<p>Hi <%= assignee.name %>,</p>
+
+<p>The due date for these tasks has expired or seems to expire soon. Please plan
+  them accordingly or actualize the "Due date" field for the following
+  ticket(s):</p>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Due date</th>
+    <th>Priority</th>
+    <th>Reporter</th>
+    <th>Summary</th>
+  </tr>
+  <% tickets.each do |ticket| %>
+    <tr>
+      <td><a href="<%= ticket.url %>"><%= ticket.id %></a></td>
+      <td><%= ticket.duedate %></td>
+      <td><%= ticket.priority %></td>
+      <td><%= ticket.reporter %></td>
+      <td><%= ticket.summary %></td>
+    </tr>
+  <% end %>
+</table>
+<p>In case you have no idea what date should be set - remove obsolete date or
+  ask your lead to fill it.</p>
+
+<p>Posted by
+  <a href="https://github.com/dgroup/lazylead">lazylead v<%= version %></a>.</p>
+</body>
+</html>

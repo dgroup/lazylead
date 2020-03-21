@@ -21,15 +21,15 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../test"
-require_relative "../../lib/lazylead/email"
+require_relative "../../lib/lazylead/smtp"
 require_relative "../../lib/lazylead/allocated"
 
 module Lazylead
   # @todo #43/DEV Minitest+integration test - define approach like maven profile
   #  for java-based applications.
-  class EmailTest < Lazylead::Test
+  class SmtpTest < Lazylead::Test
     test "email has been sent to the fake smtp server" do
-      Lazylead::Email.new(true).enable_notifications({})
+      Lazylead::Smtp.new.enable
       Mail.deliver do
         from "mike@fake.com"
         to "tom@fake.com"

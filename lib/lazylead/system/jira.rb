@@ -24,6 +24,10 @@ require "jira-ruby"
 
 module Lazylead
   # Jira system for manipulation with issues.
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
   class Jira
     def initialize(opts)
       @opts = opts
@@ -142,6 +146,25 @@ module Lazylead
 
     def summary
       fields["summary"]
+    end
+
+    # @todo #/DEV Issue url should be a reference to UI instead of REST.
+    def url
+      @issue.attrs["self"]
+    end
+
+    # @todo #/DEV Due date implementation is required based on custom field
+    def duedate
+      Date.today
+    end
+
+    def priority
+      fields["priority"]["name"]
+    end
+
+    # @todo #/DEV Issue.reporter implementation required.
+    def reporter
+      ""
     end
 
     def assignee

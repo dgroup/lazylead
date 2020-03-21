@@ -21,15 +21,17 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../../test"
-require_relative "../../../lib/lazylead/email"
+require_relative "../../../lib/lazylead/smtp"
 require_relative "../../../lib/lazylead/orm/team"
 require_relative "../../../lib/lazylead/system/jira"
 require_relative "../../../lib/lazylead/task/duedate"
 
 module Lazylead
   class DuedateTest < Lazylead::Test
+    # @todo #/DEV Print to logger the details about emails which were sent
+    #  Mail::TestMailer.deliveries.each { |m| p m.html_part.body.raw_source }
     test "issues were fetched" do
-      Lazylead::Email.new(true).enable_notifications({})
+      Lazylead::Smtp.new.enable
       Lazylead::Task::Duedate.new.run(
         {
           "from" => "fake@email.com",

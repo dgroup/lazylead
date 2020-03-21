@@ -20,31 +20,39 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "premailer"
+require_rel "../email"
+require_rel "../version"
 
 module Lazylead
   module Task
     # Lazylead task which sent notification about missing/expired due date.
     #
+    # @todo #/DEV Ensure that CSS styles are applying during email sending.
+    #
     # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
-    # @todo #/DEV Duedate: Find a way how to generate a pretty email message.
-    #  Potentially https://github.com/alexdunae/premailer might be used.
+    #
+    # @todo #/DEV Add Task.properties column to database in order to avoid
+    #  hardcode of file name with email template.
+    #  Also it can be helpful if we can group the typical actions like notify
+    #  assignee(s) by pattern. For example there is no difference between
+    #  notify assignee about missing due date or expired due date, thus no need
+    #  to implement separate ruby classes.
     class Duedate
       def run(team, sys)
-        sys.group_by_assignee(team["duedate-sql"]).each do |a, _|
+        sys.group_by_assignee(team["duedate-sql"]).each do |assignee, issues|
+          msg = Email.new(
+            "lib/messages/due_date_expired.erb",
+            assignee: assignee, tickets: issues, version: Lazylead::VERSION
+          )
           Mail.deliver do
-            to a.email
+            to assignee.email
             from team["from"]
             subject team["duedate-subject"]
-
             html_part do
               content_type "text/html; charset=UTF-8"
-              body <<~MSG
-                <p>Hi #{a.name},</p>
-                <p>The due date for these tasks has expired.
-              MSG
+              body msg.body
             end
           end
         end

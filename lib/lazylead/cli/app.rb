@@ -20,7 +20,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../email"
+require_relative "../smtp"
 require_relative "../schedule"
 require_relative "../../../../vcs4sql/lib/vcs4sql/sqlite/migration"
 
@@ -39,11 +39,11 @@ module Lazylead
     # License:: MIT
     class App
       def initialize(
-        log, schedule = Lazylead::Schedule.new, mail = Lazylead::Email.new
+        log, schedule = Lazylead::Schedule.new, smtp = Lazylead::Smtp.new
       )
         @log = log
         @schedule = schedule
-        @mail = mail
+        @smtp = smtp
       end
 
       # @todo #/DEV Use vcs4sql from rubygems.org instead of local build.
@@ -52,7 +52,7 @@ module Lazylead
       def run(opts)
         apply_vcs_migration opts
         enable_active_record
-        @mail.enable_notifications opts
+        @smtp.enable opts
         schedule_tasks
       end
 

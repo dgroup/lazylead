@@ -22,34 +22,38 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "tilt"
+require "mail"
 
 module Lazylead
-  # An email regarding tickets based on file with markup.
   #
-  # The 'tilt' gem was usage as a template engine.
-  # Read more about 'tilt':
-  #  - https://github.com/rtomayko/tilt
-  #  - https://github.com/rtomayko/tilt/blob/master/docs/TEMPLATES.md
-  #  - https://www.rubyguides.com/2018/11/ruby-erb-haml-slim/
+  # The emails configuration over SMTP protocol.
   #
   # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
-  class Email
-    # :file   :: the file with html template
-    # :binds  :: the template variables for substitution.
-    def initialize(file, binds)
-      @file = file
-      @binds = binds
+  class Smtp
+    def enable(opts = {})
+      if opts.empty? || opts[:test_mode]
+        Mail.defaults do
+          delivery_method :test
+        end
+      else
+        setup_smtp opts
+      end
     end
 
-    # Construct the email body from html template based on variables (binds).
-    # By default template engine returns '\n', thus this method removes it.
-    def body
-      Tilt.new(@file)
-          .render(OpenStruct.new(@binds))
-          .delete!("\n")
+    private
+
+    def setup_smtp(opts)
+      Mail.defaults do
+        delivery_method :smtp,
+                        address: opts[:smtp_host],
+                        port: opts[:smtp_port],
+                        user_name: opts[:smtp_user],
+                        password: opts[:smtp_pass],
+                        authentication: "plain",
+                        enable_starttls_auto: true
+      end
     end
   end
 end
