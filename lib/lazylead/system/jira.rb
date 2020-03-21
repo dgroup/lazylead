@@ -162,7 +162,9 @@ module Lazylead
       fields["priority"]["name"]
     end
 
-    # @todo #/DEV Issue.reporter implementation required.
+    # @todo #/DEV Issue.reporter implementation required. The 'reporter' should
+    #  have id, full name and email, potentially Lazylead::Assignee might be
+    #  reused somehow.
     def reporter
       ""
     end
