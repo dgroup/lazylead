@@ -27,8 +27,6 @@ module Lazylead
   module Task
     # Lazylead task which sent notification about missing/expired due date.
     #
-    # @todo #/DEV Ensure that CSS styles are applying during email sending.
-    #
     # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
@@ -40,19 +38,18 @@ module Lazylead
     #  notify assignee about missing due date or expired due date, thus no need
     #  to implement separate ruby classes.
     class Duedate
-      def run(team, sys)
+      def run(sys, team)
         sys.group_by_assignee(team["duedate-sql"]).each do |assignee, issues|
-          msg = Email.new(
-            "lib/messages/due_date_expired.erb",
-            assignee: assignee, tickets: issues, version: Lazylead::VERSION
-          )
           Mail.deliver do
             to assignee.email
             from team["from"]
             subject team["duedate-subject"]
             html_part do
               content_type "text/html; charset=UTF-8"
-              body msg.body
+              body Email.new(
+                "lib/messages/due_date_expired.erb",
+                assignee: assignee, tickets: issues, version: Lazylead::VERSION
+              ).render
             end
           end
         end

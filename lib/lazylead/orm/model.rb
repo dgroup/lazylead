@@ -41,7 +41,7 @@ module Lazylead
       has_one :system, foreign_key: "id"
 
       def exec
-        action.constantize.new.run(team, system.connect)
+        action.constantize.new.run(system.connect, team)
       end
     end
 

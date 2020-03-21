@@ -31,19 +31,17 @@ module Lazylead
     # @todo #/DEV Print to logger the details about emails which were sent
     #  Mail::TestMailer.deliveries.each { |m| p m.html_part.body.raw_source }
     test "issues were fetched" do
-      Lazylead::Smtp.new.enable
-      Lazylead::Task::Duedate.new.run(
-        {
-          "from" => "fake@email.com",
-          "duedate-sql" => "filter=16743",
-          "duedate-subject" => "[DD] PDTN!"
-        },
-        Lazylead::Jira.new(
+      Smtp.new.enable
+      Task::Duedate.new.run(
+        Jira.new(
           username: ENV["JIRA_USER"],
           password: ENV["JIRA_PASS"],
           site: "https://jira.spring.io",
           context_path: ""
-        )
+        ),
+        "from" => "fake@email.com",
+        "duedate-sql" => "filter=16743",
+        "duedate-subject" => "[DD] PDTN!"
       )
       assert_equal 2,
                    Mail::TestMailer.deliveries

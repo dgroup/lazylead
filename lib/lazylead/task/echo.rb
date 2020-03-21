@@ -28,7 +28,7 @@ module Lazylead
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
     class Echo
-      def run(team, sys)
+      def run(sys, team)
         puts "#{self.class} #{team} on #{sys}"
       end
     end

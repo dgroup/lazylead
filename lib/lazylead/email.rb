@@ -46,7 +46,7 @@ module Lazylead
 
     # Construct the email body from html template based on variables (binds).
     # By default template engine returns '\n', thus this method removes it.
-    def body
+    def render
       Tilt.new(@file)
           .render(OpenStruct.new(@binds))
           .delete!("\n")
