@@ -41,7 +41,11 @@ module Lazylead
       has_one :system, foreign_key: "id"
 
       def exec
-        action.constantize.new.run(system.connect, team)
+        action.constantize.new.run(system.connect, props)
+      end
+
+      def props
+        team.to_h.merge JSON.parse(properties)
       end
     end
 

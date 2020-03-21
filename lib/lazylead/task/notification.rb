@@ -25,29 +25,33 @@ require_rel "../version"
 
 module Lazylead
   module Task
-    # Lazylead task which sent notification about missing/expired due date.
+    #
+    # A task that sends notifications about issues to their assignees.
+    #
+    # The task supports the following features:
+    #  - fetch issues from remote ticketing system by query
+    #  - group all issues by assignee
+    #  - prepare email based on predefined template (*.erb)
+    #  - send the required notifications to each assignee
+    #
+    # The email message is sending to the assignee regarding all his/her issues,
+    #  not like one email per each issue.
     #
     # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
     #
-    # @todo #/DEV Add Task.properties column to database in order to avoid
-    #  hardcode of file name with email template.
-    #  Also it can be helpful if we can group the typical actions like notify
-    #  assignee(s) by pattern. For example there is no difference between
-    #  notify assignee about missing due date or expired due date, thus no need
-    #  to implement separate ruby classes.
-    class Duedate
-      def run(sys, team)
-        sys.group_by_assignee(team["duedate-sql"]).each do |assignee, issues|
+    class Notification
+      def run(sys, cfg)
+        sys.group_by_assignee(cfg["sql"]).each do |assignee, issues|
           Mail.deliver do
             to assignee.email
-            from team["from"]
-            subject team["duedate-subject"]
+            from cfg["from"]
+            subject cfg["subject"]
             html_part do
               content_type "text/html; charset=UTF-8"
               body Email.new(
-                "lib/messages/due_date_expired.erb",
+                cfg["template"],
                 assignee: assignee, tickets: issues, version: Lazylead::VERSION
               ).render
             end

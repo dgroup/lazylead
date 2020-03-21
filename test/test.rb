@@ -66,6 +66,15 @@ module Lazylead
       assert fst > sec, "'#{fst}' is expected to be greater than '#{sec}'"
     end
 
+    def assert_entries(exp, act)
+      raise "Primary hash for comparing is empty" if exp.nil? || exp.empty?
+
+      exp.each do |k, v|
+        assert exp.key?(k), "The key '#{k}' is absent in #{act}"
+        assert_equal v, act[k]
+      end
+    end
+
     def log
       return @flog if defined? @flog
 

@@ -22,9 +22,11 @@
 
 require_relative "../../test"
 require_relative "../../../lib/lazylead/smtp"
+require_relative "../../../lib/lazylead/cli/app"
 require_relative "../../../lib/lazylead/orm/team"
+require_relative "../../../lib/lazylead/orm/model"
 require_relative "../../../lib/lazylead/system/jira"
-require_relative "../../../lib/lazylead/task/duedate"
+require_relative "../../../lib/lazylead/task/notification"
 
 module Lazylead
   class DuedateTest < Lazylead::Test
@@ -32,7 +34,7 @@ module Lazylead
     #  Mail::TestMailer.deliveries.each { |m| p m.html_part.body.raw_source }
     test "issues were fetched" do
       Smtp.new.enable
-      Task::Duedate.new.run(
+      Task::Notification.new.run(
         Jira.new(
           username: ENV["JIRA_USER"],
           password: ENV["JIRA_PASS"],
@@ -40,13 +42,33 @@ module Lazylead
           context_path: ""
         ),
         "from" => "fake@email.com",
-        "duedate-sql" => "filter=16743",
-        "duedate-subject" => "[DD] PDTN!"
+        "sql" => "filter=16743",
+        "subject" => "[DD] PDTN!",
+        "template" => "lib/messages/due_date_expired.erb"
       )
       assert_equal 2,
                    Mail::TestMailer.deliveries
                                    .filter { |m| m.subject.eql? "[DD] PDTN!" }
                                    .length
+    end
+
+    test "configuration properties merged successfully" do
+      file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
+      Lazylead::CLI::App.new(log, Lazylead::Schedule.new(cling: false)).run(
+        home: ".",
+        sqlite: file,
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
+      )
+      assert_entries(
+        {
+          "sql" => "filter=100500",
+          "subject" => "[DD] PDTN!",
+          "from" => "basquad@fake.com",
+          "template" => "lib/messages/due_date_expired.erb"
+        },
+        Lazylead::ORM::Task.find(2).props
+      )
     end
   end
 end

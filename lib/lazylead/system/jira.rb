@@ -76,6 +76,11 @@ module Lazylead
 
     # Copy the required/mandatory parameter(s) for Jira client which can't
     #  be specified/defined at database level.
+    #
+    # @todo #/DEV Jira.cp - find a way how to avoid this method.
+    #  Potentially, hash with indifferent access might be used.
+    #  http://jocellyn.cz/2014/05/03/hash-with-indifferent-access.html
+    #  key.kind_of?(Symbol) ? key.to_s : key
     def cp(act, exp)
       @opts[exp] = @opts[act] if @opts.key? act
     end

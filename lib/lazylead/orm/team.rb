@@ -39,13 +39,7 @@ module Lazylead
     class Team < ActiveRecord::Base
       include Verbosed
 
-      def [](key)
-        props[key]
-      end
-
-      private
-
-      def props
+      def to_h
         return @prop if defined? @prop
 
         @prop = JSON.parse(properties)

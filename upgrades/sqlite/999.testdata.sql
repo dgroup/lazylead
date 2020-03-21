@@ -31,7 +31,12 @@ values (1, 'Tom Marsden', 'tommarsden@mail.com'),
 insert into systems(id, properties)
 values (1,
         '{"type":"Lazylead::Jira", "username":"", "password":"", "site":"https://jira.spring.io", "context_path":""}');
-insert into teams(id, name, lead)
-values (1, 'BA squad', 4);
-insert into tasks(name, cron, enabled, id, system, team_id, action)
-values ('echo task', '* * * * *', 'true', 1, 1, 1, 'Lazylead::Task::Echo');
+insert into teams(id, name, lead, properties)
+values (1, 'BA squad', 4, '{"from":"basquad@fake.com"}');
+insert into tasks(name, cron, enabled, id, system, team_id, action, properties)
+values ('echo task', '* * * * *', 'false', 1, 1, 1,
+        'Lazylead::Task::Echo',
+        '{}'),
+       ('expired due date', '* * * * *', 'false', 2, 1, 1,
+        'Lazylead::Task::Notification',
+        '{"sql":"filter=100500","subject":"[DD] PDTN!","template":"lib/messages/due_date_expired.erb"}');

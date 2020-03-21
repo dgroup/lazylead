@@ -29,6 +29,7 @@
 
 -- @todo #/DEV Add index by name to table persons in order to avoid full table
 --  scans during access by name.
+PRAGMA foreign_keys = ON;
 create table if not exists persons
 (
     id    integer primary key autoincrement,
@@ -42,7 +43,7 @@ create table if not exists teams
     name       text    not null,
     lead       integer not null,
     properties text,
-    foreign key (lead) references person (id) on delete cascade
+    foreign key (lead) references persons (id) on delete cascade
 );
 create table if not exists cc
 (
@@ -50,7 +51,7 @@ create table if not exists cc
     team_id   integer not null,
     person_id integer not null,
     foreign key (team_id) references team (id) on delete cascade,
-    foreign key (person_id) references person (id) on delete cascade
+    foreign key (person_id) references persons (id) on delete cascade
 );
 -- @todo #/DEV system.properties - column should be a json map(key,value)
 create table if not exists systems
@@ -73,9 +74,10 @@ create table if not exists tasks
     team_id     integer not null,
     description text,
     enabled     text,
+    properties  text    not null,
 -- @todo #/DEV tasks.enabled - add index for future search. Research is required.
-    foreign key (system) references system (id) on delete cascade,
-    foreign key (team_id) references team (id) on delete cascade
+    foreign key (system) references systems (id) on delete cascade,
+    foreign key (team_id) references teams (id) on delete cascade
 );
 -- @todo #/DEV properties.type - add check function in order to restrict the supported types
 create table if not exists properties

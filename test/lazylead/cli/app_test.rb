@@ -40,16 +40,17 @@ module Lazylead
             teams: %w[id name lead properties],
             cc: %w[id team_id person_id],
             systems: %w[id properties],
-            tasks: %w[id name cron system action team_id description enabled],
+            tasks: %w[id name cron system action team_id description enabled
+                      properties],
             properties: %w[key value type]
           },
           file
         )
         assert_fk %w[cc team_id team id],
-                  %w[cc person_id person id],
-                  %w[tasks system system id],
-                  %w[tasks team_id team id],
-                  %w[teams lead person id],
+                  %w[cc person_id persons id],
+                  %w[tasks system systems id],
+                  %w[tasks team_id teams id],
+                  %w[teams lead persons id],
                   file
       end
 

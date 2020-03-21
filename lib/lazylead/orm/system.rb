@@ -41,6 +41,7 @@ module Lazylead
     class System < ActiveRecord::Base
       include Verbosed
 
+      # Make an instance of ticketing system for future interaction.
       def connect
         cfg = JSON.parse(properties)
         if cfg["type"].empty?
