@@ -53,10 +53,9 @@ module Lazylead
     end
 
     test "configuration properties merged successfully" do
-      file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-      Lazylead::CLI::App.new(log, Lazylead::Schedule.new(cling: false)).run(
+      CLI::App.new(log, Lazylead::Schedule.new(cling: false)).run(
         home: ".",
-        sqlite: file,
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
@@ -67,7 +66,7 @@ module Lazylead
           "from" => "basquad@fake.com",
           "template" => "lib/messages/due_date_expired.erb"
         },
-        Lazylead::ORM::Task.find(2).props
+        ORM::Task.find(2).props
       )
     end
   end

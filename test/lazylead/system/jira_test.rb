@@ -50,19 +50,18 @@ module Lazylead
     #  the required credentials within System.properties column in db.
     test "found issue by jira (ORM)" do
       skip "The test need personal credentials. Re-implementation is required"
-      file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-      Lazylead::CLI::App.new(log, Lazylead::Schedule.new(cling: false)).run(
+      CLI::App.new(log, Schedule.new(cling: false)).run(
         home: ".",
-        sqlite: file,
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
       assert_equal 86_106,
-                   Lazylead::ORM::Task.find(1)
-                                      .system
-                                      .connect
-                                      .issues("key in ('DATAJDBC-500')")
-                                      .first.id.to_i,
+                   ORM::Task.find(1)
+                            .system
+                            .connect
+                            .issues("key in ('DATAJDBC-500')")
+                            .first.id.to_i,
                    "Id mismatch for https://jira.spring.io/browse/DATAJDBC-500"
     end
 

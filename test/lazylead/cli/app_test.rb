@@ -29,7 +29,7 @@ module Lazylead
     class AppTest < Lazylead::SqliteTest
       test "LL database structure installed successfully" do
         file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-        Lazylead::CLI::App.new(log, Lazylead::Schedule.new(cling: false)).run(
+        CLI::App.new(log, Schedule.new(cling: false)).run(
           home: ".",
           sqlite: file,
           vcs4sql: "upgrades/sqlite"
@@ -55,15 +55,14 @@ module Lazylead
       end
 
       test "activesupport is activated for access to domain entities" do
-        file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-        Lazylead::CLI::App.new(log, Lazylead::Schedule.new(cling: false)).run(
+        CLI::App.new(log, Schedule.new(cling: false)).run(
           home: ".",
-          sqlite: file,
+          sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
           vcs4sql: "upgrades/sqlite",
           testdata: true
         )
         assert_equal "BA squad",
-                     Lazylead::ORM::Team.find(1).name,
+                     ORM::Team.find(1).name,
                      "Required team record wasn't found in the database"
       end
 

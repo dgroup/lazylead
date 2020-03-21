@@ -28,7 +28,7 @@ require_relative "../../lib/lazylead/version"
 module Lazylead
   class VersionTest < Lazylead::Test
     test "gem has version" do
-      refute_nil ::Lazylead::VERSION
+      refute_nil Lazylead::VERSION
     end
   end
 end

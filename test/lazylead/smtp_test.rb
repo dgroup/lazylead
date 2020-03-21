@@ -29,7 +29,7 @@ module Lazylead
   #  for java-based applications.
   class SmtpTest < Lazylead::Test
     test "email has been sent to the fake smtp server" do
-      Lazylead::Smtp.new.enable
+      Smtp.new.enable
       Mail.deliver do
         from "mike@fake.com"
         to "tom@fake.com"
@@ -43,22 +43,20 @@ module Lazylead
     end
 
     # @todo #43/DEV email-related properties should be exported to the CI env
-
-    # test "test email has been sent to the remote server" do
-    #   Lazylead::Email.new.enable_notifications(
-    #     {
-    #       smtp_host: ENV["LL_SMTP_HOST"],
-    #       smtp_port: ENV["LL_SMTP_PORT"],
-    #       smtp_user: ENV["LL_SMTP_USER"],
-    #       smtp_pass: ENV["LL_SMTP_PASS"]
-    #     }
-    #   )
-    #   Mail.deliver do
-    #     from 'jlazylead@yandex.ru'
-    #     to 'ydantezs@yandex.ru'
-    #     subject 'Testing'
-    #     body 'Good, it works'
-    #   end
-    # end
+    test "test email has been sent to the remote server" do
+      skip "Not implemented yet"
+      Smtp.new.enable(
+        smtp_host: ENV["LL_SMTP_HOST"],
+        smtp_port: ENV["LL_SMTP_PORT"],
+        smtp_user: ENV["LL_SMTP_USER"],
+        smtp_pass: ENV["LL_SMTP_PASS"]
+      )
+      Mail.deliver do
+        from "from@fake.com"
+        to "to@fake.com"
+        subject "Testing"
+        body "Good, it works"
+      end
+    end
   end
 end
