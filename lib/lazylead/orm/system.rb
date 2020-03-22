@@ -45,7 +45,7 @@ module Lazylead
       def connect
         cfg = JSON.parse(properties)
         if cfg["type"].empty?
-          Lazylead::Empty.new
+          Empty.new
         else
           cfg["type"].constantize.new cfg.except("type")
         end

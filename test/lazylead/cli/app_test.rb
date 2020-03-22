@@ -21,6 +21,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../../sqlite_test"
+require_relative "../../../lib/lazylead/log"
 require_relative "../../../lib/lazylead/cli/app"
 require_relative "../../../lib/lazylead/orm/model"
 
@@ -29,7 +30,7 @@ module Lazylead
     class AppTest < Lazylead::SqliteTest
       test "LL database structure installed successfully" do
         file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-        CLI::App.new(log, Schedule.new(cling: false)).run(
+        CLI::App.new(Log::NOTHING, Schedule.new(cling: false)).run(
           home: ".",
           sqlite: file,
           vcs4sql: "upgrades/sqlite"
@@ -55,7 +56,7 @@ module Lazylead
       end
 
       test "activesupport is activated for access to domain entities" do
-        CLI::App.new(log, Schedule.new(cling: false)).run(
+        CLI::App.new(Log::NOTHING, Schedule.new(cling: false)).run(
           home: ".",
           sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
           vcs4sql: "upgrades/sqlite",

@@ -37,7 +37,6 @@ require "minitest/reporters"
 require "concurrent"
 require "timeout"
 require "active_support"
-require_relative "../lib/lazylead/fake_log"
 
 STDOUT.sync = true
 Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
@@ -47,7 +46,6 @@ module Lazylead
   # By default it defines
   #  - the timeout for each test
   #  - additional generic asserts
-  #  - test logger
   class Test < ActiveSupport::TestCase
     include Minitest::Hooks
 
@@ -73,12 +71,6 @@ module Lazylead
         assert exp.key?(k), "The key '#{k}' is absent in #{act}"
         assert_equal v, act[k]
       end
-    end
-
-    def log
-      return @flog if defined? @flog
-
-      @flog = FakeLog.new
     end
 
     # Gives file name without extension (.rb)

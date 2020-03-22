@@ -38,9 +38,7 @@ module Lazylead
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
     class App
-      def initialize(
-        log, schedule = Lazylead::Schedule.new, smtp = Lazylead::Smtp.new
-      )
+      def initialize(log, schedule = Schedule.new, smtp = Smtp.new)
         @log = log
         @schedule = schedule
         @smtp = smtp
@@ -72,7 +70,7 @@ module Lazylead
       end
 
       def schedule_tasks
-        Lazylead::ORM::Task.where(enabled: "true").find_each do |task|
+        ORM::Task.where(enabled: "true").find_each do |task|
           @schedule.register task
         end
         @schedule.join

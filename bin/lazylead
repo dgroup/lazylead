@@ -29,24 +29,18 @@ STDOUT.sync = true
 require "slop"
 require "sqlite3"
 require "rainbow"
+require "logging"
 require "backtrace"
 require "memory_profiler"
 require_relative "../lib/lazylead/allocated"
-require_relative "../lib/lazylead/fake_log"
 require_relative "../lib/lazylead/cli/app"
+require_relative "../lib/lazylead/log"
 
 Thread.current.name = "main"
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
-# @todo #/DEV Choose a framework for logging, it might be
-#  - https://rubygems.org/gems/logging/versions/2.1.0
-#  - https://github.com/TwP/logging
-#  Logger should support colored output using any of
-#  - http://errtheblog.com/posts/34-a-ruby-rainbow
-#  - https://github.com/sickill/rainbow
-#  For now FakeLog is used.
-log = Lazylead::FakeLog.new
+log = Log::ERRORS
 
 opts = Slop.parse(ARGV, strict: false, suppress_errors: true) do |o|
   o.banner = "Usage: lazylead [options]
@@ -90,7 +84,7 @@ Available options:"
          "Apply the database vcs test data with migration scripts",
          default: false
   o.on "--verbose", "Enable extra logging information" do
-    log.verbose
+    log = Log::VERBOSE
   end
   o.on "-v", "--version", "Show current version" do
     log.debug Lazylead::VERSION
@@ -112,5 +106,5 @@ if opts["memory-dump"]
 else
   code = cmd.call
 end
-log.debug("Memory footprint at the end is #{Lazylead::Allocated.new}")
+log.debug("Memory footprint at the end is #{Allocated.new}")
 exit(code) unless code.zero?
