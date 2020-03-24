@@ -92,21 +92,21 @@ module Lazylead
   # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
-  class Assignee
+  class User
     def initialize(usr)
       @usr = usr
     end
 
     def id
-      @usr.name
+      @usr["name"]
     end
 
     def name
-      @usr.attrs["displayName"]
+      @usr["displayName"]
     end
 
     def email
-      @usr.attrs["emailAddress"]
+      @usr["emailAddress"]
     end
 
     def ==(other)
@@ -167,15 +167,12 @@ module Lazylead
       fields["priority"]["name"]
     end
 
-    # @todo #/DEV Issue.reporter implementation required. The 'reporter' should
-    #  have id, full name and email, potentially Lazylead::Assignee might be
-    #  reused somehow.
     def reporter
-      ""
+      Lazylead::User.new(fields["reporter"])
     end
 
     def assignee
-      Lazylead::Assignee.new(@issue.assignee)
+      Lazylead::User.new(@issue.assignee.attrs)
     end
 
     def fields

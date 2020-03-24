@@ -75,5 +75,10 @@ module Lazylead
                        .length,
                    "Two issues found on remote Jira instance using filter"
     end
+
+    test "issue reporter fetched successfully" do
+      assert_equal "Mark Paluch",
+                   jira.issues("key in ('DATAJDBC-480')").first.reporter.name
+    end
   end
 end
