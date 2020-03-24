@@ -38,10 +38,8 @@ module Lazylead
     end
 
     test "found issue by id" do
-      assert_equal 85_918,
-                   jira.issues("key in ('DATAJDBC-480')")
-                       .first.id.to_i,
-                   "Id mismatch for https://jira.spring.io/browse/DATAJDBC-480"
+      assert_equal "DATAJDBC-480",
+                   jira.issues("key in ('DATAJDBC-480')").first.id
     end
 
     #
@@ -79,6 +77,11 @@ module Lazylead
     test "issue reporter fetched successfully" do
       assert_equal "Mark Paluch",
                    jira.issues("key in ('DATAJDBC-480')").first.reporter.name
+    end
+
+    test "issue url fetched successfully" do
+      assert_equal "https://jira.spring.io/browse/DATAJDBC-480",
+                   jira.issues("key in ('DATAJDBC-480')").first.url
     end
   end
 end

@@ -146,16 +146,15 @@ module Lazylead
     end
 
     def id
-      @issue.id
+      @issue.key
     end
 
     def summary
       fields["summary"]
     end
 
-    # @todo #/DEV Issue url should be a reference to UI instead of REST.
     def url
-      @issue.attrs["self"]
+      @issue.attrs["self"].split("/rest/api").first + "/browse/" + id
     end
 
     # @todo #/DEV Due date implementation is required based on custom field
