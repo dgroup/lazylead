@@ -20,9 +20,9 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require "vcs4sql/sqlite/migration"
 require_relative "../smtp"
 require_relative "../schedule"
-require_relative "../../../../vcs4sql/lib/vcs4sql/sqlite/migration"
 
 module Lazylead
   # @todo #/DEV Lazylead::CLI::Args add a new class which extends hash
@@ -44,9 +44,6 @@ module Lazylead
         @smtp = smtp
       end
 
-      # @todo #/DEV Use vcs4sql from rubygems.org instead of local build.
-      #  For now vcs4sql wasn't released yet.
-      #  Also, the vcs4sql should be removed from ./Gemfile.
       def run(opts)
         apply_vcs_migration opts
         enable_active_record

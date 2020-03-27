@@ -25,4 +25,3 @@
 source "https://rubygems.org"
 ruby "2.6.5"
 gemspec
-gem "vcs4sql", path: "/Users/yurii.dubinka/projects/vcs4sql"
