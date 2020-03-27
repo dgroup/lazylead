@@ -57,6 +57,7 @@ module Lazylead
         @db = File.expand_path(opts[:home]) + "/" + opts[:sqlite]
         vcs = File.expand_path(opts[:home]) + "/" + opts[:vcs4sql]
         Vcs4sql::Sqlite::Migration.new(@db).upgrade vcs, opts[:testdata]
+        @log.debug "Migration applied to #{@db} from #{vcs}"
       end
 
       def enable_active_record
@@ -64,13 +65,20 @@ module Lazylead
           adapter: "sqlite3",
           database: @db
         )
+        @log.debug "Database connection established"
       end
 
       def schedule_tasks
-        ORM::Task.where(enabled: "true").find_each do |task|
-          @schedule.register task
+        todo = ORM::Task.where(enabled: "true")
+        if todo.empty?
+          @log.warn "ll-001: No tasks found."
+        else
+          todo.find_each do |task|
+            @log.debug "Task to schedule #{task}."
+            @schedule.register task
+          end
+          @schedule.join
         end
-        @schedule.join
       end
     end
   end

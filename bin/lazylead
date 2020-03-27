@@ -40,7 +40,7 @@ Thread.current.name = "main"
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
-log = Log::ERRORS
+log = Lazylead::Log::ERRORS
 
 opts = Slop.parse(ARGV, strict: false, suppress_errors: true) do |o|
   o.banner = "Usage: lazylead [options]
@@ -49,13 +49,6 @@ Available options:"
   o.bool "--trace", "Show full stack trace in case of a problem"
   o.bool "--memory-dump", "Dump memory snapshot afterwards, to the console",
          default: false
-  o.string "--pretty",
-           "Logging format, e.g. short, full, compact (default: short)",
-           required: true,
-           default: "short"
-  o.on "--no-colors", "Disable colors in the output" do
-    Rainbow.enabled = false
-  end
   o.string "--home",
            "Home directory (default: #{Dir.pwd})",
            default: ENV["LL_HOME"].nil? ? Dir.pwd : ENV["LL_HOME"]
@@ -71,9 +64,6 @@ Available options:"
   o.string "--smtp-port",
            "SMTP port for email notifications",
            required: true
-  o.string "--smtp-host",
-           "SMTP host for email notifications",
-           required: true
   o.string "--smtp-user",
            "SMTP login for email notifications",
            required: true
@@ -81,10 +71,10 @@ Available options:"
            "SMTP password for email notifications",
            required: true
   o.bool "--testdata",
-         "Apply the database vcs test data with migration scripts",
+         "Apply the database VCS migration with test data",
          default: false
   o.on "--verbose", "Enable extra logging information" do
-    log = Log::VERBOSE
+    log = Lazylead::Log::VERBOSE
   end
   o.on "-v", "--version", "Show current version" do
     log.debug Lazylead::VERSION
@@ -106,5 +96,5 @@ if opts["memory-dump"]
 else
   code = cmd.call
 end
-log.debug("Memory footprint at the end is #{Allocated.new}")
+log.debug("Memory footprint at the end is #{Lazylead::Allocated.new}")
 exit(code) unless code.zero?

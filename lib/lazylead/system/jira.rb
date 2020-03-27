@@ -87,7 +87,7 @@ module Lazylead
   end
 
   #
-  # An issue assignee from Jira
+  # An user from Jira which might be reporter, assignee, etc.
   #
   # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
@@ -154,7 +154,7 @@ module Lazylead
     end
 
     def url
-      @issue.attrs["self"].split("/rest/api").first + "/browse/" + id
+      @issue.attrs["self"].split("/rest/api/").first + "/browse/" + id
     end
 
     # @todo #/DEV Due date implementation is required based on custom field

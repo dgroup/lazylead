@@ -42,7 +42,7 @@ module Lazylead
     # @todo #/DEV error code is required for reach 'raise' statement within the
     #  application.
     def register(task)
-      raise "task can't be a null" if task.nil?
+      raise "ll-002: task can't be a null" if task.nil?
 
       @trigger.cron task.cron do
         task.exec

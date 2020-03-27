@@ -1,0 +1,11 @@
+.docker
+.github
+/coverage
+/test
+*.yml
+*.sh
+.gitignore
+.gitattributes
+.pdd
+.ruby-version
+.simplecov

@@ -27,7 +27,7 @@ require "tilt"
 module Lazylead
   # An email regarding tickets based on file with markup.
   #
-  # The 'tilt' gem was usage as a template engine.
+  # The 'tilt' gem was used as a template engine.
   # Read more about 'tilt':
   #  - https://github.com/rtomayko/tilt
   #  - https://github.com/rtomayko/tilt/blob/master/docs/TEMPLATES.md
@@ -45,7 +45,6 @@ module Lazylead
     end
 
     # Construct the email body from html template based on variables (binds).
-    # By default template engine returns '\n', thus this method removes it.
     def render
       Tilt.new(@file)
           .render(OpenStruct.new(@binds))
