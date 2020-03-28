@@ -4,11 +4,6 @@ jobs:
     machine: true
     steps:
       - checkout
-      # start proprietary DB using private Docker image
-      # with credentials stored in the UI
-      - run: |
-          env
-          echo "$DOCKER_TOKEN" | docker login --username $DOCKER_USER --password-stdin
 
       # build the application image
       - run: |
@@ -19,5 +14,7 @@ jobs:
           cat trace.log
           grep --color -n "No tasks found" trace.log
 
-      # deploy the image
-      - run: docker push dgroup/lazylead:$CIRCLE_BRANCH
+      # publish the image
+      - run: |
+          docker login --username $DOCKER_USER --password $DOCKER_TOKEN
+          docker push dgroup/lazylead:$CIRCLE_BRANCH
