@@ -16,7 +16,7 @@ jobs:
           cat trace.log
           expected="No tasks found"
           echo "Ensure that app prints the line '${expected}'."
-          grep --color ${expected} trace.log
+          grep --color "${expected}" trace.log
 
       # publish the image
       - run: |
