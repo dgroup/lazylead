@@ -32,7 +32,10 @@ insert into systems(id, properties)
 values (1,
         '{"type":"Lazylead::Jira", "username":"", "password":"", "site":"https://jira.spring.io", "context_path":""}');
 insert into teams(id, name, lead, properties)
-values (1, 'BA squad', 4, '{"from":"basquad@fake.com"}');
+values (1, 'BA squad', 1, '{"from":"basquad@fake.com"}');
+insert into cc(team_id, person_id)
+values (1, 2),
+       (1, 3);
 insert into tasks(name, cron, enabled, id, system, team_id, action, properties)
 values ('echo task', '* * * * *', 'false', 1, 1, 1,
         'Lazylead::Task::Echo',

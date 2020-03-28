@@ -67,6 +67,8 @@ module Lazylead
     # License:: MIT
     class CC < ActiveRecord::Base
       include Verbosed
+      self.table_name = "cc"
+      belongs_to :team, foreign_key: "team_id"
     end
 
     #

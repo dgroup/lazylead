@@ -29,7 +29,7 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Allocated
-    def initialize(bytes: GetProcessMem.new.bytes.to_i)
+    def initialize(bytes = GetProcessMem.new.bytes.to_i)
       @bytes = bytes
     end
 

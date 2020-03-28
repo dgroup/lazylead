@@ -30,10 +30,9 @@ module Lazylead
   module CLI
     class AppTest < Lazylead::SqliteTest
       test "LL database structure installed successfully" do
-        file = "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-        CLI::App.new(Log::NOTHING, Schedule.new).run(
+        CLI::App.new(Log::NOTHING).run(
           home: ".",
-          sqlite: file,
+          sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
           vcs4sql: "upgrades/sqlite"
         )
         assert_tables(
@@ -46,18 +45,18 @@ module Lazylead
                       properties],
             properties: %w[key value type]
           },
-          file
+          "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
         )
-        assert_fk %w[cc team_id team id],
+        assert_fk %w[cc team_id teams id],
                   %w[cc person_id persons id],
                   %w[tasks system systems id],
                   %w[tasks team_id teams id],
                   %w[teams lead persons id],
-                  file
+                  "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
       end
 
       test "activesupport is activated for access to domain entities" do
-        CLI::App.new(Log::NOTHING, Schedule.new).run(
+        CLI::App.new(Log::NOTHING).run(
           home: ".",
           sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
           vcs4sql: "upgrades/sqlite",

@@ -32,17 +32,18 @@ module Lazylead
         "1MB": 1024 * 1024,
         "1GB": 1024 * 1024 * 1024,
         "1024GB": 1024 * 1024 * 1024 * 1024
-      }.each do |label, b|
-        assert_equal(label.to_s, Allocated.new(bytes: b).to_s)
+      }.each do |label, bytes|
+        assert_equal label.to_s,
+                     Allocated.new(bytes).to_s
       end
     end
 
     test "default ctor evaluates a memory" do
-      greater_then(Allocated.new.to_i, 0)
+      greater_then Allocated.new.to_i, 0
     end
 
     test "pass a nil (null) value" do
-      assert_equal("?", Allocated.new(bytes: nil).to_s)
+      assert_equal "?", Allocated.new(nil).to_s
     end
   end
 end

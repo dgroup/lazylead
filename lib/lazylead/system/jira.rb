@@ -65,7 +65,6 @@ module Lazylead
 
     def client
       return @client if defined? @client
-
       @opts[:auth_type] = :basic if @opts[:auth_type].nil?
       cp("site", :site)
       cp("username", :username)

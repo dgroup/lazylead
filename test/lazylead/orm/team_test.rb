@@ -1,11 +1,9 @@
-# frozen_string_literal: true
-
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"),
+# of this software and associated documentation files (the "Software"],
 # to deal in the Software without restriction, including without limitation
 # the rights to use, copy, modify, merge, publish, distribute, sublicense,
 # and/or sell copies of the Software, and to permit persons to whom
@@ -22,31 +20,25 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "active_record"
-require "require_all"
-require_rel "../task"
-require_rel "verbosed"
-require_rel "model"
+require_relative "../../sqlite_test"
+require_relative "../../../lib/lazylead/log"
+require_relative "../../../lib/lazylead/cli/app"
+require_relative "../../../lib/lazylead/orm/model"
+require_relative "../../../lib/lazylead/orm/team"
 
 module Lazylead
-  module ORM
-    #
-    # A team for lazylead task.
-    # Each team may have several tasks.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Team < ActiveRecord::Base
-      include Verbosed
-      has_many :cc, class_name: "Lazylead::ORM::CC"
-
-      def to_h
-        return @prop if defined? @prop
-        @prop = JSON.parse(properties)
-        @prop["cc"] = cc.to_a
-        @prop
-      end
+  class TeamTest < Lazylead::SqliteTest
+    # @todo #/DEV Fill 'cc' field in 'team.properties' in order to use for
+    #  email notifications. So far only 'cc.person_id' is available within team.
+    test "cc emails fetched for team" do
+      CLI::App.new(Log::NOTHING).run(
+        home: ".",
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
+      )
+      assert_equal 2, ORM::Team.find(1).to_h["cc"].size
     end
   end
 end
+

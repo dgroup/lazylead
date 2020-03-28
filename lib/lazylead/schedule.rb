@@ -33,17 +33,16 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Schedule
-    def initialize(log = Log::NOTHING, trggr: Rufus::Scheduler.new, cling: true)
+    def initialize(log = Log::NOTHING, trg = Rufus::Scheduler.new, cling = true)
       @log = log
       @cling = cling
-      @trigger = trggr
+      @trigger = trg
     end
 
     # @todo #/DEV error code is required for reach 'raise' statement within the
     #  application.
     def register(task)
       raise "ll-002: task can't be a null" if task.nil?
-
       @trigger.cron task.cron do
         task.exec
       end

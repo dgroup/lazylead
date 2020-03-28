@@ -48,7 +48,7 @@ module Lazylead
     #  the required credentials within System.properties column in db.
     test "found issue by jira (ORM)" do
       skip "The test need personal credentials. Re-implementation is required"
-      CLI::App.new(Log::NOTHING, Schedule.new).run(
+      CLI::App.new(Log::NOTHING).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",

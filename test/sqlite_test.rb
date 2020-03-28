@@ -31,7 +31,6 @@ module Lazylead
     def assert_tables(tables, file)
       raise "Table names is a null" if tables.nil?
       raise "Table names is empty" if tables.empty?
-
       schema = conn(file).query(
         "select t.name 'table', group_concat(i.name) 'columns'
          from sqlite_master t join pragma_table_info(t.name) i
@@ -44,23 +43,24 @@ module Lazylead
       assert !schema.empty?, "No tables found in #{file} for #{tables}"
       tables.each_with_index do |t, i|
         raise "Name not found for table with id #{i} in #{tables}" if t.empty?
-
         tbl = t.first.to_s
         cols = t.values_at(1).sort.join(",")
         raise "No columns found for table #{tbl} in #{tables}" if cols.empty?
-
         assert !schema[tbl].nil?, "Table '#{tbl}' not found in #{schema}"
         assert_equal cols, schema[tbl], "Columns mismatch for '#{tbl}'"
       end
     end
 
     # Assert that table(s) has required foreign key(s)
+    #  which refers to the existing table.
     def assert_fk(*fks, file)
       raise "No foreign keys specified" if fks.nil? || fks.empty?
-
       schema = conn(file).query(
         "select t.name, fks.'from', fks.'table', fks.'to'
-         from sqlite_master t join pragma_foreign_key_list(t.name) fks
+         from
+          sqlite_master t join pragma_foreign_key_list(t.name) fks,
+          sqlite_master e
+         where e.type = 'table' and e.name = fks.'table'
          order by t.name, fks.'from'"
       ).map { |f| Array.new(f) }
       fks.each do |f|
@@ -69,12 +69,12 @@ module Lazylead
       end
     end
 
-    # Establish the connection to local sqlite database
+    private
+
+    # Establish the connection to the local sqlite database
     def conn(file)
       raise "Path to sqlite file is a null" if file.nil?
-
-      conn = SQLite3::Database.new file
-      conn
+      SQLite3::Database.new file
     end
   end
 end

@@ -53,7 +53,7 @@ module Lazylead
     end
 
     test "configuration properties merged successfully" do
-      CLI::App.new(Log::NOTHING, Schedule.new).run(
+      CLI::App.new(Log::NOTHING).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",

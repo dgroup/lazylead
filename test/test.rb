@@ -66,7 +66,6 @@ module Lazylead
 
     def assert_entries(exp, act)
       raise "Primary hash for comparing is empty" if exp.nil? || exp.empty?
-
       exp.each do |k, v|
         assert exp.key?(k), "The key '#{k}' is absent in #{act}"
         assert_equal v, act[k]
