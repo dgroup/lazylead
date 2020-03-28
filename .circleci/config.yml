@@ -11,8 +11,8 @@ jobs:
           COMMIT_URL="https://github.com/dgroup/rll/commit/${CIRCLE_SHA1}"
           docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${COMMIT_URL}" \
             -t dgroup/lazylead:$CIRCLE_BRANCH . \
-            -f .docker/Dockerfile \
-          docker run --rm dgroup/lazylead bin/lazylead --verbose --trace > trace.log
+            -f .docker/Dockerfile
+          docker run --rm dgroup/lazylead "bin/lazylead --verbose --trace" > trace.log
           cat trace.log
           grep --color -n "No tasks found" trace.log
 
