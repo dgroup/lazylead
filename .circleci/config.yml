@@ -1,15 +1,23 @@
-version: 2.1
-orbs:
-  ruby: circleci/ruby@0.1.2 
-
+version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/ruby:2.6.3-stretch-node
-    executor: ruby/default
+    machine: true
     steps:
       - checkout
-      - run:
-          name: Which bundler?
-          command: bundle -v
-      - ruby/bundle-install
+      # start proprietary DB using private Docker image
+      # with credentials stored in the UI
+      - run: |
+          env
+          echo "$DOCKER_TOKEN" | docker login --username $DOCKER_USER --password-stdin
+
+      # build the application image
+      - run: |
+          set -e
+          docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${CIRCLE_COMPARE_URL}" \
+            -t dgroup/lazylead:$CIRCLE_BRANCH .
+          docker run --rm dgroup/lazylead bin/lazylead --verbose --trace > trace.log
+          cat trace.log
+          grep --color -n "No tasks found" trace.log
+
+      # deploy the image
+      - run: docker push dgroup/lazylead:$CIRCLE_BRANCH

@@ -9,3 +9,4 @@
 .pdd
 .ruby-version
 .simplecov
+*.log
