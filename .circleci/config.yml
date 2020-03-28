@@ -1,7 +1,8 @@
 version: 2
 jobs:
   build:
-    machine: true
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
 
@@ -12,7 +13,7 @@ jobs:
           docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${COMMIT_URL}" \
             -t dgroup/lazylead:$CIRCLE_BRANCH . \
             -f .docker/Dockerfile
-          docker run --rm dgroup/lazylead "bin/lazylead --verbose --trace" > trace.log
+          docker run --rm dgroup/lazylead:${CIRCLE_BRANCH} "bin/lazylead --verbose --trace" > trace.log
           cat trace.log
           grep --color -n "No tasks found" trace.log
 
