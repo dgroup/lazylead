@@ -14,7 +14,7 @@ jobs:
             -f .docker/Dockerfile
           docker run --rm dgroup/lazylead:${CIRCLE_BRANCH} bin/lazylead --verbose > trace.log
           cat trace.log
-          expected="No taskssss found"
+          expected="No tasks found"
           echo "Ensure that app prints the line '${expected}'."
           grep --color ${expected} trace.log
 
