@@ -23,6 +23,6 @@ COPY bin/lazylead ./bin/lazylead
 ADD lib ./lib
 ADD upgrades ./upgrades
 
-CMD ["./bin/lazylead", "--trace", "--verbose", "--memory-dump"]
+CMD ["bin/lazylead", "--trace", "--verbose", "--memory-dump"]
 
 MAINTAINER 'Yurii Dubinka (yurii.dubinka@gmail.com)'
