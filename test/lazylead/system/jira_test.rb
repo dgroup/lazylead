@@ -63,9 +63,6 @@ module Lazylead
                    "Id mismatch for https://jira.spring.io/browse/DATAJDBC-500"
     end
 
-    # @todo #/DEV Group by assignee method should be optimized based on
-    #  internal state. The Assignee#id should be used as equal function.
-    #  The function should be delegated into group_by method.
     test "group by assignee" do
       assert_equal 2,
                    jira.group_by_assignee("filter=16743")

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -21,33 +19,43 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
+
+require_relative "../test"
+require_relative "../../lib/lazylead/group_by"
+
 module Lazylead
-  #
-  # Allows to group the enumeration using custom function.
-  # This is similar to "group by" feature which we have in sql.
-  #
-  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-  # License:: MIT
-  class GroupBy
+  class GroupByTest < Lazylead::Test
+    test "group by enumeration by external function" do
+      class Usr
+        attr_reader :id, :name
 
-    def initialize(src)
-      @src = src
-    end
+        def initialize(id, name)
+          @id = id
+          @name = name
+        end
 
-    # Make a hash from enumeration using custom function.
-    # &block:: a custom function
-    def to_h(&block)
-      out = {}
-      @src.each do |e|
-        k = block.call e
-        if out.key? k
-          out[k] << e
-        else
-          out[k] = [e]
+        def ==(other)
+          self.class === other and other.id == @id
+        end
+
+        alias eql? ==
+
+        def hash
+          id.hash
         end
       end
-      out
+
+      assert_equal 3,
+                   GroupBy.new(
+                     [
+                       OpenStruct.new(smr: "NPE", assignee: Usr.new(1, "Tom")),
+                       OpenStruct.new(smr: "IAE", assignee: Usr.new(2, "Tim")),
+                       OpenStruct.new(smr: "MNF", assignee: Usr.new(3, "Zane")),
+                       OpenStruct.new(smr: "IAE", assignee: Usr.new(3, "Zane")),
+                       OpenStruct.new(smr: "NPE", assignee: Usr.new(3, "Zane"))
+                     ]
+                   ).to_h(&:assignee)[Usr.new(3, "Zane")].size
     end
   end
 end
+

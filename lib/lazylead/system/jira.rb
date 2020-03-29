@@ -21,6 +21,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "jira-ruby"
+require_rel "../group_by"
 
 module Lazylead
   # Jira system for manipulation with issues.
@@ -37,22 +38,12 @@ module Lazylead
       client.Issue.jql(jql).map { |i| Lazylead::Issue.new(i) }
     end
 
-    # @todo #/DEV Group by function the issues found by jql
-    def group_by(fnc, jql)
-      raise "unsupported operation for #{fnc} and #{jql}"
+    def group_by(jql, &block)
+      GroupBy.new(issues jql).to_h(&block)
     end
 
     def group_by_assignee(jql)
-      issues = issues(jql)
-      assigned = issues.group_by { |i| i.assignee.id }
-      assignee = issues.map(&:assignee)
-                       .uniq(&:id)
-                       .group_by(&:id)
-      target = {}
-      assigned.each do |id, i|
-        target[assignee[id].first] = i
-      end
-      target
+      GroupBy.new(issues jql).to_h(&:assignee)
     end
 
     # @todo #/DEV Filter the issues found by jql on app side.
@@ -92,6 +83,8 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class User
+    attr_reader :id
+
     def initialize(usr)
       @usr = usr
     end
@@ -109,19 +102,13 @@ module Lazylead
     end
 
     def ==(other)
-      eql? other
+      self.class === other and other.id == id
     end
 
-    def ===(other)
-      eql? other
-    end
+    alias eql? ==
 
-    def eql?(other)
-      equal? other
-    end
-
-    def equal?(other)
-      id == other.id
+    def hash
+      id.hash
     end
 
     def to_s
