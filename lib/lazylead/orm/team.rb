@@ -39,13 +39,10 @@ module Lazylead
     # License:: MIT
     class Team < ActiveRecord::Base
       include Verbosed
-      has_many :cc, class_name: "Lazylead::ORM::CC"
 
       def to_h
         return @prop if defined? @prop
         @prop = JSON.parse(properties)
-        @prop["cc"] = cc.to_a
-        @prop
       end
     end
   end

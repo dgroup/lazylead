@@ -22,51 +22,22 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "active_record"
-require "require_all"
-require_rel "../task"
-require_rel "verbosed"
+require "tilt"
 
 module Lazylead
-  module ORM
-    #
-    # General lazylead task.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Task < ActiveRecord::Base
-      include Verbosed
-      belongs_to :team, foreign_key: "team_id"
-      has_one :system, foreign_key: "id"
+  #
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
+  class GroupBy
 
-      def exec
-        action.constantize.new.run(system.connect, props)
-      end
-
-      def props
-        team.to_h.merge JSON.parse(properties)
-      end
+    def initialize(src)
+      @src = src
     end
 
-    #
-    # Details for each team members.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Person < ActiveRecord::Base
-      include Verbosed
-    end
-
-    #
-    # Application properties across all systems within lazylead.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Properties < ActiveRecord::Base
-      include Verbosed
+    def to_h(&block)
+      {}
     end
   end
 end

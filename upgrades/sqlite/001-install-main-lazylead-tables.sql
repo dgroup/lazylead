@@ -44,14 +44,6 @@ create table if not exists teams
     properties text,
     foreign key (lead) references persons (id) on delete cascade
 );
-create table if not exists cc
-(
-    id        integer primary key autoincrement,
-    team_id   integer not null,
-    person_id integer not null,
-    foreign key (team_id) references teams (id) on delete cascade,
-    foreign key (person_id) references persons (id) on delete cascade
-);
 -- @todo #/DEV system.properties - column should be a json map(key,value)
 create table if not exists systems
 (

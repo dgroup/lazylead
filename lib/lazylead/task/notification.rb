@@ -20,8 +20,8 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_rel "../email"
-require_rel "../version"
+require_relative "../email"
+require_relative "../version"
 
 module Lazylead
   module Task
@@ -47,6 +47,7 @@ module Lazylead
           Mail.deliver do
             to assignee.email
             from cfg["from"]
+            cc also(cfg) if cfg.key? "cc"
             subject cfg["subject"]
             html_part do
               content_type "text/html; charset=UTF-8"
@@ -57,6 +58,12 @@ module Lazylead
             end
           end
         end
+      end
+
+      # Fetch additional email addresses to be used in 'CC' email section.
+      # It might be some additional regulators, managers, etc.
+      def also(cfg)
+        cfg["cc"].split(",").map { |e| e.strip }.reject { |e| e.empty? }
       end
     end
   end

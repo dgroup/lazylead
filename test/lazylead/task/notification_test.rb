@@ -3,7 +3,7 @@
 # Copyright (c) 2019-2020 Yurii Dubinka
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"],
+# of this software and associated documentation files (the "Software"),
 # to deal in the Software without restriction, including without limitation
 # the rights to use, copy, modify, merge, publish, distribute, sublicense,
 # and/or sell copies of the Software, and to permit persons to whom
@@ -17,28 +17,22 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+# ARISING FROM, OUT OF OR IN CONN ECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../../sqlite_test"
-require_relative "../../../lib/lazylead/log"
-require_relative "../../../lib/lazylead/cli/app"
-require_relative "../../../lib/lazylead/orm/model"
-require_relative "../../../lib/lazylead/orm/team"
+require_relative "../../test"
+require_relative "../../../lib/lazylead/task/notification"
 
 module Lazylead
-  class TeamTest < Lazylead::SqliteTest
-    # @todo #/DEV Fill 'cc' field in 'team.properties' in order to use for
-    #  email notifications. So far only 'cc.person_id' is available within team.
-    test "cc emails fetched for team" do
-      CLI::App.new(Log::NOTHING).run(
-        home: ".",
-        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
-        vcs4sql: "upgrades/sqlite",
-        testdata: true
-      )
-      assert_equal 2, ORM::Team.find(1).to_h["cc"].size
+  class NotificationTest < Lazylead::Test
+    test "size of CC email addresses" do
+      assert_equal 2,
+                   Task::Notification.new.also("cc" => "f@m.com, s@m.com,").size
+    end
+
+    test "second email addresses has correct structure" do
+      assert_equal "s@m.com",
+                   Task::Notification.new.also("cc" => "f@m.com, s@m.com ")[1]
     end
   end
 end
-

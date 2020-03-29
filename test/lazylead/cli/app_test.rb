@@ -39,7 +39,6 @@ module Lazylead
           {
             persons: %w[id name email],
             teams: %w[id name lead properties],
-            cc: %w[id team_id person_id],
             systems: %w[id properties],
             tasks: %w[id name cron system action team_id description enabled
                       properties],
@@ -47,9 +46,7 @@ module Lazylead
           },
           "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
         )
-        assert_fk %w[cc team_id teams id],
-                  %w[cc person_id persons id],
-                  %w[tasks system systems id],
+        assert_fk %w[tasks system systems id],
                   %w[tasks team_id teams id],
                   %w[teams lead persons id],
                   "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"

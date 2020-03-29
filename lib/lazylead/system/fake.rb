@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -21,52 +19,33 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
-
-require "active_record"
-require "require_all"
-require_rel "../task"
-require_rel "verbosed"
-
 module Lazylead
-  module ORM
-    #
-    # General lazylead task.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Task < ActiveRecord::Base
-      include Verbosed
-      belongs_to :team, foreign_key: "team_id"
-      has_one :system, foreign_key: "id"
+  #
+  # A fake ticketing system
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
+  class Fake
 
-      def exec
-        action.constantize.new.run(system.connect, props)
-      end
-
-      def props
-        team.to_h.merge JSON.parse(properties)
-      end
+    def initialize(issues = [])
+      @issues = issues
     end
 
-    #
-    # Details for each team members.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Person < ActiveRecord::Base
-      include Verbosed
+    def issues(_)
+      @issues
     end
 
-    #
-    # Application properties across all systems within lazylead.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Properties < ActiveRecord::Base
-      include Verbosed
+    def group_by(_, &block)
+      GroupBy.new(issues _).to_h &block
+    end
+
+    def group_by_assignee(_)
+      GroupBy.new(issues _).to_h { |i| i.assignee.id }
+    end
+
+    def filtered(_, _)
+      []
     end
   end
 end

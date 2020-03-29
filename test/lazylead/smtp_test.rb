@@ -28,7 +28,7 @@ module Lazylead
   # @todo #43/DEV Minitest+integration test - define approach like maven profile
   #  for java-based applications.
   class SmtpTest < Lazylead::Test
-    test "email has been sent to the fake smtp server" do
+    test "email has been sent to the fake server" do
       Smtp.new.enable
       Mail.deliver do
         from "mike@fake.com"
