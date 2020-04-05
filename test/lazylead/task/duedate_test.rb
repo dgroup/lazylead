@@ -17,11 +17,12 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONN ECTION WITH THE SOFTWARE OR THE USE
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../../test"
 require_relative "../../../lib/lazylead/smtp"
+require_relative "../../../lib/lazylead/log"
 require_relative "../../../lib/lazylead/cli/app"
 require_relative "../../../lib/lazylead/orm/team"
 require_relative "../../../lib/lazylead/orm/model"

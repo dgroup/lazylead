@@ -19,7 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
-require_relative "../group_by"
+
 module Lazylead
   #
   # A fake ticketing system
@@ -38,11 +38,11 @@ module Lazylead
     end
 
     def group_by(_, &block)
-      GroupBy.new(@issues).to_h(&block)
+      @issues.group_by(&block)
     end
 
     def group_by_assignee(_)
-      GroupBy.new(@issues).to_h(&:assignee)
+      @issues.group_by(&:assignee)
     end
 
     def filtered(_, _)

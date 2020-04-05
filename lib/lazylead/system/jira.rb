@@ -21,7 +21,6 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "jira-ruby"
-require_rel "../group_by"
 
 module Lazylead
   # Jira system for manipulation with issues.
@@ -36,20 +35,6 @@ module Lazylead
 
     def issues(jql)
       client.Issue.jql(jql).map { |i| Lazylead::Issue.new(i) }
-    end
-
-    def group_by(jql, &block)
-      GroupBy.new(issues jql).to_h(&block)
-    end
-
-    def group_by_assignee(jql)
-      GroupBy.new(issues jql).to_h(&:assignee)
-    end
-
-    # @todo #/DEV Filter the issues found by jql on app side.
-    #  Required for cases when filtration can't be done on jira side.
-    def filtered(fnc, jql)
-      raise "unsupported operation for #{fnc} and #{jql}"
     end
 
     private

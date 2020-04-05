@@ -7,3 +7,6 @@ rdoc/
 *.db
 *.lock
 *.log
+*.iml
+*.iws
+/.idea/

@@ -43,7 +43,7 @@ module Lazylead
     #
     class Notification
       def run(sys, cfg)
-        sys.group_by_assignee(cfg["sql"]).each do |assignee, issues|
+        sys.issues(cfg["sql"]).group_by(&:assignee).each do |assignee, issues|
           Mail.deliver do
             to assignee.email
             from cfg["from"]
