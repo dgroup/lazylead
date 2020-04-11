@@ -47,7 +47,7 @@ module Lazylead
       def run(opts)
         apply_vcs_migration opts
         enable_active_record
-        @smtp.enable opts
+        @smtp.enable
         schedule_tasks
       end
 

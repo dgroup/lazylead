@@ -23,6 +23,8 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "mail"
+require_relative "log"
+require_relative "salt"
 
 module Lazylead
   #
@@ -32,37 +34,45 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Smtp
-    def initialize(log = Log::NOTHING, salt = NoSalt.new)
+    def initialize(log = Log::NOTHING, salt = NoSalt.new, opts = {})
       @log = log
       @salt = salt
+      @opts = opts
     end
 
-    def enable(opts = {})
-      if opts.empty? || opts[:test_mode]
+    def enable
+      if @opts.empty? || @opts[:test_mode]
         Mail.defaults do
           delivery_method :test
         end
-        @log.debug("SMTP connection enabled in test mode.")
+        @log.debug "SMTP connection enabled in test mode."
       else
-        setup_smtp opts
+        setup_smtp
       end
     end
 
     private
 
-    def setup_smtp(opts)
-      opts[:smtp_user] = @salt.decrypt(opts[:smtp_user]) if @salt.specified?
-      opts[:smtp_pass] = @salt.decrypt(opts[:smtp_pass]) if @salt.specified?
+    def setup_smtp
+      host = @opts[:smtp_host]
+      port = @opts[:smtp_port]
+      user = decrypted(:smtp_user)
+      pass = decrypted(:smtp_pass)
       Mail.defaults do
-        delivery_method :smtp,
-                        address: opts[:smtp_host],
-                        port: opts[:smtp_port],
-                        user_name: opts[:smtp_user],
-                        password: opts[:smtp_pass],
-                        authentication: "plain",
+        delivery_method :smtp, address: host, port: port, user_name: user,
+                        password: pass, authentication: "plain",
                         enable_starttls_auto: true
       end
-      @log.debug("SMTP connection established with #{opts[:smtp_host]}")
+      @log.debug "SMTP connection established with #{host}"
+    end
+
+    # Decrypt the value of configuration property using cryptography salt.
+    def decrypted(key)
+      if @salt.specified?
+        @salt.decrypt(@opts[key])
+      else
+        @opts[key]
+      end
     end
   end
 end

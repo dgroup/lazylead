@@ -52,8 +52,8 @@ module Lazylead
         smtp_pass: ENV["LL_SMTP_PASS"]
       )
       Mail.deliver do
-        from "from@fake.com"
-        to "to@fake.com"
+        from ENV["LL_SMTP_FROM"]
+        to ENV["LL_SMTP_TO"]
         subject "Testing"
         body "Good, it works"
       end

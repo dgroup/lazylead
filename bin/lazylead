@@ -32,16 +32,15 @@ require "rainbow"
 require "logging"
 require "backtrace"
 require "memory_profiler"
+require_relative "../lib/lazylead/log"
 require_relative "../lib/lazylead/schedule"
 require_relative "../lib/lazylead/allocated"
 require_relative "../lib/lazylead/cli/app"
-require_relative "../lib/lazylead/log"
 
+log = Lazylead::Log::ERRORS
 Thread.current.name = "main"
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
-
-log = Lazylead::Log::ERRORS
 
 opts = Slop.parse(ARGV, strict: false, suppress_errors: true) do |o|
   o.banner = "Usage: lazylead [options]
@@ -59,18 +58,6 @@ Available options:"
   o.string "--vcs4sql",
            "Home directory with database version control(vcs) scripts",
            default: "upgrades/sqlite"
-  o.string "--smtp-host",
-           "SMTP host for email notifications",
-           required: true
-  o.string "--smtp-port",
-           "SMTP port for email notifications",
-           required: true
-  o.string "--smtp-user",
-           "SMTP login for email notifications",
-           required: true
-  o.string "--smtp-pass",
-           "SMTP password for email notifications",
-           required: true
   o.bool "--testdata",
          "Apply the database VCS migration with test data",
          default: false
@@ -87,7 +74,15 @@ cmd = lambda do
   Lazylead::CLI::App.new(
     log,
     Schedule.new(log),
-    Smtp.new(log, Salt.new("smtp"))
+    Smtp.new(
+      log, Salt.new("smtp"),
+      {
+        smtp_host: ENV["smtp_host"],
+        smtp_port: ENV["smtp_port"],
+        smtp_user: ENV["smtp_user"],
+        smtp_pass: ENV["smtp_pass"]
+      }
+    )
   ).run(opts.to_h)
   return 0
 rescue StandardError => e
