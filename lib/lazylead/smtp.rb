@@ -32,11 +32,17 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Smtp
+    def initialize(log = Log::NOTHING, salt = NoSalt.new)
+      @log = log
+      @salt = salt
+    end
+
     def enable(opts = {})
       if opts.empty? || opts[:test_mode]
         Mail.defaults do
           delivery_method :test
         end
+        @log.debug("SMTP connection enabled in test mode.")
       else
         setup_smtp opts
       end
@@ -45,6 +51,8 @@ module Lazylead
     private
 
     def setup_smtp(opts)
+      opts[:smtp_user] = @salt.decrypt(opts[:smtp_user]) if @salt.specified?
+      opts[:smtp_pass] = @salt.decrypt(opts[:smtp_pass]) if @salt.specified?
       Mail.defaults do
         delivery_method :smtp,
                         address: opts[:smtp_host],
@@ -54,6 +62,7 @@ module Lazylead
                         authentication: "plain",
                         enable_starttls_auto: true
       end
+      @log.debug("SMTP connection established with #{opts[:smtp_host]}")
     end
   end
 end

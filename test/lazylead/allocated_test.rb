@@ -25,7 +25,7 @@ require_relative "../../lib/lazylead/allocated"
 
 module Lazylead
   class AllocatedTest < Lazylead::Test
-    test "bytes transformed to string has necessary labels (B, KB, MB, etc)" do
+    test "bytes transformed to string have labels (B, KB, MB, etc)" do
       {
         "1B": 1,
         "1KB": 1024,

@@ -32,6 +32,7 @@ require "rainbow"
 require "logging"
 require "backtrace"
 require "memory_profiler"
+require_relative "../lib/lazylead/schedule"
 require_relative "../lib/lazylead/allocated"
 require_relative "../lib/lazylead/cli/app"
 require_relative "../lib/lazylead/log"
@@ -83,7 +84,11 @@ Available options:"
 end
 log.debug("Memory footprint at start is #{Lazylead::Allocated.new}")
 cmd = lambda do
-  Lazylead::CLI::App.new(log).run(opts.to_h)
+  Lazylead::CLI::App.new(
+    log,
+    Schedule.new(log),
+    Smtp.new(log, Salt.new("smtp"))
+  ).run(opts.to_h)
   return 0
 rescue StandardError => e
   log.error("#{e.message} (#{e.class.name})")
