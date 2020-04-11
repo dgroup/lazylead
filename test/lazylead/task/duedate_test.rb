@@ -23,9 +23,8 @@
 require_relative "../../test"
 require_relative "../../../lib/lazylead/smtp"
 require_relative "../../../lib/lazylead/log"
+require_relative "../../../lib/lazylead/model"
 require_relative "../../../lib/lazylead/cli/app"
-require_relative "../../../lib/lazylead/orm/team"
-require_relative "../../../lib/lazylead/orm/model"
 require_relative "../../../lib/lazylead/system/jira"
 require_relative "../../../lib/lazylead/task/notification"
 

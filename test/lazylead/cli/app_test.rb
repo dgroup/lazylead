@@ -23,8 +23,7 @@
 require_relative "../../sqlite_test"
 require_relative "../../../lib/lazylead/log"
 require_relative "../../../lib/lazylead/cli/app"
-require_relative "../../../lib/lazylead/orm/model"
-require_relative "../../../lib/lazylead/orm/team"
+require_relative "../../../lib/lazylead/model"
 
 module Lazylead
   module CLI

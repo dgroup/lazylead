@@ -24,19 +24,30 @@
 
 require "active_record"
 require "require_all"
-require_rel "../task"
-require_rel "verbosed"
+require_rel "task"
 
+#
+# ORM domain model entities.
+#
+# Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+# Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+# License:: MIT
 module Lazylead
+  # Makes ORM objects verbose using object's fields.
+  module Verbose
+    def to_s
+      attributes.map { |k, v| "#{k}='#{v}'" }.join(", ")
+    end
+
+    def inspect
+      to_s
+    end
+  end
+
   module ORM
-    #
     # General lazylead task.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
     class Task < ActiveRecord::Base
-      include Verbosed
+      include Verbose
       belongs_to :team, foreign_key: "team_id"
       has_one :system, foreign_key: "id"
 
@@ -49,24 +60,40 @@ module Lazylead
       end
     end
 
-    #
-    # Details for each team members.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Person < ActiveRecord::Base
-      include Verbosed
+    # A team for lazylead task.
+    # Each team may have several tasks.
+    class Team < ActiveRecord::Base
+      include Verbose
+
+      def to_h
+        return @prop if defined? @prop
+        @prop = JSON.parse(properties)
+      end
     end
 
-    #
-    # Application properties across all systems within lazylead.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
+    # Ticketing systems to monitor.
+    class System < ActiveRecord::Base
+      include Verbose
+
+      # Make an instance of ticketing system for future interaction.
+      def connect
+        cfg = JSON.parse(properties)
+        if cfg["type"].empty?
+          Empty.new
+        else
+          cfg["type"].constantize.new Salt.new(id), cfg.except("type")
+        end
+      end
+    end
+
+    # Details about each team members.
+    class Person < ActiveRecord::Base
+      include Verbose
+    end
+
+    # Application properties across all ticketing systems.
     class Properties < ActiveRecord::Base
-      include Verbosed
+      include Verbose
     end
   end
 end

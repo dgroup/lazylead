@@ -21,8 +21,8 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../../test"
+require_relative "../../../lib/lazylead/model"
 require_relative "../../../lib/lazylead/cli/app"
-require_relative "../../../lib/lazylead/orm/system"
 require_relative "../../../lib/lazylead/system/jira"
 
 module Lazylead

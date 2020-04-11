@@ -24,7 +24,7 @@
 
 require "json"
 require "rufus-scheduler"
-require_relative "orm/model"
+require_relative "model"
 
 module Lazylead
   # The tasks schedule
