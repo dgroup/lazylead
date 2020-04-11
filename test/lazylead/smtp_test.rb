@@ -45,12 +45,15 @@ module Lazylead
     # @todo #43/DEV email-related properties should be exported to the CI env
     test "email has been sent to the remote server" do
       skip "Not implemented yet"
-      Smtp.new.enable(
-        smtp_host: ENV["LL_SMTP_HOST"],
-        smtp_port: ENV["LL_SMTP_PORT"],
-        smtp_user: ENV["LL_SMTP_USER"],
-        smtp_pass: ENV["LL_SMTP_PASS"]
-      )
+      Smtp.new(
+        Log::NOTHING, NoSalt.new,
+        {
+          smtp_host: ENV["LL_SMTP_HOST"],
+          smtp_port: ENV["LL_SMTP_PORT"],
+          smtp_user: ENV["LL_SMTP_USER"],
+          smtp_pass: ENV["LL_SMTP_PASS"]
+        }
+      ).enable
       Mail.deliver do
         from ENV["LL_SMTP_FROM"]
         to ENV["LL_SMTP_TO"]
