@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -22,37 +20,22 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "active_record"
-require "require_all"
-require_relative "verbosed"
-require_relative "../system/jira"
-require_relative "../system/empty"
-require_relative "../salt"
+require_relative "../test"
+require_relative "../../lib/lazylead/salt"
 
-# @todo #/DEV ORM-related classes/modules looks too verbose, they need to be
-#  simplified as much as possible.
 module Lazylead
-  # @todo #/DEV Add validations to the columns. More details described here
-  #  https://www.rubydoc.info/gems/activerecord/5.0.0.1.
-  module ORM
-    #
-    # Ticketing systems to monitor.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class System < ActiveRecord::Base
-      include Verbosed
+  class SaltTest < Lazylead::Test
+    test "e2e encryption/decryption is successful" do
+      ENV["salt"] = "E1F53135E559C2530000000000000000"
+      assert_equal "the-best-password",
+                   Salt.new.decrypt(Salt.new.encrypt("the-best-password"))
+    end
 
-      # Make an instance of ticketing system for future interaction.
-      def connect
-        cfg = JSON.parse(properties)
-        if cfg["type"].empty?
-          Empty.new
-        else
-          cfg["type"].constantize.new Salt.new(id), cfg.except("type")
-        end
-      end
+    test "decryption is successful" do
+      ENV["salt.5"] = "E1F53135E559C2530000000000000000"
+      assert_equal "the-best-password",
+                   Salt.new(5)
+                       .decrypt("VUxpSk83d3VGOHZMVTBvWmZ5eGlEOWdPZFhJN0tYMXhwaDd0MVg0L01PST0tLUc0bEhIVTBNRDFzdDdTSkNoeVAyckE9PQ==--4a0206700a28b69aaca65a88af09d211f4251f02")
     end
   end
 end

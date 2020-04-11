@@ -21,6 +21,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "jira-ruby"
+require_relative "../salt"
 
 module Lazylead
   # Jira system for manipulation with issues.
@@ -29,7 +30,8 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Jira
-    def initialize(opts)
+    def initialize(salt = NoSalt.new, opts)
+      @salt = salt
       @opts = opts
     end
 
@@ -46,6 +48,8 @@ module Lazylead
       cp("username", :username)
       cp("password", :password)
       cp("context_path", :context_path)
+      @opts["username"] = @salt.decrypt(@opts["username"]) if @salt.specified?
+      @opts["password"] = @salt.decrypt(@opts["password"]) if @salt.specified?
       @client = JIRA::Client.new(@opts)
     end
 
