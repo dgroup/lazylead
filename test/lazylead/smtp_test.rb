@@ -44,7 +44,7 @@ module Lazylead
 
     # @todo #43/DEV email-related properties should be exported to the CI env
     test "email has been sent to the remote server" do
-      skip "Not implemented yet"
+      skip "Not implemented yet" if ENV["LL_SMTP_HOST"].blank? || ENV["LL_SMTP_USER"].blank?
       Smtp.new(
         Log::NOTHING, NoSalt.new,
         {

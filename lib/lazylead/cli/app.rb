@@ -56,7 +56,7 @@ module Lazylead
       def apply_vcs_migration(opts)
         @db = File.expand_path(opts[:home]) + "/" + opts[:sqlite]
         vcs = File.expand_path(opts[:home]) + "/" + opts[:vcs4sql]
-        @log.debug "Database: #{@db}, sql migration dir: #{vcs}"
+        @log.debug "Database: '#{@db}', sql migration dir: '#{vcs}'"
         Vcs4sql::Sqlite::Migration.new(@db).upgrade vcs, opts[:testdata]
         @log.debug "Migration applied to #{@db} from #{vcs}"
       end

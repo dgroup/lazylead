@@ -60,7 +60,7 @@ module Lazylead
     end
 
     def specified?
-      !key.empty?
+      !key.blank?
     end
 
     def key

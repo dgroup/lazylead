@@ -32,7 +32,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.rubygems_version = "2.2"
-  s.required_ruby_version = ">=2.6.5"
+  s.required_ruby_version = ">=2.7.1"
   s.name = "lazylead"
   s.version = "0.0.0"
   s.license = "MIT"

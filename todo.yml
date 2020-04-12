@@ -9,9 +9,6 @@
 #  - https://github.com/dgroup/lazylead/blob/0.0.0-alpha-java/readme.md
 #  - https://github.com/dgroup/docker-unittests/blob/master/readme.md
 
-# @todo #/DEV Migrate to ruby 2.7.0. For now the project has 2.6.5.
-#  The project is new, it shouldn't be so expensive.
-
 # @todo #/DEV Enable DepShield badge for inspection. Example you may find
 #  [![DepShield Badge](https://depshield.sonatype.org/badges/dgroup/lazylead/depshield.svg)](https://depshield.github.io)
 
