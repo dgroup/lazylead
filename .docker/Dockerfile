@@ -1,4 +1,4 @@
-FROM ruby:2.7.1
+FROM ruby:2.7.1-alpine
 
 ARG release_tags
 
@@ -13,11 +13,14 @@ ENV APP_HOME=/lazylead \
 WORKDIR $APP_HOME
 
 RUN echo "Install 3rd-party libraries." \
-  && apt-get update \
-  && apt-get install -y tree less vim man bash unzip
+  && apk add libc-dev gcc make git sqlite sqlite-dev sqlite-libs tree less vim man bash unzip
 
 COPY Gemfile lazylead.gemspec ./
-RUN bundler install && bundler update
+
+# @todo #/DEV Avoid hardcode of minor versions for gems.
+#  Potentialy, they might be changed to something like '>=2.2.0'.
+RUN gem install json -v '2.2.0' \
+  && bundler install && bundler update
 
 COPY bin/lazylead ./bin/lazylead
 ADD lib ./lib
