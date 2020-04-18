@@ -20,7 +20,7 @@ COPY Gemfile lazylead.gemspec ./
 # @todo #/DEV Avoid hardcode of minor versions for gems.
 #  Potentialy, they might be changed to something like '>=2.2.0'.
 RUN gem install json -v '2.2.0' \
-  && bundler install && bundler update
+  && bundler install
 
 COPY bin/lazylead ./bin/lazylead
 ADD lib ./lib
