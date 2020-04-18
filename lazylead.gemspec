@@ -82,7 +82,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "vcs4sql", "~> 0.1.0"
   s.add_runtime_dependency "zache", ">=0.12"
   s.add_development_dependency "codecov", "0.1.14"
-  s.add_development_dependency "cucumber", "3.1.2"
   s.add_development_dependency "guard", "2.15.0"
   s.add_development_dependency "guard-minitest", "2.4.6"
   s.add_development_dependency "minitest", "5.11.3"

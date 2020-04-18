@@ -1,10 +1,19 @@
 version: 2
 jobs:
-  build:
+  test:
+    machine: true
+    docker: ruby:2.7.1-alpine
+    steps:
+      - checkout
+      - run: |
+          apk add libc-dev gcc make git sqlite sqlite-dev sqlite-libs
+          gem install json:2.2.0
+          bundler install
+      - run: rake task
+  deploy:
     machine: true
     steps:
       - checkout
-
       # build the application image
       - run: |
           set -e
@@ -17,8 +26,13 @@ jobs:
           expected="No tasks found"
           echo "Ensure that app prints the line '${expected}'."
           grep --color "${expected}" trace.log
-
       # publish the image
       - run: |
           docker login --username $DOCKER_USER --password $DOCKER_TOKEN
           docker push dgroup/lazylead:$CIRCLE_BRANCH
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - deploy

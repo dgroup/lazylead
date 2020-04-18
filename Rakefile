@@ -44,7 +44,7 @@ def version
   Gem::Specification.load(Dir["*.gemspec"].first).version
 end
 
-task default: %i[clean test features rubocop xcop copyright]
+task default: %i[clean test rubocop copyright]
 
 require "rake/testtask"
 desc "Run all unit tests"
@@ -72,23 +72,8 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << "rubocop-rspec"
 end
 
-require "cucumber/rake/task"
-Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = "features --format pretty"
-  Rake::Cleaner.cleanup_files(["coverage"])
-end
-Cucumber::Rake::Task.new(:"features:html") do |t|
-  t.profile = "html_report"
-end
-
-require "xcop/rake_task"
-desc "Validate all XML/XSL/XSD/HTML files for formatting"
-Xcop::RakeTask.new :xcop do |task|
-  task.license = "license.txt"
-  task.includes = ["**/*.xml", "**/*.xsl", "**/*.xsd", "**/*.html"]
-  task.excludes = ["target/**/*", "coverage/**/*", "wp/**/*"]
-end
-
+# @todo @/DEV Option 'grep --include' is absent on linux alpine.
+#  grep: unrecognized option: include
 task :copyright do
   sh "grep -q -r \"2019-#{Date.today.strftime('%Y')}\" \
     --include \"*.rb\" \
