@@ -8,7 +8,8 @@ LABEL about="https://github.com/dgroup/lazylead" \
       ll.docker.issues="https://github.com/dgroup/lazylead/issues?utf8=✓&q=label%3Adocker"
 
 ENV APP_HOME=/lazylead \
-    version=${release_tags}
+    version=${release_tags} \
+    RUBYOPT='-W:no-deprecated'
 
 WORKDIR $APP_HOME
 
