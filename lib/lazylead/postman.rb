@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -20,19 +22,33 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../../test"
-require_relative "../../../lib/lazylead/task/notification"
-
+require_relative "email"
 module Lazylead
-  class NotificationTest < Lazylead::Test
-    test "size of CC email addresses" do
-      assert_equal 2,
-                   Task::Notification.new.also("cc" => "f@m.com, s@m.com,").size
-    end
-
-    test "second email addresses has correct structure" do
-      assert_equal "s@m.com",
-                   Task::Notification.new.also("cc" => "f@m.com, s@m.com ")[1]
+  #
+  # A postman to send emails.
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
+  class Postman
+    # Send an email.
+    # :to     :: the 'to' email addresses.
+    # :mail   :: the mail configuration, like from, cc, subject, etc.
+    # :binds  :: the template bind variables.
+    def send(to, mail, binds)
+      Mail.deliver do
+        to to
+        from mail["from"]
+        cc mail["cc"].split(",").map(&:strip).reject(&:empty?) if mail.key? "cc"
+        subject mail["subject"]
+        html_part do
+          content_type "text/html; charset=UTF-8"
+          body Email.new(
+            mail["template"],
+            binds.merge(version: Lazylead::VERSION)
+          ).render
+        end
+      end
     end
   end
 end

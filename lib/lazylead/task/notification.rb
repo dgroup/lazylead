@@ -22,6 +22,7 @@
 
 require_relative "../email"
 require_relative "../version"
+require_relative "../postman"
 
 module Lazylead
   module Task
@@ -42,28 +43,15 @@ module Lazylead
     # License:: MIT
     #
     class Notification
-      def run(sys, cfg)
-        sys.issues(cfg["sql"]).group_by(&:assignee).each do |assignee, issues|
-          Mail.deliver do
-            to assignee.email
-            from cfg["from"]
-            cc also(cfg) if cfg.key? "cc"
-            subject cfg["subject"]
-            html_part do
-              content_type "text/html; charset=UTF-8"
-              body Email.new(
-                cfg["template"],
-                assignee: assignee, tickets: issues, version: Lazylead::VERSION
-              ).render
-            end
-          end
-        end
+
+      def initialize(postman = Postman.new)
+        @postman = postman
       end
 
-      # Fetch additional email addresses to be used in 'CC' email section.
-      # It might be some additional regulators, managers, etc.
-      def also(cfg)
-        cfg["cc"].split(",").map { |e| e.strip }.reject { |e| e.empty? }
+      def run(sys, cfg)
+        sys.issues(cfg["sql"]).group_by(&:assignee).each do |assignee, t|
+          @postman.send assignee.email, cfg, assignee: assignee, tickets: t
+        end
       end
     end
   end
