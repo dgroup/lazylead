@@ -9,7 +9,7 @@ jobs:
           apk add libc-dev gcc make git sqlite sqlite-dev sqlite-libs
           gem install json:2.2.0
           bundler install
-      - run: rake task
+      - run: rake test
   deploy:
     machine: true
     steps:
@@ -36,3 +36,5 @@ workflows:
     jobs:
       - test
       - deploy
+          requires:
+            - test
