@@ -72,9 +72,23 @@ module Lazylead
       end
     end
 
+    def assert_false(exp)
+      assert !exp
+    end
+
     # Gives file name without extension (.rb)
     def no_ext(path)
       File.basename(path, ".rb")
+    end
+
+    # Gives true if key(s) have non-blank values in ENV.
+    # :key  :: The key(s) from ENV
+    def env?(*keys)
+      if keys.respond_to?(:all?)
+        !keys.all? { |k| ENV[k].blank? }
+      else
+        !ENV[keys].blank?
+      end
     end
   end
 end

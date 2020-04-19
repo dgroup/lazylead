@@ -22,49 +22,17 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "email"
+require_relative "../test"
 
 module Lazylead
-  #
-  # A postman to send emails.
-  #
-  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-  # License:: MIT
-  class Postman
-    # Send an email.
-    # :to     :: the 'to' email addresses.
-    # :mail   :: the mail configuration, like from, cc, subject, template.
-    # :binds  :: the template bind variables.
-    def send(to, mail, binds)
-      html = make_body(mail, binds)
-      also = make_cc(mail)
-      Mail.deliver do
-        to to
-        from mail["from"]
-        cc also if mail.key? "cc"
-        subject mail["subject"]
-        html_part do
-          content_type "text/html; charset=UTF-8"
-          body html
-        end
-      end
+  class EnvTest < Lazylead::Test
+    test "ENV has keys" do
+      ENV["a"] = "aaa"
+      ENV["b"] = "bbb"
+      assert env? "a", "b"
     end
-
-    private
-
-    # Construct html document from template and binds.
-    def make_body(mail, binds)
-      Email.new(
-        mail["template"],
-        binds.merge(version: Lazylead::VERSION)
-      ).render
-    end
-
-    # Detect "cc" email addresses.
-    # Split "cc" emails to array if "cc" has ',' symbol.
-    def make_cc(mail)
-      mail["cc"].split(",").map(&:strip).reject(&:empty?) if mail.key? "cc"
+    test "ENV has no key" do
+      assert_false env? "c"
     end
   end
 end

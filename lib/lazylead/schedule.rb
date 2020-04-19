@@ -50,8 +50,7 @@ module Lazylead
 
     # @todo #/DEV inspect the current execution status. This method should
     #  support several format for output, by default is `json`.
-    def ps
-    end
+    def ps; end
 
     def join
       @trigger.join if @cling

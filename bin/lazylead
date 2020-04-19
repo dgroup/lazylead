@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # The MIT License
 #
@@ -76,12 +77,10 @@ cmd = lambda do
     Lazylead::Schedule.new(log),
     Lazylead::Smtp.new(
       log, Lazylead::Salt.new("smtp"),
-      {
-        smtp_host: ENV["smtp_host"],
-        smtp_port: ENV["smtp_port"],
-        smtp_user: ENV["smtp_user"],
-        smtp_pass: ENV["smtp_pass"]
-      }
+      smtp_host: ENV["smtp_host"],
+      smtp_port: ENV["smtp_port"],
+      smtp_user: ENV["smtp_user"],
+      smtp_pass: ENV["smtp_pass"]
     )
   ).run(opts.to_h)
   return 0

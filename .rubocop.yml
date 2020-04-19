@@ -5,7 +5,7 @@ require:
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.7
   Exclude:
     - "tmp/**/*"
     - "vendor/**/*"
@@ -13,6 +13,7 @@ AllCops:
 Layout/LineLength:
   Exclude:
     - "*.gemspec"
+    - "test/**/*"
 
 Metrics/AbcSize:
   Max: 16
@@ -34,7 +35,6 @@ Metrics/MethodLength:
   Max: 15
   Exclude:
     - "test/**/*"
-    - "lib/vcs4sql/exception.rb"
 
 Metrics/ParameterLists:
   Max: 3
@@ -47,19 +47,7 @@ Layout/HashAlignment:
     - table
     - key
 
-Naming/MemoizedInstanceVariableName:
-  Enabled: false
-
-Style/BarePercentLiterals:
-  EnforcedStyle: percent_q
-
-Style/ClassAndModuleChildren:
-  Enabled: false
-
-Style/EmptyMethod:
-  Enabled: false
-
-Style/FrozenStringLiteralComment:
+Layout/EmptyLineAfterGuardClause:
   Enabled: false
 
 Style/HashSyntax:

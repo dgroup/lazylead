@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -36,7 +38,6 @@ module Lazylead
   # Read more: https://en.wikipedia.org/wiki/Salt_(cryptography).
   #
   class Salt
-
     #
     # Each salt should be defined as a environment variable with id, like
     #  salt.1=E1F53135E559C253

@@ -59,8 +59,12 @@ module Lazylead
       user = decrypted(:smtp_user)
       pass = decrypted(:smtp_pass)
       Mail.defaults do
-        delivery_method :smtp, address: host, port: port, user_name: user,
-                        password: pass, authentication: "plain",
+        delivery_method :smtp,
+                        address: host,
+                        port: port,
+                        user_name: user,
+                        password: pass,
+                        authentication: "plain",
                         enable_starttls_auto: true
       end
       @log.debug "SMTP connection established with #{host}"

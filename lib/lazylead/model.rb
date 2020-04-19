@@ -81,7 +81,7 @@ module Lazylead
         if cfg["type"].empty?
           Empty.new
         else
-          cfg["type"].constantize.new Salt.new(id), cfg.except("type")
+          cfg["type"].constantize.new cfg.except("type"), Salt.new(id)
         end
       end
     end

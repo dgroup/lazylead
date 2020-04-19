@@ -2,14 +2,14 @@ version: 2
 jobs:
   test:
     docker:
-     - image: ruby:2.7.1-alpine
+      - image: ruby:2.7.1-alpine
     steps:
       - checkout
       - run: |
           apk add libc-dev gcc make git sqlite sqlite-dev sqlite-libs
           gem install json:2.2.0
           bundler install
-      - run: rake test
+      - run: rake test rubocop
   deploy:
     machine: true
     steps:

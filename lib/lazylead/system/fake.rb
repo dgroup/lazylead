@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -28,7 +30,6 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Fake
-
     def initialize(issues = [])
       @issues = issues
     end

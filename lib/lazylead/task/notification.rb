@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -43,7 +45,6 @@ module Lazylead
     # License:: MIT
     #
     class Notification
-
       def initialize(postman = Postman.new)
         @postman = postman
       end

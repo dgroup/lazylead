@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License
 #
 # Copyright (c) 2019-2020 Yurii Dubinka
@@ -30,9 +32,9 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Jira
-    def initialize(salt = NoSalt.new, opts)
-      @salt = salt
+    def initialize(opts, salt = NoSalt.new)
       @opts = opts
+      @salt = salt
     end
 
     def issues(jql)
@@ -72,8 +74,6 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class User
-    attr_reader :id
-
     def initialize(usr)
       @usr = usr
     end
@@ -91,7 +91,11 @@ module Lazylead
     end
 
     def ==(other)
-      self.class === other and other.id == id
+      if other.respond_to?(:id)
+        other.id == id
+      else
+        false
+      end
     end
 
     alias eql? ==
