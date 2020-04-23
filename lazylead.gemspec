@@ -95,4 +95,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rubocop-minitest", "0.5.1"
   s.add_development_dependency "rubocop-performance", "1.5.2"
   s.add_development_dependency "rubocop-rspec", "1.33.0"
+  s.add_development_dependency "xcop", ">=0.6"
 end
