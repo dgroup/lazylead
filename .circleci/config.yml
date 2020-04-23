@@ -7,7 +7,6 @@ jobs:
       - checkout
       - run: |
           apk add libc-dev gcc make git sqlite sqlite-dev sqlite-libs
-          gem install json:2.2.0
           bundler install
       - run: rake test rubocop
   deploy:
