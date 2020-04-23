@@ -32,7 +32,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.rubygems_version = "2.2"
-  s.required_ruby_version = ">=2.7.1"
+  s.required_ruby_version = ">=2.6.5"
   s.name = "lazylead"
   s.version = "0.0.0"
   s.license = "MIT"
@@ -91,7 +91,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rake", "12.3.2"
   s.add_development_dependency "random-port", "0.3.1"
   s.add_development_dependency "rdoc", "6.1.1"
-  s.add_development_dependency "rubocop", "0.82.0"
+  s.add_development_dependency "rubocop", "0.78"
   s.add_development_dependency "rubocop-minitest", "0.5.1"
   s.add_development_dependency "rubocop-performance", "1.5.2"
   s.add_development_dependency "rubocop-rspec", "1.33.0"

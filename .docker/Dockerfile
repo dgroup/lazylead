@@ -1,4 +1,4 @@
-FROM ruby:2.7.1-alpine
+FROM ruby:2.6.5-alpine
 
 ARG release_tags
 
@@ -8,8 +8,7 @@ LABEL about="https://github.com/dgroup/lazylead" \
       ll.docker.issues="https://github.com/dgroup/lazylead/issues?utf8=✓&q=label%3Adocker"
 
 ENV APP_HOME=/lazylead \
-    version=${release_tags} \
-    RUBYOPT='-W:no-deprecated'
+    version=${release_tags}
 
 WORKDIR $APP_HOME
 
@@ -18,10 +17,7 @@ RUN echo "Install 3rd-party libraries." \
 
 COPY Gemfile lazylead.gemspec ./
 
-# @todo #/DEV Avoid hardcode of minor versions for gems.
-#  Potentialy, they might be changed to something like '>=2.2.0'.
-RUN gem install json:2.2.0 \
-  && bundler install
+RUN bundler install
 
 COPY bin/lazylead ./bin/lazylead
 ADD lib ./lib
