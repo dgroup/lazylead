@@ -50,8 +50,8 @@ module Lazylead
       end
 
       def run(sys, cfg)
-        sys.issues(cfg["sql"]).group_by(&:assignee).each do |assignee, t|
-          @postman.send assignee.email, cfg, assignee: assignee, tickets: t
+        sys.issues(cfg["sql"]).group_by(&:assignee).each do |a, t|
+          @postman.send a.email, cfg, tickets: t
         end
       end
     end

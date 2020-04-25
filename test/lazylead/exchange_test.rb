@@ -22,19 +22,39 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-module Lazylead
-  module Task
-    # Lazylead task which prints to STDOUT the current class name and team.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Echo
-      def initialize(_) end
+require_relative "../test"
+require_relative "../../lib/lazylead/exchange"
+require_relative "../../lib/lazylead/system/jira"
 
-      def run(sys, team)
-        puts "#{self.class} #{team} on #{sys}"
-      end
+module Lazylead
+  class ExchangeTest < Lazylead::Test
+    test "email notification to outlook exchange" do
+      skip "No MS Exchange credentials provided" unless env? "EXCHANGE_URL",
+                                                             "EXCHANGE_USER",
+                                                             "EXCHANGE_PASS",
+                                                             "EXCHANGE_TO"
+      Exchange.new(
+        "endpoint" => ENV["EXCHANGE_URL"],
+        "user" => ENV["EXCHANGE_USER"],
+        "password" => ENV["EXCHANGE_PASS"]
+      ).send(
+        ENV["EXCHANGE_TO"],
+        {
+          "subject" => "[DD] PDTN!",
+          "template" => "lib/messages/due_date_expired.erb"
+        },
+        tickets: jql("key in ('DATAJDBC-480')")
+      )
+    end
+
+    # Fetch array of issues by JQL from https://jira.spring.io.
+    def jql(jql)
+      Lazylead::Jira.new(
+        username: nil,
+        password: nil,
+        site: "https://jira.spring.io",
+        context_path: ""
+      ).issues(jql)
     end
   end
 end

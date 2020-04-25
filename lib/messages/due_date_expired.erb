@@ -62,7 +62,7 @@
   <title>Expired due date</title>
 </head>
 <body>
-<p>Hi <%= assignee.name %>,</p>
+<p>Hi <%= tickets.first.assignee.name %>,</p>
 
 <p>The due date for these tasks is expired or seems to expire soon. Please plan
   them accordingly or actualize the
@@ -81,7 +81,7 @@
       <td><a href="<%= ticket.url %>"><%= ticket.id %></a></td>
       <td><%= ticket.duedate %></td>
       <td><%= ticket.priority %></td>
-      <td><%= ticket.reporter %></td>
+      <td><%= ticket.reporter.name %></td>
       <td><%= ticket.summary %></td>
     </tr>
   <% end %>

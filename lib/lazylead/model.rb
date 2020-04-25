@@ -25,6 +25,8 @@
 require "active_record"
 require "require_all"
 require_rel "task"
+require_relative "postman"
+require_relative "exchange"
 
 #
 # ORM domain model entities.
@@ -55,8 +57,18 @@ module Lazylead
         action.constantize.new.run(system.connect, props)
       end
 
+      def postman
+        if props.key? "postman"
+          pmn = JSON.parse props["postman"]
+          pmn["type"].constantize.new pmn
+        else
+          Postman.new
+        end
+      end
+
       def props
-        team.to_h.merge JSON.parse(properties)
+        return @prop if defined? @prop
+        @prop = team.to_h.merge JSON.parse(properties)
       end
     end
 
