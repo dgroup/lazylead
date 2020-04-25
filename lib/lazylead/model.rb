@@ -54,8 +54,15 @@ module Lazylead
       has_one :system, foreign_key: "id"
 
       def exec
-        action.constantize.new.run(system.connect, props)
+        action.constantize.new.run(system.connect, postman, props)
       end
+
+      def props
+        return @prop if defined? @prop
+        @prop = team.to_h.merge JSON.parse(properties)
+      end
+
+      private
 
       def postman
         if props.key? "postman"
@@ -64,11 +71,6 @@ module Lazylead
         else
           Postman.new
         end
-      end
-
-      def props
-        return @prop if defined? @prop
-        @prop = team.to_h.merge JSON.parse(properties)
       end
     end
 

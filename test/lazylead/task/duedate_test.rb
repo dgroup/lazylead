@@ -23,8 +23,9 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../../test"
-require_relative "../../../lib/lazylead/smtp"
 require_relative "../../../lib/lazylead/log"
+require_relative "../../../lib/lazylead/smtp"
+require_relative "../../../lib/lazylead/postman"
 require_relative "../../../lib/lazylead/model"
 require_relative "../../../lib/lazylead/cli/app"
 require_relative "../../../lib/lazylead/system/jira"
@@ -43,6 +44,7 @@ module Lazylead
           site: "https://jira.spring.io",
           context_path: ""
         ),
+        Postman.new,
         "from" => "fake@email.com",
         "sql" => "filter=16743",
         "subject" => "[DD] PDTN!",
@@ -70,6 +72,22 @@ module Lazylead
         },
         ORM::Task.find(2).props
       )
+    end
+
+    test "html msg has ticket details" do
+      Smtp.new.enable
+      Task::Notification.new.run(
+        NoAuthJira.new("https://jira.spring.io"),
+        Postman.new,
+        "from" => "fake@email.com",
+        "sql" => "key in ('DATAJDBC-480')",
+        "subject" => "[DD] HMCHT!",
+        "template" => "lib/messages/due_date_expired.erb"
+      )
+      assert_words %w[DATAJDBC-480 2020-04-25 Minor Mark\ Paluch Move off deprecated EntityInstantiators],
+                   Mail::TestMailer.deliveries
+                                   .filter { |m| m.subject.eql? "[DD] HMCHT!" }
+                                   .first.body.parts.first.body
     end
   end
 end

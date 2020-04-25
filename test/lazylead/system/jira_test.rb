@@ -29,19 +29,12 @@ require_relative "../../../lib/lazylead/system/jira"
 
 module Lazylead
   class JiraTest < Lazylead::Test
-    # Build an instance of Jira client based on default parameters.
-    def jira
-      Lazylead::Jira.new(
-        username: ENV["JIRA_USER"],
-        password: ENV["JIRA_PASS"],
-        site: "https://jira.spring.io",
-        context_path: ""
-      )
-    end
-
     test "found issue by id" do
       assert_equal "DATAJDBC-480",
-                   jira.issues("key in ('DATAJDBC-480')").first.id
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key in ('DATAJDBC-480')")
+                             .first
+                             .id
     end
 
     #
@@ -67,21 +60,29 @@ module Lazylead
 
     test "group by assignee" do
       assert_equal 2,
-                   jira.issues("filter=16743")
-                       .group_by(&:assignee)
-                       .min_by { |a| a.first.id }
-                       .length,
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("filter=16743")
+                             .group_by(&:assignee)
+                             .min_by { |a| a.first.id }
+                             .length,
                    "Two issues found on remote Jira instance using filter"
     end
 
     test "issue reporter fetched successfully" do
       assert_equal "Mark Paluch",
-                   jira.issues("key in ('DATAJDBC-480')").first.reporter.name
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key in ('DATAJDBC-480')")
+                             .first
+                             .reporter
+                             .name
     end
 
     test "issue url fetched successfully" do
       assert_equal "https://jira.spring.io/browse/DATAJDBC-480",
-                   jira.issues("key in ('DATAJDBC-480')").first.url
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key in ('DATAJDBC-480')")
+                             .first
+                             .url
     end
   end
 end

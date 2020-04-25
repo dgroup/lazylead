@@ -76,6 +76,14 @@ module Lazylead
       assert !exp
     end
 
+    # Assert that text contains expected words
+    def assert_words(words, text)
+      words = [words] unless words.respond_to? :each
+      words.each do |w|
+        assert_includes text, w
+      end
+    end
+
     # Gives file name without extension (.rb)
     def no_ext(path)
       File.basename(path, ".rb")

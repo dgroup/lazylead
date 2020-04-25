@@ -25,6 +25,22 @@
 require "tilt"
 
 module Lazylead
+  # Email notifications utilities.
+  module Emailing
+    # Construct html document from template and binds.
+    def make_body(opts)
+      Email.new(
+        opts["template"],
+        opts[:binds].merge(version: Lazylead::VERSION)
+      ).render
+    end
+
+    # Split text with email addresses by ',' and trim all elements if needed.
+    def split(type, opts)
+      opts[type].split(",").map(&:strip).reject(&:empty?) if opts.key? "cc"
+    end
+  end
+
   # An email regarding tickets based on file with markup.
   #
   # The 'tilt' gem was used as a template engine.

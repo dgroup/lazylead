@@ -30,10 +30,8 @@ module Lazylead
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
     class Echo
-      def initialize(_) end
-
-      def run(sys, team)
-        puts "#{self.class} #{team} on #{sys}"
+      def run(sys, _, opts)
+        puts "#{self.class} #{opts} on #{sys}"
       end
     end
   end

@@ -43,15 +43,17 @@ module Lazylead
     # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
-    #
     class Notification
-      def initialize(postman = Postman.new)
-        @postman = postman
-      end
-
-      def run(sys, cfg)
-        sys.issues(cfg["sql"]).group_by(&:assignee).each do |a, t|
-          @postman.send a.email, cfg, tickets: t
+      def run(sys, postman, opts)
+        sys.issues(opts["sql"])
+           .group_by(&:assignee)
+           .each do |a, t|
+          postman.send opts.merge(
+            to: a.email,
+            binds: {
+              tickets: t
+            }
+          )
         end
       end
     end

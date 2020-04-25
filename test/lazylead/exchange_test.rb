@@ -38,23 +38,14 @@ module Lazylead
         "user" => ENV["EXCHANGE_USER"],
         "password" => ENV["EXCHANGE_PASS"]
       ).send(
-        ENV["EXCHANGE_TO"],
-        {
-          "subject" => "[DD] PDTN!",
-          "template" => "lib/messages/due_date_expired.erb"
+        to: ENV["EXCHANGE_TO"],
+        binds: {
+          tickets: NoAuthJira.new("https://jira.spring.io")
+                             .issues("key = DATAJDBC-480")
         },
-        tickets: jql("key in ('DATAJDBC-480')")
+        "subject" => "[DD] PDTN!",
+        "template" => "lib/messages/due_date_expired.erb"
       )
-    end
-
-    # Fetch array of issues by JQL from https://jira.spring.io.
-    def jql(jql)
-      Lazylead::Jira.new(
-        username: nil,
-        password: nil,
-        site: "https://jira.spring.io",
-        context_path: ""
-      ).issues(jql)
     end
   end
 end

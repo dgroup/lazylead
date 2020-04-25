@@ -165,4 +165,16 @@ module Lazylead
       to_s
     end
   end
+
+  # Jira instance without authentication in order to access public filters
+  #  or dashboards.
+  class NoAuthJira
+    def initialize(url)
+      @jira = Jira.new username: nil, password: nil, site: url, context_path: ""
+    end
+
+    def issues(jql)
+      @jira.issues jql
+    end
+  end
 end

@@ -37,6 +37,8 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Exchange
+    include Emailing
+
     def initialize(opts)
       @cli = Viewpoint::EWSClient.new opts["endpoint"],
                                       opts["user"],
@@ -44,23 +46,17 @@ module Lazylead
     end
 
     # Send an email.
-    # :to     :: the 'to' email addresses.
-    # :mail   :: the mail configuration, like from, cc, subject, template.
-    # :binds  :: the template bind variables.
-    def send(to, mail, binds)
-      to = [to] unless to.is_a? Array
+    # :opts   :: the mail configuration like from, cc, subject, template.
+    def send(opts)
+      to = [opts[:to]] unless opts[:to].is_a? Array
+      body = make_body(opts)
       msg = {
-        subject: mail["subject"],
-        body: Email.new(
-          mail["template"],
-          binds.merge(version: Lazylead::VERSION)
-        ).render,
+        subject: opts["subject"],
+        body: body,
         body_type: "HTML",
         to_recipients: to
       }
-      if mail.key? "cc"
-        msg.update :cc, mail["cc"].split(",").map(&:strip).reject(&:empty?)
-      end
+      msg.update(:cc_recipients, split("cc", opts)) if opts.key? "cc"
       @cli.send_message msg
     end
   end

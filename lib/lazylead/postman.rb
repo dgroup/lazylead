@@ -38,43 +38,21 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Postman
+    include Emailing
     # Send an email.
-    # :to     :: the 'to' email addresses.
-    # :mail   :: the mail configuration, like from, cc, subject, template.
-    # :binds  :: the template bind variables.
-    #
-    # @todo #/DEV Think how to simplify the parameters 'mail' and 'binds',
-    #  potentially it might be merged together.
-    #
-    def send(to, mail, binds)
-      html = make_body(mail, binds)
-      also = make_cc(mail)
+    # :opts   :: the mail configuration like to, from, cc, subject, template.
+    def send(opts)
+      html = make_body(opts)
       Mail.deliver do
-        to to
-        from mail["from"]
-        cc also if mail.key? "cc"
-        subject mail["subject"]
+        to opts[:to]
+        from opts["from"]
+        cc split("cc", opts) if opts.key? "cc"
+        subject opts["subject"]
         html_part do
           content_type "text/html; charset=UTF-8"
           body html
         end
       end
-    end
-
-    private
-
-    # Construct html document from template and binds.
-    def make_body(mail, binds)
-      Email.new(
-        mail["template"],
-        binds.merge(version: Lazylead::VERSION)
-      ).render
-    end
-
-    # Detect "cc" email addresses.
-    # Split "cc" emails to array if "cc" has ',' symbol.
-    def make_cc(mail)
-      mail["cc"].split(",").map(&:strip).reject(&:empty?) if mail.key? "cc"
     end
   end
 end
