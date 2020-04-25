@@ -40,33 +40,29 @@ module Lazylead
   class Salt
     #
     # Each salt should be defined as a environment variable with id, like
-    #  salt.1=E1F53135E559C253
-    #  salt.2=84B03D034B409D4E
+    #  salt1=E1F53135E559C253
+    #  salt2=84B03D034B409D4E
     #  ...
-    #  salt.N=xxxxxxxxx
+    #  saltN=xxxxxxxxx
     #
     # You may define general salt to be used by default like
     #  salt=E1F53135E559C253
     #
-    def initialize(id = "")
+    def initialize(id, env = ENV.to_h)
       @id = id
+      @env = env
     end
 
     def encrypt(password)
-      ActiveSupport::MessageEncryptor.new(key).encrypt_and_sign password
+      ActiveSupport::MessageEncryptor.new(@env[@id]).encrypt_and_sign password
     end
 
     def decrypt(password)
-      ActiveSupport::MessageEncryptor.new(key).decrypt_and_verify password
+      ActiveSupport::MessageEncryptor.new(@env[@id]).decrypt_and_verify password
     end
 
     def specified?
-      !key.blank?
-    end
-
-    def key
-      return @key if defined? @key
-      @key = ENV["salt.#{@id}"] || ENV["salt"]
+      @env.key?(@id) && !@env[@id].blank?
     end
   end
 

@@ -66,8 +66,7 @@ module Lazylead
 
       def postman
         if props.key? "postman"
-          pmn = JSON.parse props["postman"]
-          pmn["type"].constantize.new pmn
+          props["postman"].constantize.new
         else
           Postman.new
         end
@@ -95,7 +94,10 @@ module Lazylead
         if cfg["type"].empty?
           Empty.new
         else
-          cfg["type"].constantize.new cfg.except("type"), Salt.new(id)
+          cfg["type"].constantize.new(
+            cfg.except("type", "salt"),
+            cfg["salt"].empty? ? NoSalt.new : Salt.new(cfg["salt"])
+          )
         end
       end
     end

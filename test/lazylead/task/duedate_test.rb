@@ -38,12 +38,7 @@ module Lazylead
     test "issues were fetched" do
       Smtp.new.enable
       Task::Notification.new.run(
-        Jira.new(
-          username: ENV["JIRA_USER"],
-          password: ENV["JIRA_PASS"],
-          site: "https://jira.spring.io",
-          context_path: ""
-        ),
+        NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
         "from" => "fake@email.com",
         "sql" => "filter=16743",

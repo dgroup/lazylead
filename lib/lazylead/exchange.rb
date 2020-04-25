@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "viewpoint"
+require_relative "salt"
 require_relative "email"
 require_relative "version"
 
@@ -39,10 +40,9 @@ module Lazylead
   class Exchange
     include Emailing
 
-    def initialize(opts)
-      @cli = Viewpoint::EWSClient.new opts["endpoint"],
-                                      opts["user"],
-                                      opts["password"]
+    def initialize(salt = Salt.new("exchange_salt"), opts = ENV)
+      @salt = salt
+      @opts = opts
     end
 
     # Send an email.
@@ -57,7 +57,18 @@ module Lazylead
         to_recipients: to
       }
       msg.update(:cc_recipients, split("cc", opts)) if opts.key? "cc"
-      @cli.send_message msg
+      cli.send_message msg
+    end
+
+    private
+
+    def cli
+      return @cli if defined? @cli
+      usr = @opts["exchange_user"]
+      psw = @opts["exchange_password"]
+      usr = @salt.decrypt(usr) if @salt.specified?
+      psw = @salt.decrypt(psw) if @salt.specified?
+      @cli = Viewpoint::EWSClient.new @opts["exchange_url"], usr, psw
     end
   end
 end

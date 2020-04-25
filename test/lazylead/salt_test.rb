@@ -28,16 +28,15 @@ require_relative "../../lib/lazylead/salt"
 module Lazylead
   class SaltTest < Lazylead::Test
     test "e2e encryption/decryption is successful" do
-      ENV["salt"] = "E1F53135E559C2530000000000000000"
-      assert_equal "the-best-password",
-                   Salt.new.decrypt(Salt.new.encrypt("the-best-password"))
+      ENV["s"] = "E1F53135E559C2530000000000000000"
+      assert_equal "the-password",
+                   Salt.new("s").decrypt(Salt.new("s").encrypt("the-password"))
     end
 
     test "decryption is successful" do
-      ENV["salt.5"] = "E1F53135E559C2530000000000000000"
+      ENV["s"] = "E1F53135E559C2530000000000000000"
       assert_equal "the-best-password",
-                   Salt.new(5)
-                       .decrypt("VUxpSk83d3VGOHZMVTBvWmZ5eGlEOWdPZFhJN0tYMXhwaDd0MVg0L01PST0tLUc0bEhIVTBNRDFzdDdTSkNoeVAyckE9PQ==--4a0206700a28b69aaca65a88af09d211f4251f02")
+                   Salt.new("s").decrypt("VUxpSk83d3VGOHZMVTBvWmZ5eGlEOWdPZFhJN0tYMXhwaDd0MVg0L01PST0tLUc0bEhIVTBNRDFzdDdTSkNoeVAyckE9PQ==--4a0206700a28b69aaca65a88af09d211f4251f02")
     end
   end
 end

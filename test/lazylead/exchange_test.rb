@@ -23,27 +23,46 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../test"
+require_relative "../../lib/lazylead/salt"
 require_relative "../../lib/lazylead/exchange"
 require_relative "../../lib/lazylead/system/jira"
 
 module Lazylead
   class ExchangeTest < Lazylead::Test
     test "email notification to outlook exchange" do
-      skip "No MS Exchange credentials provided" unless env? "EXCHANGE_URL",
-                                                             "EXCHANGE_USER",
-                                                             "EXCHANGE_PASS",
-                                                             "EXCHANGE_TO"
-      Exchange.new(
-        "endpoint" => ENV["EXCHANGE_URL"],
-        "user" => ENV["EXCHANGE_USER"],
-        "password" => ENV["EXCHANGE_PASS"]
-      ).send(
-        to: ENV["EXCHANGE_TO"],
+      skip "No MS Exchange credentials provided" unless env? "exchange_url",
+                                                             "exchange_user",
+                                                             "exchange_password",
+                                                             "exchange_to"
+      Exchange.new(NoSalt.new).send(
+        to: ENV["exchange_to"],
         binds: {
           tickets: NoAuthJira.new("https://jira.spring.io")
                              .issues("key = DATAJDBC-480")
         },
         "subject" => "[DD] PDTN!",
+        "template" => "lib/messages/due_date_expired.erb"
+      )
+    end
+
+    test "exchange email notification using decrypted credentials" do
+      skip "No cryptography salt provided" unless env? "exchange_salt"
+      skip "No MS Exchange credentials provided" unless env? "exchange_url",
+                                                             "enc_exchange_usr",
+                                                             "enc_exchange_psw",
+                                                             "enc_exchange_to"
+      Exchange.new(
+        Salt.new("exchange_salt"),
+        "exchange_url" => ENV["exchange_url"],
+        "exchange_user" => ENV["enc_exchange_usr"],
+        "exchange_password" => ENV["enc_exchange_psw"]
+      ).send(
+        to: ENV["exchange_to"],
+        binds: {
+          tickets: NoAuthJira.new("https://jira.spring.io")
+                             .issues("key = DATAJDBC-480")
+        },
+        "subject" => "[DD] Enc PDTN!",
         "template" => "lib/messages/due_date_expired.erb"
       )
     end
