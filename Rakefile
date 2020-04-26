@@ -72,7 +72,6 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << "rubocop-rspec"
 end
 
-# @todo @/DEV Option 'grep --include' is absent on linux alpine
 task :copyright do
   sh "grep -q -r \"2019-#{Date.today.strftime('%Y')}\" \
     --include \"*.rb\" \
