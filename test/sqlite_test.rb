@@ -28,7 +28,7 @@ require_relative "test"
 module Lazylead
   class SqliteTest < Lazylead::Test
     # Assert that table(s) has required column(s)
-    def assert_tables(tables, file)
+    def assert_tables(file, tables)
       raise "Table names is a null" if tables.nil?
       raise "Table names is empty" if tables.empty?
       schema = conn(file).query(
@@ -53,7 +53,7 @@ module Lazylead
 
     # Assert that table(s) has required foreign key(s)
     #  which refers to the existing table.
-    def assert_fk(*fks, file)
+    def assert_fk(file, *fks)
       raise "No foreign keys specified" if fks.nil? || fks.empty?
       schema = conn(file).query(
         "select t.name, fks.'from', fks.'table', fks.'to'

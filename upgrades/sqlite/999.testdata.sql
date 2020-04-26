@@ -21,25 +21,18 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
--- @todo #/DEV Simplify the table structure 'persons', 'team' they seems verbose.
-
-insert into persons(id, name, email)
-values (1, 'Tom Marsden', 'tommarsden@mail.com'),
-       (2, 'Jim Plummer', 'jimplummer@mail.com'),
-       (3, 'Eliot Kendall', 'elkendall@mail.com'),
-       (4, 'Leela Kenny', 'leelakenny@mail.com'),
-       (5, 'Macie Crane', 'maciecrane@mail.com');
 insert into systems(id, properties)
 values (1,
         '{"type":"Lazylead::Jira", "username":"", "password":"", "site":"https://jira.spring.io", "context_path":""}'),
        (2,
         '{"type":"Lazylead::Jira", "username":"${jsi_usr}", "password":"${jsi_psw}", "site":"https://jira.spring.io", "context_path":""}');
-insert into teams(id, name, lead, properties)
-values (1, 'BA squad', 1, '{"from":"basquad@fake.com"}');
+insert into teams(id, name, properties)
+values (1, 'BA squad', '{"from":"basquad@fake.com"}');
 insert into tasks(name, cron, enabled, id, system, team_id, action, properties)
 values ('echo', '* * * * *', 'false', 1, 1, 1, 'Lazylead::Task::Echo', '{}'),
        ('expired due date', '* * * * *', 'false', 2, 1, 1,
         'Lazylead::Task::Notification',
         '{"sql":"filter=100500","subject":"[DD] PDTN!","template":"lib/messages/due_date_expired.erb"}'),
-       ('task with cc', '* * * * *', 'false', 3, 1, 1, 'Lazylead::Task::Echo', '{"cc":"leelakenny@mail.com,maciecrane@mail.com"}'),
+       ('task with cc', '* * * * *', 'false', 3, 1, 1, 'Lazylead::Task::Echo',
+        '{"cc":"leelakenny@mail.com,maciecrane@mail.com"}'),
        ('task', '* * * * *', 'false', 4, 2, 1, 'Lazylead::Task::Echo', '{}');

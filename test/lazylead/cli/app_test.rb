@@ -36,21 +36,14 @@ module Lazylead
           sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
           vcs4sql: "upgrades/sqlite"
         )
-        assert_tables(
-          {
-            persons: %w[id name email],
-            teams: %w[id name lead properties],
-            systems: %w[id properties],
-            tasks: %w[id name cron system action team_id description enabled
-                      properties],
-            properties: %w[key value type]
-          },
-          "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
-        )
-        assert_fk %w[tasks system systems id],
+        assert_tables "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+                      systems: %w[id properties],
+                      teams: %w[id name properties],
+                      tasks: %w[id name cron system action team_id description
+                                enabled properties]
+        assert_fk "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
                   %w[tasks team_id teams id],
-                  %w[teams lead persons id],
-                  "test/resources/#{no_ext(__FILE__)}.#{__method__}.db"
+                  %w[tasks system systems id]
       end
 
       test "activesupport is activated for access to domain entities" do
