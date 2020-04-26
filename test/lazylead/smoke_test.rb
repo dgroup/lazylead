@@ -32,7 +32,7 @@ module Lazylead
       assert env? "a", "b"
     end
     test "ENV has no key" do
-      assert_false env? "c"
+      refute env? "c"
     end
   end
 end

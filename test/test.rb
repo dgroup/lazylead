@@ -72,10 +72,6 @@ module Lazylead
       end
     end
 
-    def assert_false(exp)
-      assert !exp
-    end
-
     # Assert that text contains expected words
     def assert_words(words, text)
       words = [words] unless words.respond_to? :each

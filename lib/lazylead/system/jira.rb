@@ -138,7 +138,7 @@ module Lazylead
 
     # @todo #/DEV Due date implementation is required based on custom field
     def duedate
-      Date.today
+      Date.new(2020, 4, 25)
     end
 
     def priority

@@ -51,7 +51,7 @@ module Lazylead
     class Task < ActiveRecord::Base
       include Verbose
       belongs_to :team, foreign_key: "team_id"
-      has_one :system, foreign_key: "id"
+      belongs_to :system, foreign_key: "system"
 
       def exec
         action.constantize.new.run(system.connect, postman, props)
@@ -90,14 +90,46 @@ module Lazylead
 
       # Make an instance of ticketing system for future interaction.
       def connect
-        cfg = JSON.parse(properties)
-        if cfg["type"].empty?
+        opts = JSON.parse(properties)
+        if opts["type"].empty?
           Empty.new
         else
-          cfg["type"].constantize.new(
-            cfg.except("type", "salt"),
-            cfg["salt"].empty? ? NoSalt.new : Salt.new(cfg["salt"])
+          opts["type"].constantize.new(
+            env(opts.except("type", "salt")),
+            opts["salt"].empty? ? NoSalt.new : Salt.new(opts["salt"])
           )
+        end
+      end
+
+      # Ticketing system configuration from environment variables.
+      #
+      # Each system from database has configuration in json column 'properties'.
+      # Some of those properties might be configured/overridden by environment
+      # variable using macros "${...}"
+      #   {
+      #      ...
+      #      "user" = "${my_user}",
+      #      "pass" = "${my_pass}"
+      #      "url" = "https://url.com"
+      #      ...
+      #   }
+      # next, we need to configure following environment variables (ENV)
+      #   my_user=XXXXX
+      #   my_pass=YYYYY
+      # thus, the result of this method is
+      #   {
+      #      ...
+      #      "user" = "XXXXXX",
+      #      "pass" = "YYYYYY"
+      #      "url" = "https://url.com"
+      #      ...
+      #   }
+      def env(opts)
+        opts.each_with_object({}) do |e, o|
+          k = e[0]
+          v = e[1]
+          v = ENV[v.slice(2, v.length - 3)] if v.start_with? "${"
+          o[k] = v
         end
       end
     end

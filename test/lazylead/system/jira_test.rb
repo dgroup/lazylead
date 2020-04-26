@@ -37,24 +37,21 @@ module Lazylead
                              .id
     end
 
-    #
-    # @todo #/DEV Avoid hard-code of credentials. To be fixed later.
-    #  For now in case if we need to check the code, we have to specify
-    #  the required credentials within System.properties column in db.
     test "found issue by jira (ORM)" do
-      skip "The test need personal credentials. Re-implementation is required"
+      skip "No Jira credentials provided" unless env? "jsi_usr", "jsi_psw"
       CLI::App.new(Log::NOTHING).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
-      assert_equal 86_106,
-                   ORM::Task.find(1)
+      assert_equal "DATAJDBC-500",
+                   ORM::Task.find(4)
                             .system
                             .connect
                             .issues("key in ('DATAJDBC-500')")
-                            .first.id.to_i,
+                            .first
+                            .id,
                    "Id mismatch for https://jira.spring.io/browse/DATAJDBC-500"
     end
 

@@ -72,8 +72,7 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << "rubocop-rspec"
 end
 
-# @todo @/DEV Option 'grep --include' is absent on linux alpine.
-#  grep: unrecognized option: include
+# @todo @/DEV Option 'grep --include' is absent on linux alpine
 task :copyright do
   sh "grep -q -r \"2019-#{Date.today.strftime('%Y')}\" \
     --include \"*.rb\" \
@@ -86,8 +85,8 @@ require "xcop/rake_task"
 desc "Validate all XML/XSL/XSD/HTML files for formatting"
 Xcop::RakeTask.new :xcop do |task|
   task.license = "license.txt"
-  task.includes = ["**/*.xml", "**/*.xsl", "**/*.xsd", "**/*.html"]
-  task.excludes = ["target/**/*", "coverage/**/*", "wp/**/*"]
+  task.includes = %w[**/*.xml **/*.xsl **/*.xsd **/*.html]
+  task.excludes = %w[target/**/* coverage/**/* wp/**/*]
 end
 
 task :clean do
