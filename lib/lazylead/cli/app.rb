@@ -77,7 +77,6 @@ module Lazylead
           @log.warn "ll-001: No tasks found."
         else
           todo.find_each do |task|
-            @log.debug "Task to schedule #{task}."
             @schedule.register task
           end
           @schedule.join

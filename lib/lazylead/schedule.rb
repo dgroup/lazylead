@@ -33,6 +33,12 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Schedule
+    # @todo #/DEV New scheduling types like 'at', 'once' is required.
+    #  The minimum time period for cron is 1 minute and it's not suitable for
+    #  unit testing, thus its better to introduce new types which allows to
+    #  schedule some task once or at particular time period like in next 200ms).
+    #  For cron expressions we should define separate test suite which will test
+    #  in parallel without blocking main CI process.
     def initialize(log = Log::NOTHING, trg = Rufus::Scheduler.new, cling = true)
       @log = log
       @cling = cling
@@ -44,8 +50,9 @@ module Lazylead
     def register(task)
       raise "ll-002: task can't be a null" if task.nil?
       @trigger.cron task.cron do
-        task.exec
+        task.exec @log
       end
+      @log.debug "Task #{task} is scheduled."
     end
 
     # @todo #/DEV inspect the current execution status. This method should

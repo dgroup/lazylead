@@ -41,7 +41,7 @@ module Lazylead
     end
 
     def enable
-      if @opts.empty? || @opts[:test_mode]
+      if @opts.empty? || @opts[:test_mode] || @opts[:smtp_host].blank?
         Mail.defaults do
           delivery_method :test
         end
@@ -67,7 +67,7 @@ module Lazylead
                         authentication: "plain",
                         enable_starttls_auto: true
       end
-      @log.debug "SMTP connection established with #{host}"
+      @log.debug "SMTP connection established with #{host} as #{user}."
     end
 
     # Decrypt the value of configuration property using cryptography salt.

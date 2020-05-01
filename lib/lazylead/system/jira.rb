@@ -105,11 +105,11 @@ module Lazylead
     end
 
     def to_s
-      id.to_s
+      inspect
     end
 
     def inspect
-      to_s
+      "#{@opts['site']} (#{@opts['username']})"
     end
   end
 

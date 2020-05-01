@@ -25,6 +25,7 @@
 require "active_record"
 require "require_all"
 require_rel "task"
+require_relative "log"
 require_relative "postman"
 require_relative "exchange"
 
@@ -86,8 +87,12 @@ module Lazylead
       belongs_to :team, foreign_key: "team_id"
       belongs_to :system, foreign_key: "system"
 
-      def exec
-        action.constantize.new.run(system.connect, postman, props)
+      def exec(log = Log::NOTHING)
+        log.debug("Task ##{id} '#{name}' is started")
+        action.constantize
+              .new(log)
+              .run(system.connect, postman, props)
+        log.debug("Task ##{id} '#{name}' is completed")
       end
 
       def props
