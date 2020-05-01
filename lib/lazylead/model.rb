@@ -25,6 +25,7 @@
 require "active_record"
 require "require_all"
 require_rel "task"
+require_rel "system"
 require_relative "log"
 require_relative "postman"
 require_relative "exchange"
