@@ -45,7 +45,7 @@ module Lazylead
         Mail.defaults do
           delivery_method :test
         end
-        @log.debug "SMTP connection enabled in test mode."
+        @log.warn "SMTP connection enabled in test mode."
       else
         setup_smtp
       end

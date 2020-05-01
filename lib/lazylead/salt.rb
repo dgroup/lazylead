@@ -38,6 +38,7 @@ module Lazylead
   # Read more: https://en.wikipedia.org/wiki/Salt_(cryptography).
   #
   class Salt
+    attr_reader :id
     #
     # Each salt should be defined as a environment variable with id, like
     #  salt1=E1F53135E559C253
@@ -70,6 +71,11 @@ module Lazylead
   # No cryptography salt defined within environment variables.
   #
   class NoSalt
+
+    def id
+      "No salt"
+    end
+
     def encrypt(_)
       raise "ll-003: Unsupported operation: 'encrypt'"
     end

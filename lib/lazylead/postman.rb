@@ -60,7 +60,7 @@ module Lazylead
         end
       end
       @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
-                 "Here is the body: #{html}."
+                 "Here is the body: #{html}"
     end
   end
 end

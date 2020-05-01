@@ -55,7 +55,8 @@ module Lazylead
       @opts["password"] = @salt.decrypt(@opts["password"]) if @salt.specified?
       @client = JIRA::Client.new(@opts)
       @log.debug "Jira client initiated using following opts: " \
-                 "#{@opts.except 'password', :password}"
+                 "#{@opts.except 'password', :password} " \
+                 " and salt #{@salt.id} (found=#{@salt.specified?})"
       @client
     end
 
