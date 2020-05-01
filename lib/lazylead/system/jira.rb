@@ -32,9 +32,10 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Jira
-    def initialize(opts, salt = NoSalt.new)
+    def initialize(opts, salt = NoSalt.new, log = Log::NOTHING)
       @opts = opts
       @salt = salt
+      @log = log
     end
 
     def issues(jql)
@@ -53,6 +54,9 @@ module Lazylead
       @opts["username"] = @salt.decrypt(@opts["username"]) if @salt.specified?
       @opts["password"] = @salt.decrypt(@opts["password"]) if @salt.specified?
       @client = JIRA::Client.new(@opts)
+      @log.debug "Jira client initiated using following opts: " \
+                 "#{@opts.except 'password', :password}"
+      @client
     end
 
     # Copy the required/mandatory parameter(s) for Jira client which can't
@@ -169,8 +173,12 @@ module Lazylead
   # Jira instance without authentication in order to access public filters
   #  or dashboards.
   class NoAuthJira
-    def initialize(url)
-      @jira = Jira.new username: nil, password: nil, site: url, context_path: ""
+    def initialize(url, log = Log::NOTHING)
+      @jira = Jira.new(
+        {username: nil, password: nil, site: url, context_path: ""},
+        NoSalt.new,
+        log
+      )
     end
 
     def issues(jql)

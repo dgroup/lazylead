@@ -52,7 +52,7 @@ module Lazylead
       @trigger.cron task.cron do
         task.exec @log
       end
-      @log.debug "Task #{task} is scheduled."
+      @log.debug "Task scheduled: #{task}"
     end
 
     # @todo #/DEV inspect the current execution status. This method should

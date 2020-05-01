@@ -92,7 +92,7 @@ module Lazylead
         log.debug("Task ##{id} '#{name}' is started")
         action.constantize
               .new(log)
-              .run(system.connect, postman, props)
+              .run(system.connect(log), postman(log), props)
         log.debug("Task ##{id} '#{name}' is completed")
       end
 
@@ -103,10 +103,11 @@ module Lazylead
 
       private
 
-      def postman
+      def postman(log)
         if props.key? "postman"
-          props["postman"].constantize.new
+          props["postman"].constantize.new(log)
         else
+          log.warn "No postman details provided, an local stub is used."
           Postman.new
         end
       end
@@ -117,14 +118,16 @@ module Lazylead
       include ORM
 
       # Make an instance of ticketing system for future interaction.
-      def connect
+      def connect(log = Log::NOTHING)
         opts = JSON.parse(properties)
         if opts["type"].empty?
+          log.warn "No task system details provided, an empty stub is used."
           Empty.new
         else
           opts["type"].constantize.new(
             env(opts.except("type", "salt")),
-            opts["salt"].empty? ? NoSalt.new : Salt.new(opts["salt"])
+            opts["salt"].empty? ? NoSalt.new : Salt.new(opts["salt"]),
+            log
           )
         end
       end

@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "viewpoint"
+require_relative "log"
 require_relative "salt"
 require_relative "email"
 require_relative "version"
@@ -40,7 +41,10 @@ module Lazylead
   class Exchange
     include Emailing
 
-    def initialize(salt = Salt.new("exchange_salt"), opts = ENV)
+    def initialize(
+      log = Log::NOTHING, salt = Salt.new("exchange_salt"), opts = ENV
+    )
+      @log = log
       @salt = salt
       @opts = opts
     end
@@ -49,15 +53,17 @@ module Lazylead
     # :opts   :: the mail configuration like from, cc, subject, template.
     def send(opts)
       to = [opts[:to]] unless opts[:to].is_a? Array
-      body = make_body(opts)
+      html = make_body(opts)
       msg = {
         subject: opts["subject"],
-        body: body,
+        body: html,
         body_type: "HTML",
         to_recipients: to
       }
       msg.update(:cc_recipients, split("cc", opts)) if opts.key? "cc"
       cli.send_message msg
+      @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
+                 "Here is the body: #{html}."
     end
 
     private
@@ -69,6 +75,8 @@ module Lazylead
       usr = @salt.decrypt(usr) if @salt.specified?
       psw = @salt.decrypt(psw) if @salt.specified?
       @cli = Viewpoint::EWSClient.new @opts["exchange_url"], usr, psw
+      @log.debug "Client to MS Exchange server initiated using opts:" \
+                 " #{@opts.except 'exchange_password'}"
     end
   end
 end

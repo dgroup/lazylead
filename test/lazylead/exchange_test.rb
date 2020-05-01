@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../test"
+require_relative "../../lib/lazylead/log"
 require_relative "../../lib/lazylead/salt"
 require_relative "../../lib/lazylead/exchange"
 require_relative "../../lib/lazylead/system/jira"
@@ -34,7 +35,7 @@ module Lazylead
                                                              "exchange_user",
                                                              "exchange_password",
                                                              "exchange_to"
-      Exchange.new(NoSalt.new).send(
+      Exchange.new(Log::NOTHING, NoSalt.new).send(
         to: ENV["exchange_to"],
         binds: {
           tickets: NoAuthJira.new("https://jira.spring.io")
@@ -52,6 +53,7 @@ module Lazylead
                                                              "enc_exchange_psw",
                                                              "enc_exchange_to"
       Exchange.new(
+        Log::NOTHING,
         Salt.new("exchange_salt"),
         "exchange_url" => ENV["exchange_url"],
         "exchange_user" => ENV["enc_exchange_usr"],

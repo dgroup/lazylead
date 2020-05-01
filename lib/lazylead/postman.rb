@@ -22,6 +22,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require_relative "log"
 require_relative "email"
 require_relative "version"
 
@@ -39,6 +40,11 @@ module Lazylead
   # License:: MIT
   class Postman
     include Emailing
+
+    def initialize(log = Log::NOTHING)
+      @log = log
+    end
+
     # Send an email.
     # :opts   :: the mail configuration like to, from, cc, subject, template.
     def send(opts)
@@ -53,6 +59,8 @@ module Lazylead
           body html
         end
       end
+      @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
+                 "Here is the body: #{html}."
     end
   end
 end
