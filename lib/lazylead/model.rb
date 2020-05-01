@@ -117,13 +117,13 @@ module Lazylead
 
       # Make an instance of ticketing system for future interaction.
       def connect(log = Log::NOTHING)
-        opts = env(to_j)
+        opts = to_j
         if opts["type"].empty?
           log.warn "No task system details provided, an empty stub is used."
           Empty.new
         else
           opts["type"].constantize.new(
-            opts.except("type", "salt"),
+            env(opts.except("type", "salt")),
             opts["salt"].empty? ? NoSalt.new : Salt.new(opts["salt"]),
             log
           )

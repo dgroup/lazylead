@@ -53,12 +53,12 @@ module Lazylead
     def client
       return @client if defined? @client
       @opts[:auth_type] = :basic if @opts[:auth_type].nil?
+      @opts["username"] = @salt.decrypt(@opts["username"]) if @salt.specified?
+      @opts["password"] = @salt.decrypt(@opts["password"]) if @salt.specified?
       cp("site", :site)
       cp("username", :username)
       cp("password", :password)
       cp("context_path", :context_path)
-      @opts["username"] = @salt.decrypt(@opts["username"]) if @salt.specified?
-      @opts["password"] = @salt.decrypt(@opts["password"]) if @salt.specified?
       @client = JIRA::Client.new(@opts)
     end
 

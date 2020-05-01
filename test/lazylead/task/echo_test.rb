@@ -22,17 +22,13 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require_relative "../../test"
+require_relative "../../../lib/lazylead/task/echo"
+
 module Lazylead
-  module Task
-    # Lazylead task which prints to STDOUT the current class name and team.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Echo
-      def run(_, _, _)
-        self.class.to_s
-      end
+  class EchoTest < Lazylead::Test
+    test "default task" do
+      assert_equal "Lazylead::Task::Echo", Task::Echo.new.run("", "", {})
     end
   end
 end
