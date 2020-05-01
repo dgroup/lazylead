@@ -42,7 +42,7 @@ module Lazylead
     include Emailing
 
     def initialize(
-      log = Log::NOTHING, salt = Salt.new("exchange_salt"), opts = ENV
+      log = Log::NOTHING, salt = Salt.new("exchange_salt"), opts = ENV.to_h
     )
       @log = log
       @salt = salt
@@ -70,13 +70,13 @@ module Lazylead
 
     def cli
       return @cli if defined? @cli
+      url = @opts["exchange_url"]
       usr = @opts["exchange_user"]
       psw = @opts["exchange_password"]
       usr = @salt.decrypt(usr) if @salt.specified?
       psw = @salt.decrypt(psw) if @salt.specified?
-      @cli = Viewpoint::EWSClient.new @opts["exchange_url"], usr, psw
-      @log.debug "Client to MS Exchange server initiated using opts:" \
-                 " #{@opts.except 'exchange_password'}"
+      @log.debug "Connect to MS Exchange server #{url} as '#{usr}'"
+      @cli = Viewpoint::EWSClient.new url, usr, psw
     end
   end
 end
