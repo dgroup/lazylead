@@ -37,17 +37,5 @@ module Lazylead
     def issues(_)
       @issues
     end
-
-    def group_by(_, &block)
-      @issues.group_by(&block)
-    end
-
-    def group_by_assignee(_)
-      @issues.group_by(&:assignee)
-    end
-
-    def filtered(_, _)
-      []
-    end
   end
 end

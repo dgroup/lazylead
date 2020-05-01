@@ -101,9 +101,7 @@ module Lazylead
         @prop = team.to_j.merge(to_j)
       end
 
-      private
-
-      def postman(log)
+      def postman(log = Log::NOTHING)
         if props.key? "postman"
           props["postman"].constantize.new(log)
         else
@@ -119,13 +117,13 @@ module Lazylead
 
       # Make an instance of ticketing system for future interaction.
       def connect(log = Log::NOTHING)
-        opts = JSON.parse(properties)
+        opts = env(to_j)
         if opts["type"].empty?
           log.warn "No task system details provided, an empty stub is used."
           Empty.new
         else
           opts["type"].constantize.new(
-            env(opts.except("type", "salt")),
+            opts.except("type", "salt"),
             opts["salt"].empty? ? NoSalt.new : Salt.new(opts["salt"]),
             log
           )

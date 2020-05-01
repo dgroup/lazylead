@@ -32,17 +32,5 @@ module Lazylead
     def issues(_)
       []
     end
-
-    def group_by(_, _)
-      {}
-    end
-
-    def group_by_assignee(_)
-      {}
-    end
-
-    def filtered(_, _)
-      []
-    end
   end
 end

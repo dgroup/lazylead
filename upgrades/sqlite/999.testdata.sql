@@ -35,4 +35,5 @@ values ('echo', '* * * * *', 'false', 1, 1, 1, 'Lazylead::Task::Echo', '{}'),
         '{"sql":"filter=100500","subject":"[DD] PDTN!","template":"lib/messages/due_date_expired.erb"}'),
        ('task with cc', '* * * * *', 'false', 3, 1, 1, 'Lazylead::Task::Echo',
         '{"cc":"leelakenny@mail.com,maciecrane@mail.com"}'),
-       ('task', '* * * * *', 'false', 4, 2, 1, 'Lazylead::Task::Echo', '{}');
+       ('task', '* * * * *', 'false', 4, 2, 1, 'Lazylead::Task::Echo', '{}'),
+       ('pman', '', '', 5, 2, 1, '', '{"postman":"Lazylead::Postman"}');

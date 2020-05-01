@@ -71,7 +71,6 @@ module Lazylead
   # No cryptography salt defined within environment variables.
   #
   class NoSalt
-
     def id
       "No salt"
     end

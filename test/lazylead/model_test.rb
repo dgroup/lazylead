@@ -48,5 +48,15 @@ module Lazylead
       )
       assert_equal "Mike", ORM::Team.find(1).env(ORM::Team.find(1).to_j)["usr"]
     end
+
+    test "postman initiated through orm" do
+      CLI::App.new(Log::NOTHING).run(
+        home: ".",
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
+      )
+      assert_kind_of Lazylead::Postman, ORM::Task.find(5).postman
+    end
   end
 end

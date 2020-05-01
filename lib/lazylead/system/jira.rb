@@ -32,10 +32,16 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Jira
+    # @todo #57/DEV The debug method should be moved outsited of ctor.
+    #  This was moved here from 'client' method because Rubocop failed the build
+    #  due to 'Metrics/AbcSize' violation.
     def initialize(opts, salt = NoSalt.new, log = Log::NOTHING)
       @opts = opts
       @salt = salt
       @log = log
+      @log.debug "Initiate a Jira client using following opts: " \
+                 "#{@opts.except 'password', :password} " \
+                 " and salt #{@salt.id} (found=#{@salt.specified?})"
     end
 
     def issues(jql)
@@ -54,10 +60,6 @@ module Lazylead
       @opts["username"] = @salt.decrypt(@opts["username"]) if @salt.specified?
       @opts["password"] = @salt.decrypt(@opts["password"]) if @salt.specified?
       @client = JIRA::Client.new(@opts)
-      @log.debug "Jira client initiated using following opts: " \
-                 "#{@opts.except 'password', :password} " \
-                 " and salt #{@salt.id} (found=#{@salt.specified?})"
-      @client
     end
 
     # Copy the required/mandatory parameter(s) for Jira client which can't
@@ -176,7 +178,7 @@ module Lazylead
   class NoAuthJira
     def initialize(url, log = Log::NOTHING)
       @jira = Jira.new(
-        {username: nil, password: nil, site: url, context_path: ""},
+        { username: nil, password: nil, site: url, context_path: "" },
         NoSalt.new,
         log
       )
