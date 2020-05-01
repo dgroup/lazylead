@@ -35,7 +35,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
-      assert_equal "${usr}", ORM::Team.find(1).to_j["usr"]
+      assert_equal "${usr}", ORM::Team.find(1).to_hash["usr"]
     end
 
     test "env properties injected" do
@@ -46,7 +46,8 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
-      assert_equal "Mike", ORM::Team.find(1).env(ORM::Team.find(1).to_j)["usr"]
+      assert_equal "Mike",
+                   ORM::Team.find(1).env(ORM::Team.find(1).to_hash)["usr"]
     end
 
     test "postman initiated through orm" do

@@ -69,9 +69,9 @@ module Lazylead
       end
     end
 
-    # Convert json-based database column to hash.
-    def to_j
-      JSON.parse(properties)
+    # Convert json-based database column 'properties' to hash.
+    def to_hash
+      JSON.parse(properties).to_h
     end
 
     def to_s
@@ -98,7 +98,7 @@ module Lazylead
 
       def props
         return @prop if defined? @prop
-        @prop = team.to_j.merge(to_j)
+        @prop = team.to_hash.merge(to_hash)
       end
 
       def postman(log = Log::NOTHING)
@@ -117,7 +117,7 @@ module Lazylead
 
       # Make an instance of ticketing system for future interaction.
       def connect(log = Log::NOTHING)
-        opts = to_j
+        opts = to_hash
         if opts["type"].empty?
           log.warn "No task system details provided, an empty stub is used."
           Empty.new

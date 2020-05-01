@@ -46,9 +46,6 @@ module Lazylead
     #  ...
     #  saltN=xxxxxxxxx
     #
-    # You may define general salt to be used by default like
-    #  salt=E1F53135E559C253
-    #
     def initialize(id, env = ENV.to_h)
       @id = id
       @env = env
