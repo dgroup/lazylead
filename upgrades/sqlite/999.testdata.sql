@@ -27,7 +27,7 @@ values (1,
        (2,
         '{"type":"Lazylead::Jira", "username":"${jsi_usr}", "password":"${jsi_psw}", "site":"https://jira.spring.io", "context_path":""}');
 insert into teams(id, name, properties)
-values (1, 'BA squad', '{"from":"basquad@fake.com"}');
+values (1, 'BA squad', '{"from":"basquad@fake.com", "usr":"${usr}"}');
 insert into tasks(name, cron, enabled, id, system, team_id, action, properties)
 values ('echo', '* * * * *', 'false', 1, 1, 1, 'Lazylead::Task::Echo', '{}'),
        ('expired due date', '* * * * *', 'false', 2, 1, 1,

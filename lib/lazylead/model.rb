@@ -35,18 +35,7 @@ require_relative "exchange"
 # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
 # License:: MIT
 module Lazylead
-  # Makes ORM objects verbose using object's fields.
-  module Verbose
-    def to_s
-      attributes.map { |k, v| "#{k}='#{v}'" }.join(", ")
-    end
-
-    def inspect
-      to_s
-    end
-  end
-
-  # Lazylead database layer with ORM entities
+  # ORM-related methods
   module ORM
     # Tables from database may have configuration in json column.
     # Some of those properties might be configured/overridden by environment
@@ -78,9 +67,22 @@ module Lazylead
       end
     end
 
+    # Convert json-based database column to hash.
+    def to_j
+      JSON.parse(properties)
+    end
+
+    def to_s
+      attributes.map { |k, v| "#{k}='#{v}'" }.join(", ")
+    end
+
+    def inspect
+      to_s
+    end
+
     # General lazylead task.
     class Task < ActiveRecord::Base
-      include Verbose
+      include ORM
       belongs_to :team, foreign_key: "team_id"
       belongs_to :system, foreign_key: "system"
 
@@ -90,7 +92,7 @@ module Lazylead
 
       def props
         return @prop if defined? @prop
-        @prop = team.to_h.merge JSON.parse(properties)
+        @prop = team.to_j.merge(to_j)
       end
 
       private
@@ -104,20 +106,9 @@ module Lazylead
       end
     end
 
-    # A team for lazylead task.
-    # Each team may have several tasks.
-    class Team < ActiveRecord::Base
-      include Verbose
-
-      def to_h
-        return @prop if defined? @prop
-        @prop = JSON.parse(properties)
-      end
-    end
-
     # Ticketing systems to monitor.
     class System < ActiveRecord::Base
-      include Verbose
+      include ORM
 
       # Make an instance of ticketing system for future interaction.
       def connect
@@ -133,14 +124,10 @@ module Lazylead
       end
     end
 
-    # Details about each team members.
-    class Person < ActiveRecord::Base
-      include Verbose
-    end
-
-    # Application properties across all ticketing systems.
-    class Properties < ActiveRecord::Base
-      include Verbose
+    # A team for lazylead task.
+    # Each team may have several tasks.
+    class Team < ActiveRecord::Base
+      include ORM
     end
   end
 end
