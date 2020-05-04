@@ -31,7 +31,7 @@ module Lazylead
   module CLI
     class AppTest < Lazylead::SqliteTest
       test "LL database structure installed successfully" do
-        CLI::App.new(Log::NOTHING).run(
+        CLI::App.new(Log::NOTHING, NoSchedule.new).run(
           home: ".",
           sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
           vcs4sql: "upgrades/sqlite"
@@ -47,7 +47,7 @@ module Lazylead
       end
 
       test "activesupport is activated for access to domain entities" do
-        CLI::App.new(Log::NOTHING).run(
+        CLI::App.new(Log::NOTHING, Schedule.new(cling: false)).run(
           home: ".",
           sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
           vcs4sql: "upgrades/sqlite",

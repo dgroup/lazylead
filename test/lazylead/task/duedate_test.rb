@@ -26,6 +26,7 @@ require_relative "../../test"
 require_relative "../../../lib/lazylead/log"
 require_relative "../../../lib/lazylead/smtp"
 require_relative "../../../lib/lazylead/postman"
+require_relative "../../../lib/lazylead/schedule"
 require_relative "../../../lib/lazylead/model"
 require_relative "../../../lib/lazylead/cli/app"
 require_relative "../../../lib/lazylead/system/jira"
@@ -52,7 +53,7 @@ module Lazylead
     end
 
     test "configuration properties merged successfully" do
-      CLI::App.new(Log::NOTHING).run(
+      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",

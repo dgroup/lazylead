@@ -23,13 +23,15 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../sqlite_test"
+require_relative "../../lib/lazylead/log"
 require_relative "../../lib/lazylead/model"
 require_relative "../../lib/lazylead/cli/app"
+require_relative "../../lib/lazylead/schedule"
 
 module Lazylead
   class OrmTest < Lazylead::SqliteTest
     test "convert column to json" do
-      CLI::App.new(Log::NOTHING).run(
+      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
@@ -40,7 +42,7 @@ module Lazylead
 
     test "env properties injected" do
       ENV["usr"] = "Mike"
-      CLI::App.new(Log::NOTHING).run(
+      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
@@ -51,7 +53,7 @@ module Lazylead
     end
 
     test "postman initiated through orm" do
-      CLI::App.new(Log::NOTHING).run(
+      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",

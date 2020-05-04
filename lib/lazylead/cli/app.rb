@@ -40,7 +40,7 @@ module Lazylead
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
     class App
-      def initialize(log, schedule = Schedule.new, smtp = Smtp.new)
+      def initialize(log, schedule, smtp = Smtp.new)
         @log = log
         @schedule = schedule
         @smtp = smtp

@@ -20,3 +20,4 @@ services:
     volumes:
       - .local/dumps:/lazylead/dumps
       - .local/logs:/lazylead/logs
+    entrypoint: bin/lazylead --trace --verbose

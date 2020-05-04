@@ -24,6 +24,7 @@
 
 require "json"
 require "rufus-scheduler"
+require_relative "log"
 require_relative "model"
 
 module Lazylead
@@ -39,10 +40,10 @@ module Lazylead
     #  schedule some task once or at particular time period like in next 200ms).
     #  For cron expressions we should define separate test suite which will test
     #  in parallel without blocking main CI process.
-    def initialize(log = Log::NOTHING, trg = Rufus::Scheduler.new, cling = true)
+    def initialize(log = Log::NOTHING, cling = true)
       @log = log
       @cling = cling
-      @trigger = trg
+      @trigger = Rufus::Scheduler.new
     end
 
     # @todo #/DEV error code is required for reach 'raise' statement within the
@@ -68,5 +69,20 @@ module Lazylead
     def stop
       @trigger.shutdown(:kill)
     end
+  end
+
+  # Fake application schedule for unit testing purposes
+  class NoSchedule
+    def initialize(log = Log::NOTHING)
+      @log = log
+    end
+
+    def register(task)
+      @log.debug("Task registered: #{task}")
+    end
+
+    def ps; end
+
+    def join; end
   end
 end
