@@ -59,5 +59,8 @@ Style/StringLiterals:
 Style/TrivialAccessors:
   AllowPredicates: true
 
+Style/EndOfLine:
+  EnforcedStyle: lf
+
 # @todo #/DEV Add violation regarding methods without documentation using RDoc
 #  https://stackoverflow.com/questions/1681467/how-to-document-ruby-code
