@@ -50,6 +50,9 @@ Layout/HashAlignment:
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 
+Layout/EndOfLine:
+  EnforcedStyle: lf
+
 Style/HashSyntax:
   EnforcedStyle: ruby19
 
@@ -59,8 +62,6 @@ Style/StringLiterals:
 Style/TrivialAccessors:
   AllowPredicates: true
 
-Layout/EndOfLine:
-  EnforcedStyle: lf
 
 # @todo #/DEV Add violation regarding methods without documentation using RDoc
 #  https://stackoverflow.com/questions/1681467/how-to-document-ruby-code
