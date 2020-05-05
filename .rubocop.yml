@@ -59,7 +59,7 @@ Style/StringLiterals:
 Style/TrivialAccessors:
   AllowPredicates: true
 
-Style/EndOfLine:
+Layout/EndOfLine:
   EnforcedStyle: lf
 
 # @todo #/DEV Add violation regarding methods without documentation using RDoc
