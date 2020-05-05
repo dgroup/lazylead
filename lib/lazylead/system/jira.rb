@@ -44,8 +44,8 @@ module Lazylead
                  " and salt #{@salt.id} (found=#{@salt.specified?})"
     end
 
-    def issues(jql)
-      client.Issue.jql(jql).map { |i| Lazylead::Issue.new(i) }
+    def issues(jql, opts = {})
+      client.Issue.jql(jql, opts).map { |i| Lazylead::Issue.new(i) }
     end
 
     private
@@ -164,6 +164,18 @@ module Lazylead
       @issue.fields
     end
 
+    # @todo #/DEV Add verification of field 'FixVersion/s' modification.
+    #  This field shows the scope of release and can be modified by each project
+    #  member. That's not correct actually, only team leads (or predefined list
+    #  of managers should be allowed to modify this field.
+    #  We need a rule which highlight the tickets where fixVersion was changed
+    #  by someone who is not from predefined list.
+    def history
+      return [] unless @issue.respond_to? :changelog
+      return [] if @issue.changelog == nil? || @issue.changelog.empty?
+      @issue.changelog["histories"]
+    end
+
     def to_s
       "#{id} #{summary}"
     end
@@ -184,8 +196,8 @@ module Lazylead
       )
     end
 
-    def issues(jql)
-      @jira.issues jql
+    def issues(jql, opts = {})
+      @jira.issues(jql, opts)
     end
   end
 end

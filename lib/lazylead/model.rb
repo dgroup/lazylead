@@ -124,7 +124,7 @@ module Lazylead
         else
           opts["type"].constantize.new(
             env(opts.except("type", "salt")),
-            opts["salt"].empty? ? NoSalt.new : Salt.new(opts["salt"]),
+            opts["salt"].blank? ? NoSalt.new : Salt.new(opts["salt"]),
             log
           )
         end

@@ -64,6 +64,11 @@ module Lazylead
       assert fst > sec, "'#{fst}' is expected to be greater than '#{sec}'"
     end
 
+    def greater_or_eq(fst, sec)
+      assert fst >= sec,
+             "'#{fst}' is expected to be greater or equal to '#{sec}'"
+    end
+
     def assert_entries(exp, act)
       raise "Primary hash for comparing is empty" if exp.nil? || exp.empty?
       exp.each do |k, v|

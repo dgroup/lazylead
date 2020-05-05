@@ -24,6 +24,7 @@
 
 require_relative "../../test"
 require_relative "../../../lib/lazylead/model"
+require_relative "../../../lib/lazylead/schedule"
 require_relative "../../../lib/lazylead/cli/app"
 require_relative "../../../lib/lazylead/system/jira"
 
@@ -39,7 +40,7 @@ module Lazylead
 
     test "found issue by jira (ORM)" do
       skip "No Jira credentials provided" unless env? "jsi_usr", "jsi_psw"
-      CLI::App.new(Log::NOTHING).run(
+      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
@@ -80,6 +81,30 @@ module Lazylead
                              .issues("key in ('DATAJDBC-480')")
                              .first
                              .url
+    end
+
+    test "issue history found" do
+      greater_or_eq 8,
+                    NoAuthJira.new("https://jira.spring.io")
+                              .issues("key='DATAJDBC-480'", expand: "changelog")
+                              .first
+                              .history
+                              .size
+    end
+
+    test "issue history not found" do
+      assert_empty NoAuthJira.new("https://jira.spring.io")
+                             .issues("key='DATAJDBC-480'")
+                             .first
+                             .history
+    end
+
+    test "2nd issue history item is correct" do
+      assert_equal "396918",
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key='DATAJDBC-480'", expand: "changelog")
+                             .first
+                             .history[2]["id"]
     end
   end
 end
