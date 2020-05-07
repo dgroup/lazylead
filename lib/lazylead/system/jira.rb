@@ -32,7 +32,7 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Jira
-    # @todo #57/DEV The debug method should be moved outsited of ctor.
+    # @todo #57/DEV The debug method should be moved outside of ctor.
     #  This was moved here from 'client' method because Rubocop failed the build
     #  due to 'Metrics/AbcSize' violation.
     def initialize(opts, salt = NoSalt.new, log = Log::NOTHING)
@@ -45,7 +45,16 @@ module Lazylead
     end
 
     def issues(jql, opts = {})
-      client.Issue.jql(jql, opts).map { |i| Lazylead::Issue.new(i) }
+      raw do |jira|
+        jira.Issue.jql(jql, opts).map { |i| Lazylead::Issue.new(i) }
+      end
+    end
+
+    # Execute request to the ticketing system using raw client.
+    # For Jira the raw client is 'jira-ruby' gem.
+    def raw
+      raise "ll-06: No block given to method" unless block_given?
+      yield client
     end
 
     private
