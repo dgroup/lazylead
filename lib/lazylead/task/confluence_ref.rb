@@ -77,7 +77,8 @@ module Lazylead
       end
 
       # Detect links mentioned in ticket comments
-      # @todo #/DEV Right now the confluence
+      # @todo #/DEV Detect pageId in case if page was mentioned in comments
+      #  using spacename+pagename.
       def mentioned_links(ticket)
         ticket.comments
               .map { |c| c.attrs["body"] }
