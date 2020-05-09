@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-# @todo Increase code coverage from 75% to 80%+.
+# @todo #/DEV Increase code coverage from 75% to 80%+.
 #  Right now it was decreased to 75% due to long manual setup of
 #  dev. instances of Atlassian Jira and Confluence.
 #  It was configured locally and there is no automation for now how
