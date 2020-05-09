@@ -37,32 +37,5 @@ module Lazylead
         @sys.issues jql
       end
     end
-
-    # @todo #/DEV Unit tests for 'group_by' function
-    #
-    def group_by(fnc, jql)
-      @mutex.synchronize do
-        @sys.group_by fnc, jql
-      end
-    end
-
-    # @todo #/DEV Unit tests for 'group_by_assignee' function
-    #
-    def group_by_assignee(jql)
-      @mutex.synchronize do
-        @sys.group_by_assignee jql
-      end
-    end
-
-    # @todo #/DEV Unit tests for 'filtered' function
-    #
-    # Filter the issues found by jql on app side.
-    # Required for cases when filtration can't be done
-    #  on ticketing system side.
-    def filtered(fnc, jql)
-      @mutex.synchronize do
-        @sys.filtered fnc, jql
-      end
-    end
   end
 end
