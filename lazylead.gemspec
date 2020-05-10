@@ -93,7 +93,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rake", "12.3.2"
   s.add_development_dependency "random-port", "0.3.1"
   s.add_development_dependency "rdoc", "6.1.1"
-  s.add_development_dependency "rubocop", "0.78"
+  s.add_development_dependency "rubocop", "0.82"
   s.add_development_dependency "rubocop-minitest", "0.5.1"
   s.add_development_dependency "rubocop-performance", "1.5.2"
   s.add_development_dependency "rubocop-rspec", "1.33.0"
