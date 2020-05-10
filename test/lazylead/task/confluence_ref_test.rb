@@ -28,6 +28,8 @@ require_relative "../../test"
 require_relative "../../../lib/lazylead/task/confluence_ref"
 
 module Lazylead
+  # @todo #/DEV Test took ~5s+ and should be optimized.
+  #  Potentially, a confluence HTTP client is a first candidate.
   class ConfluenceRefTest < Lazylead::Test
     # @todo #/DEV Test fully depends on external system.
     #  Before test the external system should be cleaned up.
@@ -37,11 +39,12 @@ module Lazylead
     test "link issue and confluence page from comments" do
       skip "No Confluence details provided" unless env? "CONFLUENCE_URL",
                                                         "CONFLUENCE_APP_ID",
-                                                        "CONFLUENCE_NAME"
-      skip "No JIRA credentials provided" unless env? "JIRA_URL",
-                                                      "JIRA_USER",
-                                                      "JIRA_PASS",
-                                                      "CONFLUENCE_JQL"
+                                                        "CONFLUENCE_NAME",
+                                                        "CONFLUENCE_USER",
+                                                        "CONFLUENCE_PASS",
+                                                        "CONFLUENCE_JQL"
+      skip "No JIRA credentials provided" unless env? "JIRA_URL", "JIRA_USER",
+                                                      "JIRA_PASS"
       Task::ConfluenceRef.new.run(
         Jira.new(
           username: ENV["JIRA_USER"],
@@ -52,10 +55,9 @@ module Lazylead
         "jql" => ENV["CONFLUENCE_JQL"],
         "confluences" => [
           {
-            "url" => ENV["CONFLUENCE_URL"],
-            "app" => ENV["CONFLUENCE_APP_ID"],
-            "name" => ENV["CONFLUENCE_NAME"],
-            "type" => "com.atlassian.confluence"
+            "url" => ENV["CONFLUENCE_URL"], "app" => ENV["CONFLUENCE_APP_ID"],
+            "name" => ENV["CONFLUENCE_NAME"], "type" => "com.atlassian.confluence",
+            "user" => ENV["CONFLUENCE_USER"], "pass" => ENV["CONFLUENCE_PASS"]
           }
         ].to_json
       )

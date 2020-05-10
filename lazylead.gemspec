@@ -55,6 +55,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "backtrace", "0.3"
   s.add_runtime_dependency "concurrent-ruby", "1.1.5"
   s.add_runtime_dependency "diffy", "3.3.0"
+  s.add_runtime_dependency "faraday", "1.0.1"
   s.add_runtime_dependency "futex", "0.8.5"
   s.add_runtime_dependency "get_process_mem", "0.2.5"
   s.add_runtime_dependency "haml", "5.0.4"

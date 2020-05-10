@@ -40,13 +40,13 @@ module Lazylead
          group by t.name
          order by t.name"
       ).to_h
-      assert !schema.empty?, "No tables found in #{file} for #{tables}"
+      refute_empty schema, "No tables found in #{file} for #{tables}"
       tables.each_with_index do |t, i|
         raise "Name not found for table with id #{i} in #{tables}" if t.empty?
         tbl = t.first.to_s
         cols = t.values_at(1).sort.join(",")
         raise "No columns found for table #{tbl} in #{tables}" if cols.empty?
-        assert !schema[tbl].nil?, "Table '#{tbl}' not found in #{schema}"
+        refute schema[tbl].nil?, "Table '#{tbl}' not found in #{schema}"
         assert_equal cols, schema[tbl], "Columns mismatch for '#{tbl}'"
       end
     end

@@ -22,38 +22,40 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "json"
-require "faraday"
-require_relative "../system/jira"
-require_relative "../log"
-require_relative "../confluence"
+require_relative "../test"
+require_relative "../../lib/lazylead/confluence"
 
 module Lazylead
-  module Task
-    # The lazylead task which adds reference to Confluence page
-    #  in case if Confluence page was mentioned in issue comments.
-    # @todo #/DEV Support sub-task for link search. Potentially, the issue
-    #  might have sub-tasks where discussion ongoing.
-    class ConfluenceRef
-      def initialize(log = Log::NOTHING)
-        @log = log
-      end
+  class ConfluenceTest < Lazylead::Test
+    test "make link from jira to confluence" do
+      assert_entries(
+        {
+          globalId: "appId=dddd&pageId=0000",
+          application: {
+            type: "com.atlassian.confluence",
+            name: "Knowledge System"
+          },
+          relationship: "Wiki Page",
+          object: {
+            url: "https://conf.com/pages/viewpage.action?pageId=0000",
+            title: "Wiki Page"
+          }
+        },
+        Confluence.new(
+          OpenStruct.new(
+            app: "dddd",
+            url: "https://conf.com",
+            name: "Knowledge System",
+            type: "com.atlassian.confluence"
+          )
+        ).make_link("https://conf.com/pages/viewpage.action?pageId=0000")
+      )
+    end
 
-      def run(sys, _, opts)
-        confluences = confluences(opts)
-        return if confluences.empty?
-        sys.issues(opts["jql"])
-           .map { |i| Link.new(i, sys, confluences) }
-           .each(&:fetch_links)
-           .select(&:need_link?)
-           .each(&:add_link)
-      end
-
-      def confluences(opts)
-        return [] if opts["confluences"].nil? || opts["confluences"].blank?
-        JSON.parse(opts["confluences"], object_class: OpenStruct)
-            .map { |c| Confluence.new(c) }
-      end
+    test "jira comment is a confluence link" do
+      assert Link.new(
+        "", "", [Confluence.new(OpenStruct.new(url: "https://confluence.com"))]
+      ).confluence_link? "https://confluence.com/pages/viewpage.action?pageId=1"
     end
   end
 end

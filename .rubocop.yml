@@ -53,6 +53,9 @@ Layout/EmptyLineAfterGuardClause:
 Layout/EndOfLine:
   EnforcedStyle: lf
 
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
 Style/HashSyntax:
   EnforcedStyle: ruby19
 
@@ -62,6 +65,23 @@ Style/StringLiterals:
 Style/TrivialAccessors:
   AllowPredicates: true
 
+Style/ExponentialNotation:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
 
 # @todo #/DEV Add violation regarding methods without documentation using RDoc
 #  https://stackoverflow.com/questions/1681467/how-to-document-ruby-code
