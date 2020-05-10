@@ -1,0 +1,120 @@
+<html>
+<head>
+  <style>
+    /* CSS styles taken from https://github.com/yegor256/tacit */
+    th {
+      font-weight: 600
+    }
+
+    table tr {
+      border-bottom-width: 2.16px
+    }
+
+    table tr th {
+      border-bottom-width: 2.16px
+    }
+
+    table tr td, table tr th {
+      overflow: hidden;
+      padding: 5.4px 3.6px
+    }
+
+    a {
+      color: #275a90;
+      text-decoration: none
+    }
+
+    a:hover {
+      text-decoration: underline
+    }
+
+    pre, code, kbd, samp, var, output {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 13px
+    }
+
+    pre code {
+      background: none;
+      border: 0;
+      line-height: 29.7px;
+      padding: 0
+    }
+
+    code, kbd {
+      background: #daf1e0;
+      border-radius: 3.6px;
+      color: #2a6f3b;
+      display: inline-block;
+      line-height: 18px;
+      padding: 3.6px 6.3px 2.7px
+    }
+
+    * {
+      border: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      box-sizing: border-box;
+      margin: 0;
+      max-width: 100%;
+      padding: 0;
+      vertical-align: baseline;
+      font-family: system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-stretch: normal;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 29.7px
+    }
+
+    html, body {
+      width: 100%
+    }
+
+    html {
+      height: 100%
+    }
+
+    body {
+      background: #fff;
+      color: #1a1919;
+      padding: 36px
+    }
+  </style>
+  <title>Not authorized "Fix Version" change</title>
+</head>
+<body>
+<p>Hi,</p>
+
+<p>The <span style='font-weight:bold'>'Fix Version'</span> for the following
+  ticket(s) changed by not authorized person(s):</p>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Priority</th>
+    <th>When</th>
+    <th>Who</th>
+    <th>Reporter</th>
+    <th>Summary</th>
+  </tr>
+  <% versions.each do |v| %>
+    <tr>
+      <td><a href='<%= v.issue.url %>'><%= v.issue.id %></a></td>
+      <td><%= v.issue.priority %></td>
+      <td><%= DateTime.parse(v.last["created"])
+                      .strftime('%d-%b-%Y %I:%M:%S %p') %></td>
+      <td><span style='color: red'><%= v.last["author"]["displayName"] %></span>
+        (<%= v.last["author"]["name"] %>)
+      </td>
+      <td><%= v.issue.reporter.name %></td>
+      <td><%= v.issue.summary %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p>Authorized person(s) are: <code><%= allowed %></code>.</p>
+
+<p>Posted by
+  <a href="https://github.com/dgroup/lazylead">lazylead v<%= version %></a>.
+</p>
+</body>
+</html>

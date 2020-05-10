@@ -22,38 +22,31 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../email"
-require_relative "../version"
-require_relative "../postman"
+require "mail"
+
+require_relative "../../test"
+require_relative "../../../lib/lazylead/smtp"
+require_relative "../../../lib/lazylead/postman"
+require_relative "../../../lib/lazylead/task/fix_version"
 
 module Lazylead
-  module Task
-    #
-    # A task that sends notifications about issues to their assignees.
-    #
-    # The task supports the following features:
-    #  - fetch issues from remote ticketing system by query
-    #  - group all issues by assignee
-    #  - prepare email based on predefined template (*.erb)
-    #  - send the required notifications to each assignee
-    #
-    # The email message is sending to the assignee regarding all his/her issues,
-    #  not like one email per each issue.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Notification
-      def run(sys, postman, opts)
-        sys.issues(opts["sql"])
-           .group_by(&:assignee)
-           .each do |a, t|
-          postman.send opts.merge(
-            to: a.email,
-            tickets: t
-          )
-        end
-      end
+  class FixVersionTest < Lazylead::Test
+    test "alert in case fixvesion changed by not authorized person" do
+      Lazylead::Smtp.new.enable
+      Task::FixVersion.new.run(
+        NoAuthJira.new("https://jira.spring.io"),
+        Postman.new,
+        "to" => "lead@company.com",
+        "from" => "ll@company.com",
+        "jql" => "key in ('DATAJDBC-480') and fixVersion is not empty",
+        "allowed" => "tom,mike,bob",
+        "subject" => "FixVersion: How dare you?",
+        "template" => "lib/messages/illegal_fixversion_change.erb"
+      )
+      assert_words %w[DATAJDBC-480 01-Apr-2020 Minor Mark\ Paluch tom,mike,bob EntityInstantiators],
+                   Mail::TestMailer.deliveries
+                                   .filter { |m| m.subject.eql? "FixVersion: How dare you?" }
+                                   .first.body.parts.first.body
     end
   end
 end

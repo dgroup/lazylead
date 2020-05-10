@@ -189,10 +189,6 @@ module Lazylead
       @issue.comments
     end
 
-    def add_link(link)
-      @issue.remotelink.build.save link
-    end
-
     def to_s
       "#{id} #{summary}"
     end

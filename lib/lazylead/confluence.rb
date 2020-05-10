@@ -109,14 +109,10 @@ module Lazylead
             .map { |cmnt| cmnt.attrs["body"] }
             .select { |cmnt| @confl.any? { |c| cmnt.include? c.url } }
             .flat_map { |cmnt| cmnt.split " " }
-            .select(&method(:confluence_link?))
+            .select { |cmnt| @confl.any? { |c| cmnt.start_with? c.url } }
             .map(&method(:to_page_id))
             .reject(&:blank?)
             .uniq
-    end
-
-    def confluence_link?(comment)
-      @confl.any? { |c| comment.start_with? c.url }
     end
 
     # Convert confluence page url to the following format:
@@ -154,7 +150,7 @@ module Lazylead
     def add_link
       @diff.each do |url|
         cnf = @confl.find { |c| url.start_with? c.url }
-        @issue.add_link(cnf.make_link(url))
+        @issue.remotelink.build.save cnf.make_link(url)
       end
     end
   end

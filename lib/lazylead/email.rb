@@ -31,7 +31,7 @@ module Lazylead
     def make_body(opts)
       Email.new(
         opts["template"],
-        opts[:binds].merge(version: Lazylead::VERSION)
+        opts.merge(version: Lazylead::VERSION)
       ).render
     end
 

@@ -16,7 +16,7 @@ Layout/LineLength:
     - "test/**/*"
 
 Metrics/AbcSize:
-  Max: 16
+  Max: 20
   Exclude:
     - "test/**/*"
 

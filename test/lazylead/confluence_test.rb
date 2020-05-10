@@ -51,11 +51,5 @@ module Lazylead
         ).make_link("https://conf.com/pages/viewpage.action?pageId=0000")
       )
     end
-
-    test "jira comment is a confluence link" do
-      assert Link.new(
-        "", "", [Confluence.new(OpenStruct.new(url: "https://confluence.com"))]
-      ).confluence_link? "https://confluence.com/pages/viewpage.action?pageId=1"
-    end
   end
 end

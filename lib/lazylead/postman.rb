@@ -50,7 +50,7 @@ module Lazylead
     def send(opts)
       html = make_body(opts)
       Mail.deliver do
-        to opts[:to]
+        to opts[:to] || opts["to"]
         from opts["from"]
         cc split("cc", opts) if opts.key? "cc"
         subject opts["subject"]
