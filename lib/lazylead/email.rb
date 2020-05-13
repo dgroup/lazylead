@@ -37,7 +37,11 @@ module Lazylead
 
     # Split text with email addresses by ',' and trim all elements if needed.
     def split(type, opts)
-      opts[type].split(",").map(&:strip).reject(&:empty?) if opts.key? "cc"
+      if opts[type].include? ","
+        opts[type].split(",").map(&:strip).reject(&:empty?)
+      else
+        [opts[type]]
+      end
     end
   end
 

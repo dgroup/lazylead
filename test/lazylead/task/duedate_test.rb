@@ -30,7 +30,7 @@ require_relative "../../../lib/lazylead/schedule"
 require_relative "../../../lib/lazylead/model"
 require_relative "../../../lib/lazylead/cli/app"
 require_relative "../../../lib/lazylead/system/jira"
-require_relative "../../../lib/lazylead/task/notification"
+require_relative "../../../lib/lazylead/task/alert"
 
 module Lazylead
   class DuedateTest < Lazylead::Test
@@ -38,7 +38,7 @@ module Lazylead
     #  Mail::TestMailer.deliveries.each { |m| p m.html_part.body.raw_source }
     test "issues were fetched" do
       Smtp.new.enable
-      Task::Notification.new.run(
+      Task::AssigneeAlert.new.run(
         NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
         "from" => "fake@email.com",
@@ -72,18 +72,55 @@ module Lazylead
 
     test "html msg has ticket details" do
       Smtp.new.enable
-      Task::Notification.new.run(
+      Task::AssigneeAlert.new.run(
         NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
         "from" => "fake@email.com",
-        "sql" => "key in ('DATAJDBC-480')",
+        "sql" => "key in ('STS-3599')",
         "subject" => "[DD] HMCHT!",
         "template" => "lib/messages/due_date_expired.erb"
       )
-      assert_words %w[DATAJDBC-480 2020-04-25 Minor Mark\ Paluch Move off deprecated EntityInstantiators],
+      assert_words %w[STS-3599 2013-11-08 Major Miles\ Parker Use JavaFX WebView],
                    Mail::TestMailer.deliveries
                                    .filter { |m| m.subject.eql? "[DD] HMCHT!" }
                                    .first.body.parts.first.body
+    end
+
+    test "send notification about bunch of tickets" do
+      Smtp.new.enable
+      Task::Alert.new.run(
+        NoAuthJira.new("https://jira.spring.io"),
+        Postman.new,
+        "from" => "fake@email.com",
+        "sql" => "key in ('STS-3599')",
+        "subject" => "ALRT: Frozen",
+        "template" => "lib/messages/due_date_expired.erb",
+        "to" => "big.boss@example.com",
+        "addressee" => "Boss"
+      )
+      assert_words %w[Hi Boss STS-3599 2013-11-08 Major Miles\ Parker Use JavaFX WebView],
+                   Mail::TestMailer.deliveries
+                                   .filter { |m| m.subject.eql? "ALRT: Frozen" }
+                                   .first.body.parts.first.body
+    end
+
+    test "cc got notification" do
+      Smtp.new.enable
+      Task::Alert.new.run(
+        NoAuthJira.new("https://jira.spring.io"),
+        Postman.new,
+        "from" => "fake@email.com",
+        "sql" => "key in ('STS-3599')",
+        "subject" => "CC: Watching",
+        "template" => "lib/messages/due_date_expired.erb",
+        "to" => "big.boss@example.com",
+        "addressee" => "Boss",
+        "cc" => "another.boss@example.com,mom@home.com"
+      )
+      assert_equal %w[another.boss@example.com mom@home.com],
+                   Mail::TestMailer.deliveries
+                                   .filter { |m| m.subject.eql? "CC: Watching" }
+                                   .first.cc
     end
   end
 end

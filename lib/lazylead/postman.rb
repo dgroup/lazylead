@@ -49,10 +49,11 @@ module Lazylead
     # :opts   :: the mail configuration like to, from, cc, subject, template.
     def send(opts)
       html = make_body(opts)
+      cc = cc(opts)
       Mail.deliver do
         to opts[:to] || opts["to"]
         from opts["from"]
-        cc split("cc", opts) if opts.key? "cc"
+        cc cc if opts.key? "cc"
         subject opts["subject"]
         html_part do
           content_type "text/html; charset=UTF-8"
@@ -61,6 +62,12 @@ module Lazylead
       end
       @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
                  "Here is the body: #{html}"
+    end
+
+    def cc(opts)
+      cc = opts["cc"]
+      cc = split("cc", opts) if !cc.nil? && cc.include?(",")
+      cc
     end
   end
 end

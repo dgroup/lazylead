@@ -37,10 +37,8 @@ module Lazylead
                                                              "exchange_to"
       Exchange.new(Log::NOTHING, NoSalt.new).send(
         to: ENV["exchange_to"],
-        binds: {
-          tickets: NoAuthJira.new("https://jira.spring.io")
-                             .issues("key = DATAJDBC-480")
-        },
+        tickets: NoAuthJira.new("https://jira.spring.io")
+                           .issues("key = DATAJDBC-480"),
         "subject" => "[DD] PDTN!",
         "template" => "lib/messages/due_date_expired.erb"
       )
@@ -60,10 +58,8 @@ module Lazylead
         "exchange_password" => ENV["enc_exchange_psw"]
       ).send(
         to: ENV["exchange_to"],
-        binds: {
-          tickets: NoAuthJira.new("https://jira.spring.io")
-                             .issues("key = DATAJDBC-480")
-        },
+        tickets: NoAuthJira.new("https://jira.spring.io")
+                           .issues("key = DATAJDBC-480"),
         "subject" => "[DD] Enc PDTN!",
         "template" => "lib/messages/due_date_expired.erb"
       )

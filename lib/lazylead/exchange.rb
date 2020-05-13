@@ -52,7 +52,8 @@ module Lazylead
     # Send an email.
     # :opts   :: the mail configuration like from, cc, subject, template.
     def send(opts)
-      to = [opts[:to]] unless opts[:to].is_a? Array
+      to = opts["to"] || opts[:to]
+      to = [to] unless to.is_a? Array
       html = make_body(opts)
       msg = {
         subject: opts["subject"],
@@ -60,7 +61,7 @@ module Lazylead
         body_type: "HTML",
         to_recipients: to
       }
-      msg.update(:cc_recipients, split("cc", opts)) if opts.key? "cc"
+      msg.update(cc_recipients: split("cc", opts)) if opts.key? "cc"
       cli.send_message msg
       @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
                  "Here is the body: #{html}"

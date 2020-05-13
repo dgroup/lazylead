@@ -152,9 +152,8 @@ module Lazylead
       @issue.attrs["self"].split("/rest/api/").first + "/browse/" + id
     end
 
-    # @todo #/DEV Due date implementation is required based on custom field
     def duedate
-      Date.new(2020, 4, 25)
+      @issue.fields["duedate"]
     end
 
     def priority

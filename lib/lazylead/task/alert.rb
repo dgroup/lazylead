@@ -27,7 +27,26 @@ require_relative "../version"
 require_relative "../postman"
 
 module Lazylead
+  #
+  # Email alerts about particular issue(s).
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
   module Task
+    #
+    # Notify particular person about tickets based on pre-defined html template.
+    #
+    # The task supports the following features:
+    #  - fetch issues from remote ticketing system by query
+    #  - prepare email based on predefined template (*.erb)
+    #  - send the required notifications pre-defined "addressee".
+    class Alert
+      def run(sys, postman, opts)
+        postman.send opts.merge(tickets: sys.issues(opts["sql"]))
+      end
+    end
+
     #
     # A task that sends notifications about issues to their assignees.
     #
@@ -39,19 +58,33 @@ module Lazylead
     #
     # The email message is sending to the assignee regarding all his/her issues,
     #  not like one email per each issue.
-    #
-    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-    # License:: MIT
-    class Notification
+    class AssigneeAlert
       def run(sys, postman, opts)
         sys.issues(opts["sql"])
            .group_by(&:assignee)
            .each do |a, t|
-          postman.send opts.merge(
-            to: a.email,
-            tickets: t
-          )
+          postman.send opts.merge(to: a.email, addressee: a.name, tickets: t)
+        end
+      end
+    end
+
+    #
+    # A task that sends notifications about issues to their reporters.
+    #
+    # The task supports the following features:
+    #  - fetch issues from remote ticketing system by query
+    #  - group all issues by reporter
+    #  - prepare email based on predefined template (*.erb)
+    #  - send the required notifications to each reporter
+    #
+    # The email message is sending to the assignee regarding all his/her issues,
+    #  not like one email per each issue.
+    class ReporterAlert
+      def run(sys, postman, opts)
+        sys.issues(opts["sql"])
+           .group_by(&:reporter)
+           .each do |a, t|
+          postman.send opts.merge(to: a.email, addressee: a.name, tickets: t)
         end
       end
     end
