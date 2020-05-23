@@ -35,6 +35,11 @@ module Lazylead
   #  the instantiation and sending. For each type of mail servers we should have
   #  separate object.
   #
+  # @todo #/DEV TestMail.deliveries -> store all emails to the files in
+  #  /test/resources/testmailer/*.html. Right now after each test with email
+  #  sending we taking the body and test it content. Quite ofter we need to
+  #  check visual style in mails, etc, thus its better to store them on disk.
+  #
   # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
@@ -49,7 +54,7 @@ module Lazylead
     # :opts   :: the mail configuration like to, from, cc, subject, template.
     def send(opts)
       html = make_body(opts)
-      cc = cc(opts)
+      cc = detect_cc(opts)
       Mail.deliver do
         to opts[:to] || opts["to"]
         from opts["from"]
@@ -64,7 +69,7 @@ module Lazylead
                  "Here is the body: #{html}"
     end
 
-    def cc(opts)
+    def detect_cc(opts)
       cc = opts["cc"]
       cc = split("cc", opts) if !cc.nil? && cc.include?(",")
       cc

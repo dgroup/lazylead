@@ -78,7 +78,7 @@
   </tr>
   <% tickets.each do |ticket| %>
     <tr>
-      <td><a href="<%= ticket.url %>"><%= ticket.id %></a></td>
+      <td><a href="<%= ticket.url %>"><%= ticket.key %></a></td>
       <td><%= ticket.duedate %></td>
       <td><%= ticket.priority %></td>
       <td><%= ticket.reporter.name %></td>

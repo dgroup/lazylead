@@ -141,6 +141,10 @@ module Lazylead
     end
 
     def id
+      @issue.id
+    end
+
+    def key
       @issue.key
     end
 
@@ -149,7 +153,7 @@ module Lazylead
     end
 
     def url
-      @issue.attrs["self"].split("/rest/api/").first + "/browse/" + id
+      @issue.attrs["self"].split("/rest/api/").first + "/browse/" + key
     end
 
     def duedate
@@ -183,11 +187,40 @@ module Lazylead
     end
 
     def to_s
-      "#{id} #{summary}"
+      "#{key} #{summary}"
     end
 
     def inspect
       to_s
+    end
+  end
+
+  # The jira issue comments
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
+  class Comments
+    attr_reader :issue
+
+    def initialize(issue, sys)
+      @issue = issue
+      @sys = sys
+    end
+
+    def body?(text)
+      comments.any? { |c| c.attrs["body"].include? text }
+    end
+
+    def comments
+      @comments ||= @sys.raw do |conn|
+        conn.Issue.find(@issue.id, expand: "comments,changelog", fields: "")
+            .comments
+      end
+    end
+
+    def last(quantity)
+      comments.last(quantity).map { |c| c.attrs["body"] }
     end
   end
 
@@ -204,6 +237,13 @@ module Lazylead
 
     def issues(jql, opts = {})
       @jira.issues(jql, opts)
+    end
+
+    # Execute request to the ticketing system using raw client.
+    # For Jira the raw client is 'jira-ruby' gem.
+    def raw(&block)
+      raise "ll-07: No block given to method" unless block_given?
+      @jira.raw(&block)
     end
   end
 end

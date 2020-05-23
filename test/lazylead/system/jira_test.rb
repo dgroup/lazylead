@@ -35,7 +35,7 @@ module Lazylead
                    NoAuthJira.new("https://jira.spring.io")
                              .issues("key in ('DATAJDBC-480')")
                              .first
-                             .id
+                             .key
     end
 
     test "found issue by jira (ORM)" do
@@ -52,7 +52,7 @@ module Lazylead
                             .connect
                             .issues("key in ('DATAJDBC-500')")
                             .first
-                            .id,
+                            .key,
                    "Id mismatch for https://jira.spring.io/browse/DATAJDBC-500"
     end
 

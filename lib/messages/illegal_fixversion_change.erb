@@ -98,7 +98,7 @@
   </tr>
   <% versions.each do |v| %>
     <tr>
-      <td><a href='<%= v.issue.url %>'><%= v.issue.id %></a></td>
+      <td><a href='<%= v.issue.url %>'><%= v.issue.key %></a></td>
       <td><%= v.issue.priority %></td>
       <td><%= DateTime.parse(v.last["created"])
                       .strftime('%d-%b-%Y %I:%M:%S %p') %></td>
