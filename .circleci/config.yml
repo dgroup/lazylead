@@ -14,32 +14,25 @@ jobs:
     steps:
       - checkout
       # build the application image
-      - run: |
-          set -e
-          COMMIT_URL="https://github.com/dgroup/rll/commit/${CIRCLE_SHA1}"
-          docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${COMMIT_URL}" \
-            -t dgroup/lazylead:$CIRCLE_BRANCH . \
-            -f .docker/Dockerfile
-          docker run --rm dgroup/lazylead:${CIRCLE_BRANCH} bin/lazylead --verbose > trace.log
-          cat trace.log
-          expected="No tasks found"
-          echo "Ensure that app prints the line '${expected}'."
-          grep --color "${expected}" trace.log
+      - run:
+          name: "Build docker image"
+          command: |
+            set -e
+            COMMIT_URL="https://github.com/dgroup/rll/commit/${CIRCLE_SHA1}"
+            docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${COMMIT_URL}" \
+              -t dgroup/lazylead:$CIRCLE_BRANCH . \
+              -f .docker/Dockerfile
+            docker run --rm dgroup/lazylead:${CIRCLE_BRANCH} bin/lazylead --verbose > trace.log
+            cat trace.log
+            expected="No tasks found"
+            echo "Ensure that app prints the line '${expected}'."
+            grep --color "${expected}" trace.log
       # publish the image
-      - run: |
-          docker login --username $DOCKER_USER --password $DOCKER_TOKEN
-          if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              chmod +x .circleci/env.sh
-              .circleci/env.sh
-              for tag in ${docker_release_tags// / } ; do
-                  docker tag dgroup/lazylead:$CIRCLE_BRANCH dgroup/lazylead:${tag}
-                  docker push dgroup/lazylead:${tag}
-                  echo "dgroup/lazylead:${tag} released"
-              done
-          else
-              docker push dgroup/lazylead:$CIRCLE_BRANCH
-              echo "dgroup/lazylead:${CIRCLE_BRANCH} released"
-          fi
+      - run:
+          name: "Deploy docker image"
+          command: |
+            chmod +x .circleci/release_image.sh
+            .circleci/release_image.sh
 workflows:
   version: 2
   build_and_test:
