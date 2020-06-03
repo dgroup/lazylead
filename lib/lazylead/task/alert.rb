@@ -22,6 +22,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require_relative "../log"
 require_relative "../email"
 require_relative "../version"
 require_relative "../postman"
@@ -42,6 +43,10 @@ module Lazylead
     #  - prepare email based on predefined template (*.erb)
     #  - send the required notifications pre-defined "addressee".
     class Alert
+      def initialize(log = Log::NOTHING)
+        @log = log
+      end
+
       def run(sys, postman, opts)
         postman.send opts.merge(tickets: sys.issues(opts["sql"]))
       end
@@ -59,6 +64,10 @@ module Lazylead
     # The email message is sending to the assignee regarding all his/her issues,
     #  not like one email per each issue.
     class AssigneeAlert
+      def initialize(log = Log::NOTHING)
+        @log = log
+      end
+
       def run(sys, postman, opts)
         sys.issues(opts["sql"])
            .group_by(&:assignee)
@@ -80,6 +89,10 @@ module Lazylead
     # The email message is sending to the assignee regarding all his/her issues,
     #  not like one email per each issue.
     class ReporterAlert
+      def initialize(log = Log::NOTHING)
+        @log = log
+      end
+
       def run(sys, postman, opts)
         sys.issues(opts["sql"])
            .group_by(&:reporter)
