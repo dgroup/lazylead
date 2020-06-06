@@ -1,9 +1,6 @@
 # @todo #/DEV Enable Travis CI as second CI server once the project
 #  became a public. This might be alternative for Circle CI (just in case)
 
-# @todo #/DEV Explain in readme.md how to use the project,
-#  add more instructions and generic guide.
-
 # @todo #/DEV There a lot of badges in readme which aren't enabled for now.
 #  Let's enable them. Examples you may find here:
 #  - https://github.com/dgroup/lazylead/blob/0.0.0-alpha-java/readme.md

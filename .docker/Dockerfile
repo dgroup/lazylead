@@ -12,6 +12,9 @@ ENV APP_HOME=/lazylead \
 
 WORKDIR $APP_HOME
 
+# @todo #/DEV The current image size is about 150MB.
+#  The original alpine image is ~20MB.
+#  Image cleanup is required.
 RUN echo "Install 3rd-party libraries." \
   && apk add libc-dev gcc make git sqlite sqlite-dev sqlite-libs tree less vim man bash unzip
 

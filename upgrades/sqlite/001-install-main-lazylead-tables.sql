@@ -36,7 +36,6 @@ create table if not exists teams
     name       text not null,
     properties text
 );
--- @todo #/DEV system.properties - column should be a json map(key,value)
 create table if not exists systems
 (
     id         integer primary key autoincrement,
