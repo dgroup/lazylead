@@ -1,50 +1,15 @@
-# @todo #/DEV Define automatic integration between rultor and Circle CI.
-#  Right not its not clear how to automatically accept the merge requests into master.
-#  Without this integration the release history won't be clear.
-version: 2
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2 
+
 jobs:
-  test:
+  build:
     docker:
-      - image: ruby:2.6.5-alpine
+      - image: circleci/ruby:2.6.3-stretch-node
+    executor: ruby/default
     steps:
       - checkout
-      - run: |
-          apk add libc-dev gcc make git sqlite sqlite-dev sqlite-libs
-          bundler install
-      - run: rake test rubocop xcop
-  deploy:
-    machine: true
-    steps:
-      - checkout
-      # build the application image
       - run:
-          name: "Build docker image"
-          command: |
-            set -e
-            COMMIT_URL="https://github.com/dgroup/rll/commit/${CIRCLE_SHA1}"
-            docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${COMMIT_URL}" \
-              -t dgroup/lazylead:$CIRCLE_BRANCH . \
-              -f .docker/Dockerfile
-            docker run --rm dgroup/lazylead:${CIRCLE_BRANCH} bin/lazylead --verbose > trace.log
-            cat trace.log
-            expected="No tasks found"
-            echo "Ensure that app prints the line '${expected}'."
-            grep --color "${expected}" trace.log
-      # publish the image
-      - run:
-          name: "Deploy docker image"
-          command: |
-            chmod +x .circleci/release_image.sh
-            .circleci/release_image.sh
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - test
-      - deploy:
-          filters:
-            branches:
-              only:
-                - master
-          requires:
-            - test
+          name: Which bundler?
+          command: bundle -v
+      - ruby/bundle-install
