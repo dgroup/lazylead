@@ -59,7 +59,7 @@ New ideas, bugs, suggestions or questions are welcome [via GitHub issues](https:
 ### Get started
 :warning: We're still in a very early alpha version, the API may change frequently until we release version 1.0.
 
-Let's assume that
+Let's assume that:
 - your team is using jira as a ticketing system
 - you defined a jira filter with tickets where actions need. The filter id is `555` and it has JQL like `project=XXXX and type=Bug and status not in (Closed, Cancelled, "Ready For Testing", "On Hold) and parent = YYYY and duedate < startOfDay()`
 - you have `MS Exchange` server for email notifications
@@ -80,7 +80,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
           # Please ensure that your jira filter(s) grants this user to see issues.
           # Sometimes jira filter(s) may be created with restricted visibility, thus
           #  lazylead can't find the issues. 
-          jira_url: https://jira.spring.io
+          jira_url: https://your.jira.com
           jira_user: theuser
           jira_password: thepass
           # The MS Exchange server details, please ensure that '/ews/Exchange.asm` 
