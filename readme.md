@@ -63,17 +63,17 @@ New ideas, bugs, suggestions or questions are welcome [via GitHub issues](https:
 :warning: We're still in a very early alpha version, the API may change frequently until we release version 1.0.
 
 Let's assume that:
-  - your team is using jira as a ticketing system
-  - you defined a jira filter with tickets where actions need. The filter id is `555` and it has JQL like
-    ```text
-    project=XXXX and type=Bug and status not in (Closed, Cancelled, "Ready For Testing", "On Hold) 
-     and parent = YYYY and duedate < startOfDay()
-    ```
-  - you have `MS Exchange` server for email notifications
-  - you want to notify your developers during working days at `8am (UTC)` time about tickets where due dates are expired
+- your team is using jira as a ticketing system
+- you defined a jira filter with tickets where actions need. The filter id is `555` and it has JQL like
+   ```text
+   project=XXXX and type=Bug and status not in (Closed, Cancelled, "Ready For Testing", "On Hold) 
+    and parent = YYYY and duedate < startOfDay()
+   ```
+- you have `MS Exchange` server for email notifications
+- you want to notify your developers during working days at `8am (UTC)` time about tickets where due dates are expired
 
 For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
- 1. Define yml file with configuration [tasks.yml](.github/tasks.yml):
+1. Define yml file with configuration [tasks.yml](.github/tasks.yml)
     ```yml
     version: '2.3'
     services:
@@ -100,11 +100,11 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
         # db/ll.db is sqlite file with jira related annoying tasks
         entrypoint: bin/lazylead --sqlite db/ll.db --trace --verbose
    ```
-   or just download the project using git
+    or just download the project using git
    ```bash
    git clone https://github.com/dgroup/lazylead.git ll && cd ll && pwd && ls -lah
    ```
- 2. Create a container, using `docker-compose -f .github/tasks.yml up`
+2. Create a container, using `docker-compose -f .github/tasks.yml up`
     The container will stop as there were no tasks provided:
     ```bash
     ll > docker-compose -f .github/tasks.yml up                                                                                                           100% 🔋  13:35:04
@@ -120,7 +120,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     lazylead exited with code 0
     ll > 
     ```
- 3. Define your team and tasks in database. 
+3. Define your team and tasks in database. 
     Yes, there are no UI yet, but its planned. Pull requests are welcome! 
     The tables structure defined [here](upgrades/sqlite/001-install-main-lazylead-tables.sql).
     Modify you [sqlite](https://sqlite.com/index.html) file(`ll.db`) using [DB Browser](https://sqlitebrowser.org/) or any similar tool.
@@ -140,7 +140,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     
     ```
     Yes, for task scheduling we are using [cron](https://crontab.guru).
- 4. Once you changed `./ll.db`, please restart the container using `docker-compose -f .github/tasks.yml restart`
+4. Once you changed `./ll.db`, please restart the container using `docker-compose -f .github/tasks.yml restart`
     ```bash
     ll > docker-compose -f .github/tasks.yml restart                                                                                                      100% 🔋  14:37:19
     Restarting lazylead ... done
