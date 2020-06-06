@@ -16,22 +16,22 @@
 [![DevOps By Rultor.com](http://www.rultor.com/b/dgroup/lazylead)](http://www.rultor.com/p/dgroup/lazylead)
 [![EO badge](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org/#principles)
 
-#### Overview
+### Overview
 Ticketing systems (Github, Jira, etc.) are strongly integrated into our processes and everyone understands their necessity. As soon as a developer becomes a lead/technical manager, he or she faces a set of routine tasks that are related to ticketing work. On large projects this becomes a problem, more and more you spend time running around on dashboards and tickets, looking for incorrect deviations in tickets and performing routine tasks instead of solving technical problems.
 
 The idea of automatic management is not new, for example [Zerocracy](https://www.zerocracy.com/) is available on the market. 
-I like this idea, but large companies/projects are not ready yet for such a decisive breakthrough and need step-by-step solutions such as lazylead. 
+I like this idea, but large companies/projects are not ready yet for such a decisive breakthrough and need step-by-step solutions such as [lazylead](https://github.com/dgroup/lazylead). 
 I think you remember how [static code analysis](https://en.wikipedia.org/wiki/Static_program_analysis) treated at in the past; today we have a huge toolkit (pmd, checkstyle, qulice, rubocop, etc) for each language that allows you to avoid routine/known issues and remove from the code reviewer the unnecessary load.
  
 Join our [telegram group](https://t.me/lazyleads) for discussions.
 
 | Daily annoying task                                                    | Jira               | Github      | Trello      |
 | :--------------------------------------------------------------------- | :----------------: | :---------: | :---------: |
-| Notify ticket's assignee                                               | :white_check_mark: | :hourglass: | :hourglass: |
-| Notify ticket's reporter                                               | :white_check_mark: | :hourglass: | :hourglass: |
-| Notify ticket's manager                                                | :white_check_mark: | :hourglass: | :hourglass: |
-| Notify about illegal `Fix Version` modification                        | :white_check_mark: | :x:         | :x:         | 
-| Expected comment in ticket is missing                                  | :white_check_mark: | :hourglass: | :hourglass: |
+| [Notify ticket's assignee](lib/lazylead/task/alert.rb)                 | :white_check_mark: | :hourglass: | :hourglass: |
+| [Notify ticket's reporter](lib/lazylead/task/alert.rb)                 | :white_check_mark: | :hourglass: | :hourglass: |
+| [Notify ticket's manager](lib/lazylead/task/alert.rb)                  | :white_check_mark: | :hourglass: | :hourglass: |
+| [Notify about illegal "Fix Version" modification](lib/lazylead/task/fix_version.rb)                        | :white_check_mark: | :x:         | :x:         | 
+| [Expected comment in ticket is missing](lib/lazylead/task/missing_comment.rb)                                  | :white_check_mark: | :hourglass: | :hourglass: |
 | Propagate some fields from parent ticket into sub-tasks                | :hourglass:        | :x:         | :x:         |  
 | Print the current capacity of team into newly created tasks            | :hourglass:        | :hourglass: | :hourglass: |  
 | Create/retrofit the defect automatically into latest release           | :hourglass:        | :hourglass: | :x:         |  
@@ -56,7 +56,7 @@ Join our [telegram group](https://t.me/lazyleads) for discussions.
 
 New ideas, bugs, suggestions or questions are welcome [via GitHub issues](https://github.com/dgroup/lazylead/issues/new)!
 
-#### Get started
+### Get started
 :warning: We're still in a very early alpha version, the API may change frequently until we release version 1.0.
 
 Let's assume that
@@ -82,7 +82,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
           #  lazylead can't find the issues. 
           jira_url: https://jira.spring.io
           jira_user: theuser
-          jira_pass: thepass
+          jira_password: thepass
           # The MS Exchange server details, please ensure that '/ews/Exchange.asm` 
           #  will be after your server url. Just change the url to your server.
           exchange_url: https://your.ms.exchange.server/ews/Exchange.asmx
@@ -149,7 +149,6 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     [2020-06-06T11:37:37] DEBUG Task scheduled: id='1', name='Expired due dates', cron='0 8 * * 1-5', system='1', action='Lazylead::Task::AssigneeAlert', team_id='1', description='', enabled='true', properties='{"sql":"filter=555", "cc":"my.email@google.com", "subject":"[LL] Expired due dates", "template":"lib/messages/due_date_expired.erb", "postman":"Lazylead::Exchange"}'
    ll > docker stop lazylead                                                                                                                            
    lazylead
-   ll >
    ```
 
 #### Contribution guide

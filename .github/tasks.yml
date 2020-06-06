@@ -1,0 +1,24 @@
+version: '2.3'
+services:
+
+  lazylead:
+    image: dgroup/lazylead:latest
+    container_name: lazylead
+    mem_limit: 128m
+    environment:
+      # The jira server details.
+      # Please ensure that your jira filter(s) grants this user to see issues.
+      # Sometimes jira filter(s) may be created with restricted visibility, thus
+      #  lazylead can't find the issues.
+      jira_url: https://jira.spring.io
+      jira_user: theuser
+      jira_password: thepass
+      # The MS Exchange server details, please ensure that '/ews/Exchange.asm`
+      #  will be after your server url. Just change the url to your server.
+      exchange_url: https://your.ms.exchange.server/ews/Exchange.asmx
+      exchange_user: theuser
+      exchange_password: the password
+    volumes:
+      - ./:/lazylead/db
+    # db/ll.db is sqlite file with jira related annoying tasks
+    entrypoint: bin/lazylead --sqlite db/ll.db --trace --verbose
