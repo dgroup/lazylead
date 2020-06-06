@@ -13,6 +13,7 @@
 [![Dependency Status](https://requires.io/github/dgroup/lazylead/requirements.svg?branch=master)](https://requires.io/github/dgroup/lazylead/requirements/?branch=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dgroup_lazylead&metric=alert_status)](https://sonarcloud.io/dashboard?id=dgroup_lazylead)
 [![codebeat badge](https://codebeat.co/badges/f3bc8c19-5986-413f-89c4-c869b1e9b705)](https://codebeat.co/projects/github-com-dgroup-lazylead-master)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e1ec2d63ff9040d99c934e3c05c24abe)](https://www.codacy.com/manual/dgroup/lazylead?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dgroup/lazylead&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e873a41b1c76d7b2d6ae/maintainability)](https://codeclimate.com/github/dgroup/lazylead/maintainability)
 [![codecov](https://codecov.io/gh/dgroup/lazylead/branch/master/graph/badge.svg)](https://codecov.io/gh/dgroup/lazylead)
 [![DepShield Badge](https://depshield.sonatype.org/badges/dgroup/lazylead/depshield.svg)](https://depshield.github.io)
