@@ -30,34 +30,32 @@ I think you remember how [static code analysis](https://en.wikipedia.org/wiki/St
  
 Join our [telegram group](https://t.me/lazyleads) for discussions.
 
-| Daily annoying task                                                    | Jira               | Github      | Trello      |
-| :--------------------------------------------------------------------- | :----------------: | :---------: | :---------: |
-| [Notify ticket's assignee](lib/lazylead/task/alert.rb)                 | :white_check_mark: | :hourglass: | :hourglass: |
-| [Notify ticket's reporter](lib/lazylead/task/alert.rb)                 | :white_check_mark: | :hourglass: | :hourglass: |
-| [Notify ticket's manager](lib/lazylead/task/alert.rb)                  | :white_check_mark: | :hourglass: | :hourglass: |
-| [Notify about illegal "Fix Version" modification](lib/lazylead/task/fix_version.rb)                        | :white_check_mark: | :x:         | :x:         | 
-| [Expected comment in ticket is missing](lib/lazylead/task/missing_comment.rb)                                  | :white_check_mark: | :hourglass: | :hourglass: |
-| Propagate some fields from parent ticket into sub-tasks                | :hourglass:        | :x:         | :x:         |  
-| Print the current capacity of team into newly created tasks            | :hourglass:        | :hourglass: | :hourglass: |  
-| Create/retrofit the defect automatically into latest release           | :hourglass:        | :hourglass: | :x:         |  
-| Notify about expired(ing) due dates                                    | :hourglass:        | :hourglass: | :hourglass: |
-| Notify about absent original estimations                               | :hourglass:        | :hourglass: | :hourglass: |
-| Notify about 'Hot potato' tickets                                      | :hourglass:        | :hourglass: | :hourglass: |
-| Notify about long live tickets (aging)                                 | :hourglass:        | :hourglass: | :hourglass: |
-| Notify about tickets with invalid format (missing url/stacktrace, etc) | :hourglass:        | :hourglass: | :hourglass: |
-| Create a meeting(s) automatically in case some tickets appeared (group by assignee/reporters/component/ticket type/etc) | :hourglass: | :hourglass: | :hourglass: |
+| Daily annoying task                                                    | Jira  | Github | Trello |
+| :--------------------------------------------------------------------- | :---: | :----: | :----: |
+| [Notify ticket's assignee](lib/lazylead/task/alert.rb)                 | ✅ | ⌛ | ⌛ |
+| [Notify ticket's reporter](lib/lazylead/task/alert.rb)                 | ✅ | ⌛ | ⌛ |
+| [Notify ticket's manager](lib/lazylead/task/alert.rb)                  | ✅ | ⌛ | ⌛ |
+| [Notify about illegal "Fix Version" modification](lib/lazylead/task/fix_version.rb) | ✅ | ❌ | ❌ | 
+| [Expected comment in ticket is missing](lib/lazylead/task/missing_comment.rb) | ✅ | ⌛ | ⌛ |
+| Propagate some fields from parent ticket into sub-tasks                | ⌛ | ❌ | ❌ |  
+| Print the current capacity of team into newly created tasks            | ⌛ | ⌛ | ⌛ |  
+| Create/retrofit the defect automatically into latest release           | ⌛ | ⌛ | ❌ |  
+| Notify about expired(ing) due dates                                    | ⌛ | ⌛ | ⌛ |
+| Notify about absent original estimations                               | ⌛ | ⌛ | ⌛ |
+| Notify about 'Hot potato' tickets                                      | ⌛ | ⌛ | ⌛ |
+| Notify about long live tickets (aging)                                 | ⌛ | ⌛ | ⌛ |
+| Notify about tickets with invalid format (missing url/stacktrace, etc) | ⌛ | ⌛ | ⌛ |
+| Create a meeting(s) automatically in case some tickets appeared (group by assignee/reporters/component/ticket type/etc) | ⌛ | ⌛ | ⌛ |
 
-:white_check_mark: - implemented, :hourglass: - planned, :x: - not supported by ticketing system.
+| Integration                                           | Type          | Status |
+| :---------------------------------------------------- | :-----------: | :----: |
+| [Microsoft Exchange Server](lib/lazylead/exchange.rb) | Emails        | ✅ |
+| [Microsoft Exchange Server](lib/lazylead/exchange.rb) | Calendar      | ⌛ |
+| [mail.yandex.ru](lib/lazylead/postman.rb)             | Emails        | ✅ |
+| [mail.google.ru](lib/lazylead/postman.rb)             | Emails        | 🌵 |
+| slack                                                 | Notifications | ⌛ |
 
-| Integration                                           | Type          | Status             |
-| :---------------------------------------------------- | :-----------: | :----------------: |
-| [Microsoft Exchange Server](lib/lazylead/exchange.rb) | Emails        | :white_check_mark: |
-| [Microsoft Exchange Server](lib/lazylead/exchange.rb) | Calendar      | :hourglass:        |
-| [mail.yandex.ru](lib/lazylead/postman.rb)             | Emails        | :white_check_mark: |
-| [mail.google.ru](lib/lazylead/postman.rb)             | Emails        | :cactus:           |
-| slack                                                 | Notifications | :hourglass:        |
-
-:white_check_mark: - implemented, :hourglass: - planned, :cactus: - implemented, but not tested.
+✅ - implemented, ⌛ - planned, 🌵 - implemented, but not tested, ❌ - not supported by ticketing system.
 
 New ideas, bugs, suggestions or questions are welcome [via GitHub issues](https://github.com/dgroup/lazylead/issues/new)!
 
