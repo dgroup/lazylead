@@ -99,11 +99,11 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
           - ./:/lazylead/db
         # db/ll.db is sqlite file with jira related annoying tasks
         entrypoint: bin/lazylead --sqlite db/ll.db --trace --verbose
-   ```
-   or just download the project using git
-   ```bash
-   git clone https://github.com/dgroup/lazylead.git ll && cd ll && pwd && ls -lah
-   ```
+    ```
+    or just download the project using git
+    ```bash
+    git clone https://github.com/dgroup/lazylead.git ll && cd ll && pwd && ls -lah
+    ```
 
 2.  Create a container, using `docker-compose -f .github/tasks.yml up`
     The container will stop as there were no tasks provided:
@@ -148,7 +148,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     ll > docker-compose -f .github/tasks.yml restart                                                                                                      100% 🔋  14:37:19
     Restarting lazylead ... done
     ```
-   check the logs and stop container if needed
+    check the logs and stop container if needed
     ```bash
     ll > docker logs lazylead
     2020-06-06T11:37:36] DEBUG Memory footprint at start is 52MB
