@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = "2.2"
   s.required_ruby_version = ">=2.6.5"
   s.name = "lazylead"
-  s.version = "0.1.1"
+  s.version = "0.1.2"
   s.license = "MIT"
   s.summary = "Eliminate the annoying work within bug-trackers."
   s.description = "Ticketing systems (Github, Jira, etc.) are strongly
@@ -101,5 +101,6 @@ tasks instead of solving technical problems."
   s.add_development_dependency "rubocop-minitest", "0.5.1"
   s.add_development_dependency "rubocop-performance", "1.5.2"
   s.add_development_dependency "rubocop-rspec", "1.33.0"
+  s.add_development_dependency "sqlint", "0.1.10"
   s.add_development_dependency "xcop", "0.6"
 end

@@ -11,7 +11,7 @@ jobs:
       - run: |
           apk add libc-dev gcc make git sqlite sqlite-dev sqlite-libs
           bundler install
-      - run: rake test rubocop xcop
+      - run: bundle exec rake test rubocop xcop
   deploy:
     machine: true
     steps:

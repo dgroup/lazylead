@@ -23,9 +23,7 @@ COPY Gemfile lazylead.gemspec ./
 RUN bundler install
 
 COPY bin/lazylead ./bin/lazylead
-ADD lib ./lib
-ADD upgrades ./upgrades
+COPY lib ./lib
+COPY upgrades ./upgrades
 
 CMD ["bin/lazylead", "--trace", "--verbose", "--memory-dump"]
-
-MAINTAINER 'Yurii Dubinka (yurii.dubinka@gmail.com)'

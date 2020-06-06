@@ -1,5 +1,5 @@
 #!/bin/bash
-export docker_release_tags="latest 0.1.1"
+export docker_release_tags="latest 0.1.2"
 docker login --username "${DOCKER_USER}" --password "${DOCKER_TOKEN}"
 if [ "${CIRCLE_BRANCH}" == "master" ]; then
     for tag in ${docker_release_tags// / } ; do

@@ -44,7 +44,7 @@ def version
   Gem::Specification.load(Dir["*.gemspec"].first).version
 end
 
-task default: %i[clean test rubocop xcop copyright]
+task default: %i[clean test rubocop xcop copyright docker_build]
 
 require "rake/testtask"
 desc "Run all unit tests"
@@ -88,6 +88,27 @@ Xcop::RakeTask.new :xcop do |task|
   task.excludes = %w[target/**/* coverage/**/* wp/**/*]
 end
 
+# @todo #/DEV Enable sqlint into rake task chain after rubocop. For now there
+#  are 4 non-resolved violations here.
+task :sqlint do
+  require "sqlint"
+  total = 0
+  Dir.glob("upgrades/**/*.sql").each do |f|
+    violations = SQLint::Linter.new(f, File.open(f, "r")).run.first(1000)
+    violations.each do |v|
+      msg_lines = v.message.split("\n")
+      p [v.filename, v.line, v.column, "#{v.type} #{msg_lines.shift}"].join ":"
+    end
+    total += violations.count { |lint| lint.type == :error }
+  end
+  abort("#{total} SQL violations found.") if total.positive?
+end
+
 task :clean do
   Dir.glob("test/resources/**/*.db").each { |f| File.delete(f) }
+end
+
+task :docker_build do
+  puts "Building docker image..."
+  system("docker-compose -f .docker/docker-compose.yml build")
 end
