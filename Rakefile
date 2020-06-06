@@ -26,6 +26,7 @@ require "rubygems"
 require "rake"
 require "date"
 require "rdoc"
+require "rainbow"
 require "rake/clean"
 
 # @todo #/DEV Investigate the possibility of using migrations from active_record
@@ -44,7 +45,7 @@ def version
   Gem::Specification.load(Dir["*.gemspec"].first).version
 end
 
-task default: %i[clean test rubocop xcop copyright docker_build]
+task default: %i[clean test rubocop sqlint xcop copyright docker_build]
 
 require "rake/testtask"
 desc "Run all unit tests"
@@ -88,20 +89,33 @@ Xcop::RakeTask.new :xcop do |task|
   task.excludes = %w[target/**/* coverage/**/* wp/**/*]
 end
 
-# @todo #/DEV Enable sqlint into rake task chain after rubocop. For now there
-#  are 4 non-resolved violations here.
+# @todo #/DEV Enable rule "Checks SQL against the ANSI syntax" fully.
+#  Right now all violations related to PRAGMA https://www.sqlite.org/pragma.html
+#  are suppressed as PRAGMA is sqlite specific option.
+#  Potential fix is to move this option into vcs4sql lib and remove from our
+#  sql files.
 task :sqlint do
+  puts "Running sqlint..."
   require "sqlint"
+  src = Dir.glob("upgrades/**/*.sql")
+  puts "Inspecting #{src.size} files"
   total = 0
-  Dir.glob("upgrades/**/*.sql").each do |f|
-    violations = SQLint::Linter.new(f, File.open(f, "r")).run.first(1000)
+  src.each do |f|
+    violations = SQLint::Linter.new(f, File.open(f, "r"))
+                               .run
+                               .first(1000)
+                               .reject { |v| v.message.include? '"PRAGMA"' }
     violations.each do |v|
       msg_lines = v.message.split("\n")
       p [v.filename, v.line, v.column, "#{v.type} #{msg_lines.shift}"].join ":"
     end
     total += violations.count { |lint| lint.type == :error }
   end
-  abort("#{total} SQL violations found.") if total.positive?
+  if total.positive?
+    abort "#{Rainbow(total).red} SQL violations found."
+  else
+    puts "#{src.size} files inspected, #{Rainbow('no offenses').green} detected"
+  end
 end
 
 task :clean do

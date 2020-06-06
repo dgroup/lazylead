@@ -32,19 +32,19 @@
 PRAGMA foreign_keys = ON;
 create table if not exists teams
 (
-    id         integer primary key autoincrement,
+    id         integer primary key,
     name       text not null,
     properties text
 );
 create table if not exists systems
 (
-    id         integer primary key autoincrement,
+    id         integer primary key,
     properties text not null
 );
 -- @todo #/DEV task.cron - add regexp verification of cron expression.
 create table if not exists tasks
 (
-    id          integer primary key autoincrement,
+    id          integer primary key,
     name        text    not null,
     cron        text    not null,
 -- @todo #/DEV task.cron - add support for non-cron based schedule like at, once, every.
