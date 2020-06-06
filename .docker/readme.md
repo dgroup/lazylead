@@ -20,5 +20,4 @@
     ```
 
 - [Cheat sheet](https://gist.github.com/dgroup/5046bac5531fae11242dd03201626f5b)
-
 - [Basics](https://github.com/wsargent/docker-cheat-sheet)
