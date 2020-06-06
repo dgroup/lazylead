@@ -26,14 +26,13 @@ require "English"
 
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "lazylead/version"
 
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.rubygems_version = "2.2"
   s.required_ruby_version = ">=2.6.5"
   s.name = "lazylead"
-  s.version = Lazylead::VERSION
+  s.version = "0.1.1"
   s.license = "MIT"
   s.summary = "Eliminate the annoying work within bug-trackers."
   s.description = "Ticketing systems (Github, Jira, etc.) are strongly
