@@ -1,3 +1,6 @@
+# @todo #/DEV Define automatic integration between rultor and Circle CI.
+#  Right not its not clear how to automatically accept the merge requests into master.
+#  Without this integration the release history won't be clear.
 version: 2
 jobs:
   test:
