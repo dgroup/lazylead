@@ -64,7 +64,11 @@ New ideas, bugs, suggestions or questions are welcome [via GitHub issues](https:
 
 Let's assume that:
 - your team is using jira as a ticketing system
-- you defined a jira filter with tickets where actions need. The filter id is `555` and it has JQL like `project=XXXX and type=Bug and status not in (Closed, Cancelled, "Ready For Testing", "On Hold) and parent = YYYY and duedate < startOfDay()`
+- you defined a jira filter with tickets where actions need. The filter id is `555` and it has JQL like
+  ```
+  project=XXXX and type=Bug and status not in (Closed, Cancelled, "Ready For Testing", "On Hold) 
+   and parent = YYYY and duedate < startOfDay()
+  ```
 - you have `MS Exchange` server for email notifications
 - you want to notify your developers during working days at `8am (UTC)` time about tickets where due dates are expired
 
