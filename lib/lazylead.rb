@@ -22,4 +22,31 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-# @todo #/DEV Define autoload entry point for all classes related to this gem.
+require_relative "lazylead/allocated"
+require_relative "lazylead/confluence"
+require_relative "lazylead/email"
+require_relative "lazylead/exchange"
+require_relative "lazylead/log"
+require_relative "lazylead/model"
+require_relative "lazylead/postman"
+require_relative "lazylead/salt"
+require_relative "lazylead/schedule"
+require_relative "lazylead/smtp"
+require_relative "lazylead/cli/app"
+require_relative "lazylead/system/jira"
+require_relative "lazylead/system/empty"
+require_relative "lazylead/system/fake"
+require_relative "lazylead/system/synced"
+require_relative "lazylead/task/alert"
+require_relative "lazylead/task/confluence_ref"
+require_relative "lazylead/task/echo"
+require_relative "lazylead/task/fix_version"
+require_relative "lazylead/task/missing_comment"
+require_relative "lazylead/version"
+
+# Lazylead main module.
+# Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+# Copyright:: Copyright (c) 2020 Yurii Dubinka
+# License:: MIT
+module Lazylead
+end
