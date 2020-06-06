@@ -26,7 +26,7 @@ Ticketing systems (Github, Jira, etc.) are strongly integrated into our processe
 
 The idea of automatic management is not new, for example [Zerocracy](https://www.zerocracy.com/) is available on the market. 
 I like this idea, but large companies/projects are not ready yet for such a decisive breakthrough and need step-by-step solutions such as [lazylead](https://github.com/dgroup/lazylead). 
-I think you remember how [static code analysis](https://en.wikipedia.org/wiki/Static_program_analysis) treated at in the past; today we have a huge toolkit (pmd, checkstyle, qulice, rubocop, etc) for each language that allows you to avoid routine issues and remove from the code reviewer the unnecessary load.
+I think you remember how [static code analysis](https://en.wikipedia.org/wiki/Static_program_analysis) treated at in the past; today we have a huge toolkit (pmd, checkstyle, qulice, rubocop, peon, etc) for each language that allows you to avoid routine issues and remove from the code reviewer the unnecessary load.
  
 Join our [telegram group](https://t.me/lazyleads) for discussions.
 
