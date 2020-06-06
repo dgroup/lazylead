@@ -63,17 +63,17 @@ New ideas, bugs, suggestions or questions are welcome [via GitHub issues](https:
 :warning: We're still in a very early alpha version, the API may change frequently until we release version 1.0.
 
 Let's assume that:
-- your team is using jira as a ticketing system
-- you defined a jira filter with tickets where actions need. The filter id is `555` and it has JQL like
-  ```
-  project=XXXX and type=Bug and status not in (Closed, Cancelled, "Ready For Testing", "On Hold) 
-   and parent = YYYY and duedate < startOfDay()
-  ```
-- you have `MS Exchange` server for email notifications
-- you want to notify your developers during working days at `8am (UTC)` time about tickets where due dates are expired
+  - your team is using jira as a ticketing system
+  - you defined a jira filter with tickets where actions need. The filter id is `555` and it has JQL like
+    ```text
+    project=XXXX and type=Bug and status not in (Closed, Cancelled, "Ready For Testing", "On Hold) 
+     and parent = YYYY and duedate < startOfDay()
+    ```
+  - you have `MS Exchange` server for email notifications
+  - you want to notify your developers during working days at `8am (UTC)` time about tickets where due dates are expired
 
 For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
-1. Define yml file with configuration [tasks.yml](.github/tasks.yml):
+ 1. Define yml file with configuration [tasks.yml](.github/tasks.yml):
     ```yml
     version: '2.3'
     services:
@@ -104,33 +104,33 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
    ```bash
    git clone https://github.com/dgroup/lazylead.git ll && cd ll && pwd && ls -lah
    ```
-2. Create a container, using `docker-compose -f .github/tasks.yml up`
-   The container will stop as there were no tasks provided:
-   ```bash
-   ll > docker-compose -f .github/tasks.yml up                                                                                                           100% 🔋  13:35:04
-   Creating lazylead ... done
-   Attaching to lazylead
-   lazylead    | [2020-06-06T10:35:13] DEBUG Memory footprint at start is 52MB
-   lazylead    | [2020-06-06T10:35:13] DEBUG Database: '/lazylead/db/ll.db', sql migration dir: '/lazylead/upgrades/sqlite'
-   lazylead    | [2020-06-06T10:35:13] DEBUG Migration applied to /lazylead/db/ll.db from /lazylead/upgrades/sqlite
-   lazylead    | [2020-06-06T10:35:13] DEBUG Database connection established
-   lazylead    | [2020-06-06T10:35:13] WARN  SMTP connection enabled in test mode.
-   lazylead    | [2020-06-06T10:35:13] WARN  ll-001: No tasks found.
-   lazylead    | [2020-06-06T10:35:13] DEBUG Memory footprint at the end is 66MB
-   lazylead exited with code 0
-   ll > 
-   ```
-3. Define your team and tasks in database. 
-   Yes, there are no UI yet, but its planned. Pull requests are welcome! 
-   The tables structure defined [here](upgrades/sqlite/001-install-main-lazylead-tables.sql).
-   Modify you [sqlite](https://sqlite.com/index.html) file(`ll.db`) using [DB Browser](https://sqlitebrowser.org/) or any similar tool.
-   Please change the `<youremail.com>` to your email address in order to be in CC when developer get the notification:
-   ```sql
-   insert into teams  (id, name, properties) 
+ 2. Create a container, using `docker-compose -f .github/tasks.yml up`
+    The container will stop as there were no tasks provided:
+    ```bash
+    ll > docker-compose -f .github/tasks.yml up                                                                                                           100% 🔋  13:35:04
+    Creating lazylead ... done
+    Attaching to lazylead
+    lazylead    | [2020-06-06T10:35:13] DEBUG Memory footprint at start is 52MB
+    lazylead    | [2020-06-06T10:35:13] DEBUG Database: '/lazylead/db/ll.db', sql migration dir: '/lazylead/upgrades/sqlite'
+    lazylead    | [2020-06-06T10:35:13] DEBUG Migration applied to /lazylead/db/ll.db from /lazylead/upgrades/sqlite
+    lazylead    | [2020-06-06T10:35:13] DEBUG Database connection established
+    lazylead    | [2020-06-06T10:35:13] WARN  SMTP connection enabled in test mode.
+    lazylead    | [2020-06-06T10:35:13] WARN  ll-001: No tasks found.
+    lazylead    | [2020-06-06T10:35:13] DEBUG Memory footprint at the end is 66MB
+    lazylead exited with code 0
+    ll > 
+    ```
+ 3. Define your team and tasks in database. 
+    Yes, there are no UI yet, but its planned. Pull requests are welcome! 
+    The tables structure defined [here](upgrades/sqlite/001-install-main-lazylead-tables.sql).
+    Modify you [sqlite](https://sqlite.com/index.html) file(`ll.db`) using [DB Browser](https://sqlitebrowser.org/) or any similar tool.
+    Please change the `<youremail.com>` to your email address in order to be in CC when developer get the notification:
+    ```sql
+    insert into teams  (id, name, properties) 
                values (1, 'Dream team with lazylead', '{}');
-   insert into systems(id, properties)    
+    insert into systems(id, properties)    
                values (1,'{"type":"Lazylead::Jira", "username":"${jira_user}", "password":"${jira_password}", "site":"${jira_url}", "context_path":""}');
-   insert into tasks  (name, cron, enabled, id, system, team_id, action, properties)
+    insert into tasks  (name, cron, enabled, id, system, team_id, action, properties)
                values ('Expired due dates', 
                        '0 8 * * 1-5', 
                        'true',
@@ -138,25 +138,26 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
                        'Lazylead::Task::AssigneeAlert',
                        '{"sql":"filter=555", "cc":"<youremail.com>", "subject":"[LL] Expired due dates", "template":"lib/messages/due_date_expired.erb", "postman":"Lazylead::Exchange"}');
     
-   ```
-   Yes, for task scheduling we are using [cron](https://crontab.guru).
-4. Once you changed `./ll.db`, please restart the container using `docker-compose -f .github/tasks.yml restart`
-   ```bash
-   ll > docker-compose -f .github/tasks.yml restart                                                                                                      100% 🔋  14:37:19
-   Restarting lazylead ... done
-   ```
-   check the logs and stop container if needed
-   ```bash
-   ll > docker logs lazylead
+    ```
+    Yes, for task scheduling we are using [cron](https://crontab.guru).
+ 4. Once you changed `./ll.db`, please restart the container using `docker-compose -f .github/tasks.yml restart`
+    ```bash
+    ll > docker-compose -f .github/tasks.yml restart                                                                                                      100% 🔋  14:37:19
+    Restarting lazylead ... done
+    ```
+    check the logs and stop container if needed
+    ```bash
+    ll > docker logs lazylead
     2020-06-06T11:37:36] DEBUG Memory footprint at start is 52MB
     [2020-06-06T11:37:37] DEBUG Database: '/lazylead/db/ll.db', sql migration dir: '/lazylead/upgrades/sqlite'
     [2020-06-06T11:37:37] DEBUG Migration applied to /lazylead/db/ll.db from /lazylead/upgrades/sqlite
     [2020-06-06T11:37:37] DEBUG Database connection established
     [2020-06-06T11:37:37] WARN  SMTP connection enabled in test mode.
     [2020-06-06T11:37:37] DEBUG Task scheduled: id='1', name='Expired due dates', cron='0 8 * * 1-5', system='1', action='Lazylead::Task::AssigneeAlert', team_id='1', description='', enabled='true', properties='{"sql":"filter=555", "cc":"my.email@google.com", "subject":"[LL] Expired due dates", "template":"lib/messages/due_date_expired.erb", "postman":"Lazylead::Exchange"}'
-   ll > docker stop lazylead                                                                                                                            
-   lazylead
-   ```
+    [2020-06-06T11:37:37] DEBUG Memory footprint at the end is is 55MB
+    ll > docker stop lazylead                                                                                                                            
+    lazylead
+    ```
 
 #### Contribution guide
 Pull requests are welcome! 
