@@ -49,8 +49,8 @@ Join our [telegram group](https://t.me/lazyleads) for discussions.
 | :---------------------------------------------------- | :-----------: | :----: |
 | [Microsoft Exchange Server](lib/lazylead/exchange.rb) | Emails        | ✅ |
 | [Microsoft Exchange Server](lib/lazylead/exchange.rb) | Calendar      | ⌛ |
-| [mail.yandex.ru](lib/lazylead/postman.rb)             | Emails        | ✅ |
-| [mail.google.ru](lib/lazylead/postman.rb)             | Emails        | 🌵 |
+| [mail.yandex.com](lib/lazylead/postman.rb)            | Emails        | ✅ |
+| [mail.google.com](lib/lazylead/postman.rb)            | Emails        | 🌵 |
 | slack                                                 | Notifications | ⌛ |
 
 ✅ - implemented, ⌛ - planned, 🌵 - implemented, but not tested, ❌ - not supported by ticketing system.
