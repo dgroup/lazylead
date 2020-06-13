@@ -156,7 +156,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     [2020-06-06T11:37:37] DEBUG Database connection established
     [2020-06-06T11:37:37] WARN  SMTP connection enabled in test mode.
     [2020-06-06T11:37:37] DEBUG Task scheduled: id='1', name='Expired due dates', cron='0 8 * * 1-5', system='1', action='Lazylead::Task::AssigneeAlert', team_id='1', description='', enabled='true', properties='{"sql":"filter=555", "cc":"my.email@google.com", "subject":"[LL] Expired due dates", "template":"lib/messages/due_date_expired.erb", "postman":"Lazylead::Exchange"}'
-    [2020-06-06T11:37:37] DEBUG Memory footprint at the end is is 55MB
+    ...
     ll > docker stop lazylead
     lazylead
     ```
