@@ -70,7 +70,7 @@ module Lazylead
                      .reverse
                      .find do |h|
           h["items"].any? do |i|
-            i["field"] == "Fix Version" && !i["to"].nil?
+            i["field"] == "Fix Version"
           end
         end
       end
