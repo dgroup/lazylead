@@ -161,7 +161,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     lazylead
     ```
 
-#### Contribution guide
+### Contribution guide
 [![EO badge](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org/#principles) 
 
 Pull requests are welcome! Don't forget to run this, beforehand:
@@ -169,3 +169,6 @@ Pull requests are welcome! Don't forget to run this, beforehand:
 bundle exec rake
 ```
 Everyone interacting in this project’s codebases, issue trackers, chat rooms is expected to follow the [code of conduct](.github/CODE_OF_CONDUCT.md).
+
+Contributors:
+ * [dgroup](https://github.com/dgroup) as Yurii Dubinka (yurii.dubinka@gmail.com)
