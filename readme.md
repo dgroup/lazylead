@@ -161,10 +161,10 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     lazylead
     ```
 
-### Contribution guide
+### How to contribute?
 [![EO badge](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org/#principles) 
 
-Pull requests are welcome! Don't forget to run this, beforehand:
+Pull requests are welcome! Don't forget to add your name to contribution section and run this, beforehand:
 ```ruby
 bundle exec rake
 ```
