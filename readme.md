@@ -3,7 +3,6 @@
 [![Downloads](https://ruby-gem-downloads-badge.herokuapp.com/lazylead?type=total)](https://rubygems.org/gems/lazylead)
 [![](https://img.shields.io/docker/pulls/dgroup/lazylead.svg)](https://hub.docker.com/r/dgroup/lazylead "Image pulls")
 [![](https://images.microbadger.com/badges/image/dgroup/lazylead.svg)](https://microbadger.com/images/dgroup/lazylead "Image layers")
-[![](https://images.microbadger.com/badges/version/dgroup/lazylead.svg)](https://microbadger.com/images/dgroup/lazylead "Image version")
 [![Commit activity](https://img.shields.io/github/commit-activity/y/dgroup/lazylead.svg?style=flat-square)](https://github.com/dgroup/lazylead/graphs/commit-activity)
 [![Hits-of-Code](https://hitsofcode.com/github/dgroup/lazylead)](https://hitsofcode.com/view/github/dgroup/lazylead)
 [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](./license.txt)
@@ -16,7 +15,6 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e1ec2d63ff9040d99c934e3c05c24abe)](https://www.codacy.com/manual/dgroup/lazylead?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dgroup/lazylead&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e873a41b1c76d7b2d6ae/maintainability)](https://codeclimate.com/github/dgroup/lazylead/maintainability)
 [![codecov](https://codecov.io/gh/dgroup/lazylead/branch/master/graph/badge.svg)](https://codecov.io/gh/dgroup/lazylead)
-[![DepShield Badge](https://depshield.sonatype.org/badges/dgroup/lazylead/depshield.svg)](https://depshield.github.io)
 
 [![DevOps By Rultor.com](http://www.rultor.com/b/dgroup/lazylead)](http://www.rultor.com/p/dgroup/lazylead)
 [![EO badge](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org/#principles)
@@ -51,8 +49,8 @@ Join our [telegram group](https://t.me/lazyleads) for discussions.
 | :---------------------------------------------------- | :-----------: | :----: |
 | [Microsoft Exchange Server](lib/lazylead/exchange.rb) | Emails        | ✅ |
 | [Microsoft Exchange Server](lib/lazylead/exchange.rb) | Calendar      | ⌛ |
-| [mail.yandex.ru](lib/lazylead/postman.rb)             | Emails        | ✅ |
-| [mail.google.ru](lib/lazylead/postman.rb)             | Emails        | 🌵 |
+| [mail.yandex.com](lib/lazylead/postman.rb)            | Emails        | ✅ |
+| [mail.google.com](lib/lazylead/postman.rb)            | Emails        | 🌵 |
 | slack                                                 | Notifications | ⌛ |
 
 ✅ - implemented, ⌛ - planned, 🌵 - implemented, but not tested, ❌ - not supported by ticketing system.
@@ -108,7 +106,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
 2.  Create a container, using `docker-compose -f .github/tasks.yml up`
     The container will stop as there were no tasks provided:
     ```bash
-    ll > docker-compose -f .github/tasks.yml up                                                                                                           100% 🔋  13:35:04
+    ll > docker-compose -f .github/tasks.yml up                                                         
     Creating lazylead ... done
     Attaching to lazylead
     lazylead    | [2020-06-06T10:35:13] DEBUG Memory footprint at start is 52MB
@@ -145,7 +143,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
 
 4.  Once you changed `./ll.db`, please restart the container using `docker-compose -f .github/tasks.yml restart`
     ```bash
-    ll > docker-compose -f .github/tasks.yml restart                                                                                                      100% 🔋  14:37:19
+    ll > docker-compose -f .github/tasks.yml restart
     Restarting lazylead ... done
     ```
     check the logs and stop container if needed
@@ -158,13 +156,14 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     [2020-06-06T11:37:37] WARN  SMTP connection enabled in test mode.
     [2020-06-06T11:37:37] DEBUG Task scheduled: id='1', name='Expired due dates', cron='0 8 * * 1-5', system='1', action='Lazylead::Task::AssigneeAlert', team_id='1', description='', enabled='true', properties='{"sql":"filter=555", "cc":"my.email@google.com", "subject":"[LL] Expired due dates", "template":"lib/messages/due_date_expired.erb", "postman":"Lazylead::Exchange"}'
     [2020-06-06T11:37:37] DEBUG Memory footprint at the end is is 55MB
-    ll > docker stop lazylead                                                                                                                            
+    ll > docker stop lazylead
     lazylead
     ```
 
 #### Contribution guide
-Pull requests are welcome! 
-Don't forget to run this, beforehand:
+[![EO badge](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org/#principles) 
+
+Pull requests are welcome! Don't forget to run this, beforehand:
 ```ruby
 bundle exec rake
 ```
