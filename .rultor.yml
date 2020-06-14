@@ -13,24 +13,13 @@ release:
   script: |-
     export RUBYOPT="-W0"
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
-#    sed -i "s/0\.0\.0/${tag}/g" lib/lazylead/version.rb
-#    bundle install --no-color
-#    rake --quiet
-#    git add lib/lazylead/version.rb
-#    git commit -m "version set to ${tag}"
-#    gem build lazylead.gemspec
-#    chmod 0600 ../rubygems.yml
-#    gem push *.gem --config-file ../rubygems.yml
-    echo "Set docker release tags on CI"
     curl --request POST \
       --url https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar \
       --header 'accept: application/json' \
       --header 'circle-token: $(cat ${circleci.token)' \
       --header 'content-type: application/json' \
-      --data '{
-      "name": "DOCKER_RELEASE_TAGS",
-      "value": "latest ${tag}"
-    }'
+      --data '{ "name": "DOCKER_RELEASE_TAGS", "value": "latest ${tag}" }'
+    exit -2
 merge:
   script: |-
     bundle install
