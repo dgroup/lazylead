@@ -22,8 +22,7 @@ jobs:
           command: |
             set -e
             COMMIT_URL="https://github.com/dgroup/rll/commit/${CIRCLE_SHA1}"
-            docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${COMMIT_URL}" \
-              --build-arg version=${DOCKER_RELEASE_TAGS:7} \
+            docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${COMMIT_URL}" --build-arg version="${DOCKER_RELEASE_TAGS:7}" \
               -t dgroup/lazylead:$CIRCLE_BRANCH . \
               -f .docker/Dockerfile
             docker run --rm dgroup/lazylead:${CIRCLE_BRANCH} bin/lazylead --verbose > trace.log
