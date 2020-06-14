@@ -5,12 +5,6 @@ assets:
   circleci.token: dgroup/ossrh#circleci.token
 docker:
   image: ruby:2.6.5
-install: |
-  export GEM_HOME=~/.ruby
-  export GEM_PATH=$GEM_HOME:$GEM_PATH
-  apt-get -y update
-  apt-get -y install libcurl4-openssl-dev
-  gem install pdd -v 0.20.5
 release:
   script: |-
     export RUBYOPT="-W0"
@@ -31,4 +25,3 @@ merge:
   script: |-
     bundle install
     rake --quiet
-    pdd -f /dev/null -v
