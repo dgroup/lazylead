@@ -15,7 +15,7 @@ release:
     # rake --quiet
     # git add lib/lazylead/version.rb lazylead.gemspec
     # gem build lazylead.gemspec
-    curl -X POST --url https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar -H 'accept: application/json' -H 'circle-token: $(cat ../circleci.token)' -H 'content-type: application/json' -d '{ "name": "DOCKER_RELEASE_TAGS", "value": "latest ${tag}" }'
+    curl -X POST --url "https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar" -H "accept: application/json" -H "circle-token: $(cat ../circleci.token)" -H "content-type: application/json" -d "{ \"name\": \"DOCKER_RELEASE_TAGS\", \"value\": \"latest ${tag}\" }"
     exit -2
 merge:
   script: |-
