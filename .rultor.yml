@@ -18,6 +18,7 @@ release:
     chmod 0600 ../rubygems.yml
     # gem push *.gem --config-file ../rubygems.yml
     curl -X POST --url "https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar" -H "accept: application/json" -H "circle-token: $(cat ../circleci.token)" -H "content-type: application/json" -d "{ \"name\": \"DOCKER_RELEASE_TAGS\", \"value\": \"latest ${tag}\" }"
+    exit -2
 merge:
   script: |-
     bundle install
