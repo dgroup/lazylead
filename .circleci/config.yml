@@ -11,7 +11,7 @@ jobs:
       - run: |
           apk add libc-dev gcc make git sqlite sqlite-dev sqlite-libs
           bundler install
-      - run: bundle exec rake test rubocop xcop
+      - run: bundle exec rake test rubocop sqlint xcop copyright
   deploy:
     machine: true
     steps:
@@ -23,7 +23,7 @@ jobs:
             set -e
             COMMIT_URL="https://github.com/dgroup/rll/commit/${CIRCLE_SHA1}"
             docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${COMMIT_URL}" \
-              --build-arg version=${DOCKER_RELEASE_TAGS:7}
+              --build-arg version=${DOCKER_RELEASE_TAGS:7} \
               -t dgroup/lazylead:$CIRCLE_BRANCH . \
               -f .docker/Dockerfile
             docker run --rm dgroup/lazylead:${CIRCLE_BRANCH} bin/lazylead --verbose > trace.log
