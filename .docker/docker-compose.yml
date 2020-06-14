@@ -10,9 +10,9 @@ services:
     build:
       context: ../
       dockerfile: .docker/Dockerfile
-    environment:
-      # @todo #/DEV Add SHA2, version, release date, and url to commit.
-      release_tags: "0.1.0"
+      args:
+        release_tags: "latest 0.1.0"
+        version: "0.1.0"
     ports:
       - 82:8080
       - 1082:1082 # remote debug

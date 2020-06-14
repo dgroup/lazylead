@@ -45,7 +45,7 @@ def version
   Gem::Specification.load(Dir["*.gemspec"].first).version
 end
 
-task default: %i[clean test rubocop sqlint xcop copyright docker_build]
+task default: %i[clean test rubocop sqlint xcop copyright docker]
 
 require "rake/testtask"
 desc "Run all unit tests"
@@ -122,7 +122,9 @@ task :clean do
   Dir.glob("test/resources/**/*.db").each { |f| File.delete(f) }
 end
 
-task :docker_build do
+task :docker do
   puts "Building docker image..."
-  system("docker-compose -f .docker/docker-compose.yml build")
+  system "docker-compose -f .docker/docker-compose.yml build "\
+          " --build-arg release_tags='latest 1.0'"\
+          " --build-arg version=1.0"
 end

@@ -27,14 +27,12 @@ require "English"
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-# @todo #/DEV Version should be set only in one place. No duplicates allowed.
-#  Right now its placed to 'version.rb', 'lazylead.gemspec', 'release_image.sh'.
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.rubygems_version = "2.2"
   s.required_ruby_version = ">=2.6.5"
   s.name = "lazylead"
-  s.version = "0.1.2"
+  s.version = "0.0.0"
   s.license = "MIT"
   s.summary = "Eliminate the annoying work within bug-trackers."
   s.description = "Ticketing systems (Github, Jira, etc.) are strongly
@@ -56,7 +54,7 @@ tasks instead of solving technical problems."
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.test_files = s.files.grep(%r{^(test|features)/})
   s.rdoc_options = ["--charset=UTF-8"]
-  s.extra_rdoc_files = ["readme.md", "license.txt"]
+  s.extra_rdoc_files = %w[readme.md license.txt]
   s.add_runtime_dependency "activerecord", "6.0.3"
   s.add_runtime_dependency "backtrace", "0.3"
   s.add_runtime_dependency "concurrent-ruby", "1.1.5"

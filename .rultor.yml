@@ -3,6 +3,8 @@ architect:
 assets:
   rubygems.yml: dgroup/ossrh#rubygems.yml
   circleci.token: dgroup/ossrh#circleci.token
+docker:
+  image: ruby:2.6.5
 install: |
   export GEM_HOME=~/.ruby
   export GEM_PATH=$GEM_HOME:$GEM_PATH
@@ -15,10 +17,10 @@ release:
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
     sed -i "s/0\.0\.0/${tag}/g" lib/lazylead/version.rb
     sed -i "s/0\.0\.0/${tag}/g" lazylead.gemspec
-    bundle install --no-color
-    rake --quiet
-    git add lib/lazylead/version.rb lazylead.gemspec
-    gem build lazylead.gemspec
+    # bundle install --no-color
+    # rake --quiet
+    # git add lib/lazylead/version.rb lazylead.gemspec
+    # gem build lazylead.gemspec
     curl --request POST --url https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar \
         --header 'accept: application/json' \
         --header 'circle-token: $(cat ${circleci.token)' \

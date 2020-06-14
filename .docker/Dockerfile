@@ -1,14 +1,14 @@
 FROM ruby:2.6.5-alpine
 
 ARG release_tags
+ARG version
 
 LABEL about="https://github.com/dgroup/lazylead" \
       ci.contact="yurii.dubinka@gmail.com" \
       ci.release.tag="${release_tags}" \
       ll.docker.issues="https://github.com/dgroup/lazylead/issues?utf8=✓&q=label%3Adocker"
 
-ENV APP_HOME=/lazylead \
-    version=${release_tags}
+ENV APP_HOME=/lazylead
 
 WORKDIR $APP_HOME
 
@@ -25,5 +25,7 @@ RUN bundler install
 COPY bin/lazylead ./bin/lazylead
 COPY lib ./lib
 COPY upgrades ./upgrades
+
+RUN sed -i "s/0\.0\.0/${version}/g" lib/lazylead/version.rb
 
 CMD ["bin/lazylead", "--trace", "--verbose", "--memory-dump"]
