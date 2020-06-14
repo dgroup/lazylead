@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 echo "Release tags: ${DOCKER_RELEASE_TAGS}"
 docker login --username "${DOCKER_USER}" --password "${DOCKER_TOKEN}"
 if [ "${CIRCLE_BRANCH}" == "master" ]; then
@@ -11,3 +12,5 @@ else
     docker push "dgroup/lazylead:${CIRCLE_BRANCH}"
     echo "dgroup/lazylead:${CIRCLE_BRANCH} released"
 fi
+echo "Available LL images:"
+docker images | grep lazylead
