@@ -18,7 +18,7 @@ release:
     bundle install --no-color
     rake --quiet
     git add lib/lazylead/version.rb lazylead.gemspec
-    gem build zold.gemspec
+    gem build lazylead.gemspec
     curl --request POST --url https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar \
         --header 'accept: application/json' \
         --header 'circle-token: $(cat ${circleci.token)' \
