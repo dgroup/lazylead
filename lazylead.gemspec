@@ -27,6 +27,8 @@ require "English"
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
+# @todo #/DEV Version should be set only in one place. No duplicates allowed.
+#  Right now its placed to 'version.rb', 'lazylead.gemspec', 'release_image.sh'.
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.rubygems_version = "2.2"

@@ -1,8 +1,8 @@
 #!/bin/bash
-export docker_release_tags="latest 0.1.2"
+echo "Release tags: ${DOCKER_RELEASE_TAGS}"
 docker login --username "${DOCKER_USER}" --password "${DOCKER_TOKEN}"
 if [ "${CIRCLE_BRANCH}" == "master" ]; then
-    for tag in ${docker_release_tags// / } ; do
+    for tag in ${DOCKER_RELEASE_TAGS// / } ; do
         docker tag "dgroup/lazylead:${CIRCLE_BRANCH}" "dgroup/lazylead:${tag}"
         docker push "dgroup/lazylead:${tag}"
         echo "dgroup/lazylead:${tag} released"
