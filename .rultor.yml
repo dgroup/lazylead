@@ -15,7 +15,7 @@ release:
     sed -i "s/0\.0\.0/${tag}/g" lib/lazylead/version.rb
     sed -i "s/0\.0\.0/${tag}/g" lazylead.gemspec
     bundle install --no-color
-    rake --quiet
+    bundle exec rake test rubocop sqlint xcop
     git add lib/lazylead/version.rb lazylead.gemspec
     gem build lazylead.gemspec
     chmod 0600 ../rubygems.yml
@@ -25,4 +25,4 @@ release:
 merge:
   script: |-
     bundle install
-    rake --quiet
+    bundle exec rake test rubocop sqlint xcop
