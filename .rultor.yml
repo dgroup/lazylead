@@ -20,8 +20,7 @@ release:
     gem build lazylead.gemspec
     chmod 0600 ../rubygems.yml
     # gem push *.gem --config-file ../rubygems.yml
-    export token=$(< ../circleci.token)
-    curl -X POST --url https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar?circle-token=$token -H "accept: application/json" -H "content-type: application/json" -d "{ \"name\": \"DOCKER_RELEASE_TAGS\", \"value\": \"latest ${tag}\" }"
+    curl -s -X POST --url "https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar?circle-token=$(< ../circleci.token)" -H "accept: application/json" -H "content-type: application/json" -d "{ \"name\": \"DOCKER_RELEASE_TAGS\", \"value\": \"latest ${tag}\" }" > /dev/null
     exit -2
 merge:
   script: |-
