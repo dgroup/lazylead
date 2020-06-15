@@ -10,6 +10,7 @@ docker:
   image: ruby:2.6.5
 release:
   script: |-
+    set -e
     export RUBYOPT="-W0"
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
     sed -i "s/0\.0\.0/${tag}/g" lib/lazylead/version.rb
@@ -17,12 +18,12 @@ release:
     bundle install --no-color
     bundle exec rake test rubocop sqlint xcop
     git add lib/lazylead/version.rb lazylead.gemspec
+    git commit -m "version set to ${tag}"
     gem build lazylead.gemspec
     chmod 0600 ../rubygems.yml
-    # gem push *.gem --config-file ../rubygems.yml
+    gem push *.gem --config-file ../rubygems.yml
     curl -s -X POST --url "https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar" -H @../circleci.header -H "accept: application/json" -H "content-type: application/json" -d "{ \"name\": \"DOCKER_RELEASE_TAGS\", \"value\": \"latest ${tag}\" }" -o /dev/null
     curl -s -X POST --url https://circleci.com/api/v2/project/gh/dgroup/lazylead/pipeline -H @../circleci.header -H 'accept: application/json' -H 'content-type: application/json' -H 'x-attribution-login: dgroup' -o /dev/null
-    exit -2
 merge:
   script: |-
     bundle install
