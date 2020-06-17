@@ -26,7 +26,7 @@ The idea of automatic management is not new, for example [Zerocracy](https://www
 I like this idea, but large companies/projects are not ready yet for such a decisive breakthrough and need step-by-step solutions such as [lazylead](https://github.com/dgroup/lazylead). 
 I think you remember how [static code analysis](https://en.wikipedia.org/wiki/Static_program_analysis) treated at in the past; today we have a huge toolkit (pmd, checkstyle, qulice, rubocop, peon, etc) for each language that allows you to avoid routine issues and remove from the code reviewer the unnecessary load.
  
-Join our [telegram group](https://t.me/lazyleads) for discussions.
+Join our [telegram group](https://t.me/lazyleads)(lazylead.org) for discussions.
 
 | Daily annoying task                                                    | Jira  | Github | Trello |
 | :--------------------------------------------------------------------- | :---: | :----: | :----: |
@@ -127,7 +127,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     Modify you [sqlite](https://sqlite.com/index.html) file(`ll.db`) using [DB Browser](https://sqlitebrowser.org/) or any similar tool.
     Please change the `<youremail.com>` to your email address in order to be in CC when developer get the notification:
     ```sql
-    insert into teams  (id, name, properties) 
+    insert into teams (id, name, properties) 
                values (1, 'Dream team with lazylead', '{}');
     insert into systems(id, properties)    
                values (1,'{"type":"Lazylead::Jira", "username":"${jira_user}", "password":"${jira_password}", "site":"${jira_url}", "context_path":""}');
