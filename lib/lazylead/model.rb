@@ -92,13 +92,19 @@ module Lazylead
         log.debug("Task ##{id} '#{name}' is started")
         action.constantize
               .new(log)
-              .run(system.connect(log), postman(log), props)
+              .run(system.connect(log), postman(log), props(log))
         log.debug("Task ##{id} '#{name}' is completed")
       end
 
-      def props
-        return @prop if defined? @prop
-        @prop = team.to_hash.merge(to_hash)
+      def props(log = Log::NOTHING)
+        @props ||= begin
+                    if team.nil?
+                      log.warn("Team for task #{id} isn't defined.")
+                      to_hash
+                    else
+                      team.to_hash.merge(to_hash)
+                    end
+                  end
       end
 
       def postman(log = Log::NOTHING)

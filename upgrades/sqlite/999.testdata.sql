@@ -27,7 +27,8 @@ values (1,
        (2,
         '{"type":"Lazylead::Jira", "username":"${jsi_usr}", "password":"${jsi_psw}", "site":"https://jira.spring.io", "context_path":""}');
 insert into teams(id, name, properties)
-values (1, 'BA squad', '{"from":"basquad@fake.com", "usr":"${usr}"}');
+values (1, 'BA squad', '{"from":"basquad@fake.com", "usr":"${usr}"}'),
+       (154, 'Team for issue #154', '{"cc":"lead@fake.com"}');
 insert into tasks(name, cron, enabled, id, system, team_id, action, properties)
 values ('echo', '* * * * *', 'false', 1, 1, 1, 'Lazylead::Task::Echo', '{}'),
        ('expired due date', '* * * * *', 'false', 2, 1, 1,
@@ -36,4 +37,5 @@ values ('echo', '* * * * *', 'false', 1, 1, 1, 'Lazylead::Task::Echo', '{}'),
        ('task with cc', '* * * * *', 'false', 3, 1, 1, 'Lazylead::Task::Echo',
         '{"cc":"leelakenny@mail.com,maciecrane@mail.com"}'),
        ('task', '* * * * *', 'false', 4, 2, 1, 'Lazylead::Task::Echo', '{}'),
-       ('pman', '', '', 5, 2, 1, '', '{"postman":"Lazylead::Postman"}');
+       ('pman', '', '', 5, 2, 1, '', '{"postman":"Lazylead::Postman"}'),
+       ('issue 154', '* * * * *', 'false', 154, 1, 154, 'Lazylead::Task::AssigneeAlert', '{}');
