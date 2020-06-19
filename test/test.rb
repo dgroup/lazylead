@@ -37,6 +37,7 @@ require "minitest/reporters"
 require "concurrent"
 require "timeout"
 require "active_support"
+require "mail"
 
 STDOUT.sync = true
 Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
@@ -98,6 +99,16 @@ module Lazylead
       else
         !ENV[keys].blank?
       end
+    end
+
+    # Assert that email sent using 'mail' gem in test mode
+    #  has expected subject and words
+    def assert_email(subject, words)
+      assert_words words,
+                   Mail::TestMailer.deliveries
+                                   .filter { |m| m.subject.eql? subject }
+                                   .first
+                                   .body.parts.first.body.raw_source
     end
   end
 end

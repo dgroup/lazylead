@@ -43,10 +43,8 @@ module Lazylead
         "subject" => "FixVersion: How dare you?",
         "template" => "lib/messages/illegal_fixversion_change.erb"
       )
-      assert_words %w[DATAJDBC-480 01-Apr-2020 Minor Mark\ Paluch tom,mike,bob EntityInstantiators],
-                   Mail::TestMailer.deliveries
-                                   .filter { |m| m.subject.eql? "FixVersion: How dare you?" }
-                                   .first.body.parts.first.body
+      assert_email "FixVersion: How dare you?",
+                   %w[DATAJDBC-480 01-Apr-2020 Minor Mark\ Paluch tom,mike,bob EntityInstantiators]
     end
   end
 end

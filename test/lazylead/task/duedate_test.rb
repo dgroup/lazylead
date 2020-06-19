@@ -80,10 +80,8 @@ module Lazylead
         "subject" => "[DD] HMCHT!",
         "template" => "lib/messages/due_date_expired.erb"
       )
-      assert_words %w[STS-3599 2013-11-08 Major Miles\ Parker Use JavaFX WebView],
-                   Mail::TestMailer.deliveries
-                                   .filter { |m| m.subject.eql? "[DD] HMCHT!" }
-                                   .first.body.parts.first.body
+      assert_email "[DD] HMCHT!",
+                   %w[STS-3599 2013-11-08 Major Miles\ Parker Use JavaFX WebView]
     end
 
     test "send notification about bunch of tickets" do
@@ -98,10 +96,8 @@ module Lazylead
         "to" => "big.boss@example.com",
         "addressee" => "Boss"
       )
-      assert_words %w[Hi Boss STS-3599 2013-11-08 Major Miles\ Parker Use JavaFX WebView],
-                   Mail::TestMailer.deliveries
-                                   .filter { |m| m.subject.eql? "ALRT: Frozen" }
-                                   .first.body.parts.first.body
+      assert_email "ALRT: Frozen",
+                   %w[Hi Boss STS-3599 2013-11-08 Major Miles\ Parker Use JavaFX WebView]
     end
 
     test "cc got notification" do

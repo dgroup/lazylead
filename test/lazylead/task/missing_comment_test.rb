@@ -47,10 +47,8 @@ module Lazylead
         "template" => "lib/messages/missing_comment.erb",
         "template_details" => "reference to <a href='file://ftp/path'>ftp</a>"
       )
-      assert_words %w[DATAJDBC-523 Major Mark\ Paluch https://github.com/spring-projects/spring-data-jdbc/commit/aadbb667ed1d61139d5ac51a06eb3dd1b39316db#diff-510a5041bb8a0575e97fedf105606b83R130],
-                   Mail::TestMailer.deliveries
-                                   .filter { |m| m.subject.eql? "Expected ftp link is missing" }
-                                   .first.body.parts.first.body
+      assert_email "Expected ftp link is missing",
+                   %w[DATAJDBC-523 Major Mark\ Paluch https://github.com/spring-projects/spring-data-jdbc/commit/aadbb667ed1d61139d5ac51a06eb3dd1b39316db#diff-510a5041bb8a0575e97fedf105606b83R130]
     end
   end
 end
