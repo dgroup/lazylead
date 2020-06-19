@@ -106,5 +106,13 @@ module Lazylead
                              .first
                              .history[2]["id"]
     end
+
+    test "issue has expected status" do
+      assert_equal "Closed",
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key='DATAJDBC-480'")
+                             .first
+                             .status
+    end
   end
 end

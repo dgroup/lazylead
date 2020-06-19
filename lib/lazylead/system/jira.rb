@@ -193,6 +193,10 @@ module Lazylead
     def inspect
       to_s
     end
+
+    def status
+      @issue.status.attrs["name"]
+    end
   end
 
   # The jira issue comments
