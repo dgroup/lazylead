@@ -38,6 +38,7 @@ jobs:
           command: |
             chmod +x .circleci/release_image.sh
             .circleci/release_image.sh
+            curl -s -X POST -u ${CI_TOKEN}:""  --url "https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar" -H "accept: application/json" -H "content-type: application/json" -d "{ \"name\": \"DOCKER_RELEASE_TAGS\", \"value\": \"master\" }"
 workflows:
   version: 2
   build_and_test:
