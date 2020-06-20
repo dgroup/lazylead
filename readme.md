@@ -101,7 +101,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     ```
     or just download the project using git
     ```bash
-    git clone https://github.com/dgroup/lazylead.git ll && cd ll && pwd && ls -lah
+    git clone https://github.com/dgroup/lazylead.git ll && cd ll
     ```
 
 2.  Create a container, using `docker-compose -f .github/tasks.yml up`
