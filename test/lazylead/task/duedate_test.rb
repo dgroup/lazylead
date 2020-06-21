@@ -118,5 +118,21 @@ module Lazylead
                                    .filter { |m| m.subject.eql? "CC: Watching" }
                                    .first.cc
     end
+
+    test "reporter got alert about his/her tickets with expired due dates" do
+      Smtp.new.enable
+      Task::ReporterAlert.new.run(
+        NoAuthJira.new("https://jira.spring.io"),
+        Postman.new,
+        "from" => "fake@email.com",
+        "sql" => "filter=16743",
+        "subject" => "DD Expired!",
+        "template" => "lib/messages/due_date_expired.erb"
+      )
+      assert_equal 2,
+                   Mail::TestMailer.deliveries
+                                   .filter { |m| m.subject.eql? "DD Expired!" }
+                                   .length
+    end
   end
 end

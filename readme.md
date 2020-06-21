@@ -28,21 +28,21 @@ I think you remember how [static code analysis](https://en.wikipedia.org/wiki/St
  
 Join our telegram group [lazylead.org](https://t.me/lazyleads) for discussions.
 
-| Daily annoying task                                                    | Jira  | Github | Trello |
-| :--------------------------------------------------------------------- | :---: | :----: | :----: |
-| [Notify ticket's assignee](lib/lazylead/task/alert.rb)                 | ✅ | ⌛ | ⌛ |
-| [Notify ticket's reporter](lib/lazylead/task/alert.rb)                 | ✅ | ⌛ | ⌛ |
-| [Notify ticket's manager](lib/lazylead/task/alert.rb)                  | ✅ | ⌛ | ⌛ |
+| Daily annoying task                                                                 | Jira  | Github | Trello |
+| :---------------------------------------------------------------------------------- | :---: | :----: | :----: |
+| [Notify ticket's assignee](lib/lazylead/task/alert.rb)                              | ✅ | ⌛ | ⌛ |
+| [Notify ticket's reporter](lib/lazylead/task/alert.rb)                              | ✅ | ⌛ | ⌛ |
+| [Notify ticket's manager](lib/lazylead/task/alert.rb)                               | ✅ | ⌛ | ⌛ |
 | [Notify about illegal "Fix Version" modification](lib/lazylead/task/fix_version.rb) | ✅ | ❌ | ❌ | 
-| [Expected comment in ticket is missing](lib/lazylead/task/missing_comment.rb) | ✅ | ⌛ | ⌛ |
-| Propagate some fields from parent ticket into sub-tasks                | ⌛ | ❌ | ❌ |  
-| Print the current capacity of team into newly created tasks            | ⌛ | ⌛ | ⌛ |  
-| Create/retrofit the defect automatically into latest release           | ⌛ | ⌛ | ❌ |  
-| Notify about expired(ing) due dates                                    | ⌛ | ⌛ | ⌛ |
-| Notify about absent original estimations                               | ⌛ | ⌛ | ⌛ |
-| Notify about 'Hot potato' tickets                                      | ⌛ | ⌛ | ⌛ |
-| Notify about long live tickets (aging)                                 | ⌛ | ⌛ | ⌛ |
-| Notify about tickets with invalid format (missing url/stacktrace, etc) | ⌛ | ⌛ | ⌛ |
+| [Expected comment in ticket is missing](lib/lazylead/task/missing_comment.rb)       | ✅ | ⌛ | ⌛ |
+| [Propagate some fields from parent ticket into sub-tasks](.docs/propagate_down.md)  | ✅ | ❌ | ❌ |  
+| Print the current capacity of team into newly created tasks                         | ⌛ | ⌛ | ⌛ |  
+| Create/retrofit the defect automatically into latest release                        | ⌛ | ⌛ | ❌ |  
+| [Notify about expired(ing) due dates](.docs/duedate_expired.md)                     | ✅ | ❌ | ⌛ |
+| Notify about absent original estimations                                            | ⌛ | ⌛ | ⌛ |
+| Notify about 'Hot potato' tickets                                                   | ⌛ | ⌛ | ⌛ |
+| Notify about long live tickets (aging)                                              | ⌛ | ⌛ | ⌛ |
+| Notify about tickets with invalid format (missing url/stacktrace, etc)              | ⌛ | ⌛ | ⌛ |
 | Create a meeting(s) automatically in case some tickets appeared (group by assignee/reporters/component/ticket type/etc) | ⌛ | ⌛ | ⌛ |
 
 | Integration                                           | Type          | Status |
@@ -59,7 +59,7 @@ Join our telegram group [lazylead.org](https://t.me/lazyleads) for discussions.
 New ideas, bugs, suggestions or questions are welcome [via GitHub issues](https://github.com/dgroup/lazylead/issues/new)!
 
 ### Get started
-:warning: We're still in a very early alpha version, the API may change frequently until we release version 1.0.
+⚠️ We're still in a very early alpha version, the API may change frequently until we release version 1.0.
 
 Let's assume that:
 - your team is using jira as a ticketing system

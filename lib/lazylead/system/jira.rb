@@ -46,7 +46,7 @@ module Lazylead
 
     def issues(jql, opts = {})
       raw do |jira|
-        jira.Issue.jql(jql, opts).map { |i| Lazylead::Issue.new(i) }
+        jira.Issue.jql(jql, opts).map { |i| Lazylead::Issue.new(i, jira) }
       end
     end
 
@@ -136,8 +136,9 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Issue
-    def initialize(issue)
+    def initialize(issue, jira)
       @issue = issue
+      @jira = jira
     end
 
     def id
@@ -183,7 +184,10 @@ module Lazylead
     end
 
     def comments
-      @issue.comments
+      return @comments if defined? @comments
+      @comments = @jira.Issue.find(@issue.id, expand: "comments", fields: "")
+                       .comments
+                       .map { |c| Comment.new(c) }
     end
 
     def to_s
@@ -228,6 +232,18 @@ module Lazylead
     end
   end
 
+  # Comment in jira ticket
+  class Comment
+    def initialize(comment)
+      @comment = comment
+    end
+
+    # Check that comment has expected text
+    def include?(text)
+      @comment.attrs["body"].include? text
+    end
+  end
+
   # Jira instance without authentication in order to access public filters
   #  or dashboards.
   class NoAuthJira
@@ -248,6 +264,27 @@ module Lazylead
     def raw(&block)
       raise "ll-07: No block given to method" unless block_given?
       @jira.raw(&block)
+    end
+  end
+
+  # A fake jira system which allows to work with sub-tasks.
+  class Fake
+    def initialize(issues)
+      @issues = issues
+    end
+
+    def issues(_, _)
+      @issues
+    end
+
+    # Execute request to the ticketing system using raw client.
+    def raw
+      raise "ll-08: No block given to method" unless block_given?
+      yield(OpenStruct.new(Issue: self))
+    end
+
+    def find(id)
+      @issues.detect { |i| i.id.eql? id }
     end
   end
 end
