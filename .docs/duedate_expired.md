@@ -5,7 +5,7 @@ Why do we need this if Jira has `Filter Subscription` feature:
 - https://confluence.atlassian.com/jiracorecloud/advanced-searching-765593707.html
 
 As far as I know, filter subscription feature doesn't allow(for now) to group tickets by assignee and send to each of them personal message with missing due dates.
-Right now its just send whole list of tickets to your or specified group.
+Right now its just send whole list of tickets to you or specified group.
 In worst cases, shared responsibility leads to irresponsibility each individual.
 
 #### How to use lazylead for this
