@@ -39,8 +39,7 @@ module Lazylead
         assert_tables "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
                       systems: %w[id properties],
                       teams: %w[id name properties],
-                      tasks: %w[id name cron system action team_id description
-                                enabled properties]
+                      tasks: %w[id name cron system action team_id enabled properties]
         assert_fk "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
                   %w[tasks team_id teams id],
                   %w[tasks system systems id]

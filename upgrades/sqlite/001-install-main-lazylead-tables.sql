@@ -54,7 +54,6 @@ create table if not exists tasks
     system      integer not null,
     action      text    not null,
     team_id     integer not null,
-    description text,
     enabled     text,
     properties  text    not null,
 -- @todo #/DEV tasks.enabled - add index for future search. Research is required.
