@@ -16,9 +16,8 @@ jobs:
     machine: true
     steps:
       - checkout
-      # build the application image
       - run:
-          name: "Build docker image"
+          name: "Build LL image"
           command: |
             set -e
             COMMIT_URL="https://github.com/dgroup/lazylead/commit/${CIRCLE_SHA1}"
@@ -32,12 +31,20 @@ jobs:
             expected="No tasks found"
             echo "Ensure that app prints the line '${expected}'."
             grep --color "${expected}" trace.log
-      # publish the image
       - run:
-          name: "Deploy docker image"
+          name: "Push LL image"
           command: |
             chmod +x .circleci/release_image.sh
             .circleci/release_image.sh
+      - run:
+          name: "Build & push LL VCS image"
+          command: |
+            sed -i "s/0\.0\.0/${DOCKER_RELEASE_TAGS}/g" .docker/vcs.dockerfile
+            docker build -t dgroup/lazylead:${DOCKER_RELEASE_TAGS}-vcs -f .docker/vcs.dockerfile
+            docker push dgroup/lazylead:${DOCKER_RELEASE_TAGS}
+      - run:
+          name: "Reset tag to master"
+          command: |
             curl -s -X POST -u ${CI_TOKEN}:""  --url "https://circleci.com/api/v2/project/gh/dgroup/lazylead/envvar" -H "accept: application/json" -H "content-type: application/json" -d "{ \"name\": \"DOCKER_RELEASE_TAGS\", \"value\": \"master\" }"
 workflows:
   version: 2
