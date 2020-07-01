@@ -41,7 +41,7 @@ jobs:
           command: |
             sed -i "s/0\.0\.0/${DOCKER_RELEASE_TAGS}/g" .docker/vcs.dockerfile
             docker build -t dgroup/lazylead:${DOCKER_RELEASE_TAGS}-vcs -f .docker/vcs.dockerfile
-            docker push dgroup/lazylead:${DOCKER_RELEASE_TAGS}
+            docker push dgroup/lazylead:${DOCKER_RELEASE_TAGS}-vcs
       - run:
           name: "Reset tag to master"
           command: |
