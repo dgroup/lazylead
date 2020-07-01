@@ -62,9 +62,17 @@ module Lazylead
         to_recipients: to
       }
       msg.update(cc_recipients: split("cc", opts)) if opts.key? "cc"
+      add_attachments(msg, opts)
       cli.send_message msg
+      msg[:file_attachments].each(&:close) unless msg[:file_attachments].empty?
       @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
                  "Here is the body: #{html}"
+    end
+
+    def add_attachments(msg, opts)
+      return unless opts.key? "attachments"
+      files = split("attachments", opts).map { |f| File.open(f, "r") }
+      msg[:file_attachments] = files
     end
 
     private

@@ -34,6 +34,7 @@ require "logging"
 require "backtrace"
 require "memory_profiler"
 require_relative "../lib/lazylead/log"
+require_relative "../lib/lazylead/home"
 require_relative "../lib/lazylead/schedule"
 require_relative "../lib/lazylead/allocated"
 require_relative "../lib/lazylead/cli/app"
@@ -51,8 +52,8 @@ Available options:"
   o.bool "--memory-dump", "Dump memory snapshot afterwards, to the console",
          default: false
   o.string "--home",
-           "Home directory (default: #{Dir.pwd})",
-           default: ENV["LL_HOME"].nil? ? Dir.pwd : ENV["LL_HOME"]
+           "Home directory (default #{Lazylead::Home.new.dir})",
+           default: Lazylead::Home.new.dir
   o.string "--sqlite",
            "SQLite database file name",
            default: "lazylead.db"

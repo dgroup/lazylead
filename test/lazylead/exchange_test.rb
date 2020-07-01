@@ -25,6 +25,7 @@
 require_relative "../test"
 require_relative "../../lib/lazylead/log"
 require_relative "../../lib/lazylead/salt"
+require_relative "../../lib/lazylead/home"
 require_relative "../../lib/lazylead/exchange"
 require_relative "../../lib/lazylead/system/jira"
 
@@ -62,6 +63,25 @@ module Lazylead
                            .issues("key = DATAJDBC-480"),
         "subject" => "[DD] Enc PDTN!",
         "template" => "lib/messages/due_date_expired.erb"
+      )
+    end
+
+    test "exchange email with attachment" do
+      skip "No MS Exchange credentials provided" unless env? "exchange_url",
+                                                             "exchange_user",
+                                                             "exchange_password",
+                                                             "exchange_to"
+      Exchange.new(
+        Log::NOTHING,
+        Salt.new("exchange_salt"),
+        "exchange_url" => ENV["exchange_url"],
+        "exchange_user" => ENV["enc_exchange_usr"],
+        "exchange_password" => ENV["enc_exchange_psw"]
+      ).send(
+        to: ENV["exchange_to"],
+        "attachments" => "readme.md",
+        "subject" => "[LL] Attachments",
+        "template" => "lib/messages/savepoint.erb"
       )
     end
   end
