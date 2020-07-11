@@ -21,16 +21,51 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
-
-require_relative "email"
+require "forwardable"
 
 module Lazylead
+  # Entry point for email CC detection.
+  # The email may need CC email addresses, thus, there are various strategies
+  #  how it can be done.
+  class CC
+    # Build an CC in order to detect email addresses by different conditions.
+    #
+    # Supported conditions(types):
+    #  - PlainCC
+    #  - PredefinedCC
+    #  - ComponentCC
+    #  - Empty
+    #
+    def detect(emails, sys)
+      return PlainCC.new(emails) if plain?(emails)
+      return EmptyCC unless emails.key? "type"
+      return EmptyCC if emails["type"].blank? || emails["type"].nil?
+      type = emails["type"].constantize
+      return ComponentCC.new(emails["project"], sys) if type.is_a? ComponentCC
+      type.new(emails["opts"])
+    end
+
+    private
+
+    # Detect that raw CC is a string which may has plain email addresses
+    def plain?(text)
+      (text.is_a? String) &&
+        (text.to_s.include?(",") || text.to_s.include?("@"))
+    end
+  end
+
   # Array of CC addresses from text for email notification.
+  #
+  #   PlainCC.new("a@f.com, , -,b@f.com").cc    # ==> ["a@f.com", "b@f.com"]
   #
   # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
-  class CC
+  class PlainCC
+    include Enumerable
+    extend Forwardable
+    def_delegators :@cc, :each
+
     # The regexp expression for email notification is very simple, here is the
     # reason why https://bit.ly/38iLKeo
     def initialize(text, regxp = /[^\s]@[^\s]/)
@@ -47,50 +82,16 @@ module Lazylead
                 end
               end
     end
+
+    def each(&block)
+      cc.each(&block)
+    end
   end
 
-  # CC addresses based on Jira component owners for email notification.
-  # Allows to detect the CC for particular ticket based on its component.
-  #
-  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
-  # License:: MIT
-  class ComponentCC
-    def initialize(prj, jira)
-      @prj = prj
-      @jira = jira
-    end
-
-    def [](key)
-      to_h[key]
-    end
-
-    def cc(*names)
-      return to_h.values.uniq.compact if names.count.zero?
-      return to_h[names.first] if names.count == 1
-      hash.values_at(names.first, names.drop(1)).uniq.compact
-    end
-
-    def to_h
-      @to_h ||= begin
-                  components.each_with_object({}) do |c, h|
-                    h[c.attrs["name"]] = @jira.raw do |j|
-                      lead = j.Component
-                              .find(c.attrs["id"], expand: "", fields: "")
-                              .attrs["lead"]
-                      next if lead.nil? || lead.empty?
-                      j.User.find(lead["key"]).attrs["emailAddress"]
-                    end
-                  end
-                end
-    end
-
-    private
-
-    def components
-      @jira.raw do |j|
-        j.Project.find(@prj, expand: "components", fields: "").components
-      end
+  # Empty CC email addresses.
+  class EmptyCC
+    def cc
+      []
     end
   end
 
@@ -111,20 +112,63 @@ module Lazylead
       to_h[key]
     end
 
-    def cc
-      to_h.values.flatten.uniq
+    def cc(*names)
+      return to_h.values.flatten.uniq.compact if names.count.zero?
+      return self[names.first] if names.count == 1
+      to_h.values_at(names.first, *names.drop(1)).flatten.uniq.compact
     end
 
     def to_h
       @to_h ||= begin
                   if @orig.is_a? Hash
                     @orig.each_with_object({}) do |i, o|
-                      o[i.first] = Lazylead::CC.new(i.last).cc
+                      o[i.first] = Lazylead::PlainCC.new(i.last).cc
                     end
                   else
                     {}
                   end
                 end
+    end
+  end
+
+  # CC addresses based on Jira component owners for email notification.
+  # Allows to detect the CC for particular ticket based on its component.
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
+  class ComponentCC < Lazylead::PredefinedCC
+    def initialize(prj, jira)
+      @prj = prj
+      @jira = jira
+    end
+
+    def to_h
+      @to_h ||= begin
+                  components.each_with_object({}) do |c, h|
+                    email = lead(c.attrs["id"])
+                    next if email.nil? || email.blank?
+                    h[c.attrs["name"]] = email
+                  end
+                end
+    end
+
+    private
+
+    def lead(component_id)
+      @jira.raw do |j|
+        lead = j.Component
+                .find(component_id, expand: "", fields: "")
+                .attrs["lead"]
+        next if lead.nil? || lead.empty?
+        j.User.find(lead["key"]).attrs["emailAddress"]
+      end
+    end
+
+    def components
+      @jira.raw do |j|
+        j.Project.find(@prj, expand: "components", fields: "").components
+      end
     end
   end
 end

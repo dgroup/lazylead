@@ -26,6 +26,7 @@ require "active_record"
 require "require_all"
 require_rel "task"
 require_rel "system"
+require_relative "cc"
 require_relative "log"
 require_relative "postman"
 require_relative "exchange"
@@ -90,21 +91,30 @@ module Lazylead
 
       def exec(log = Log::NOTHING)
         log.debug("Task ##{id} '#{name}' is started")
-        action.constantize
-              .new(log)
-              .run(system.connect(log), postman(log), props(log))
+        sys = system.connect(log)
+        pman = postman(log)
+        opts = props(log)
+        opts = detect_cc(sys) if opts.key? "cc"
+        action.constantize.new(log).run(sys, pman, opts)
         log.debug("Task ##{id} '#{name}' is completed")
+      end
+
+      def detect_cc(sys)
+        opts = props
+        opts["cc"] = CC.new.detect(opts["cc"], sys)
+        return opts.except "cc" if opts["cc"].is_a? EmptyCC
+        opts
       end
 
       def props(log = Log::NOTHING)
         @props ||= begin
-                    if team.nil?
-                      log.warn("Team for task #{id} isn't defined.")
-                      to_hash
-                    else
-                      team.to_hash.merge(to_hash)
-                    end
-                  end
+                     if team.nil?
+                       log.warn("Team for task #{id} isn't defined.")
+                       to_hash
+                     else
+                       team.to_hash.merge(to_hash)
+                     end
+                   end
       end
 
       def postman(log = Log::NOTHING)

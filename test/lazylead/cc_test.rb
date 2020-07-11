@@ -23,27 +23,38 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../test"
-require_relative "../../lib/lazylead/cc"
 require_relative "../../lib/lazylead/log"
+require_relative "../../lib/lazylead/cli/app"
+require_relative "../../lib/lazylead/cc"
 require_relative "../../lib/lazylead/system/jira"
 
 module Lazylead
-  class CcTest < Lazylead::Test
+  class PlainCcTest < Lazylead::Test
     test "cc has valid email" do
-      assert_equal "a@fake.com", Lazylead::CC.new("a@fake.com").cc.first
+      assert_equal "a@fake.com", Lazylead::PlainCC.new("a@fake.com").cc.first
     end
 
     test "cc has valid email despite on additional spaces" do
-      assert_equal "a@fake.com", Lazylead::CC.new("a@fake.com ").cc.first
+      assert_equal "a@fake.com", Lazylead::PlainCC.new("a@fake.com ").cc.first
     end
 
     test "cc has valid email despite on unexpected symbols" do
-      assert_equal "a@fake.com", Lazylead::CC.new("a@fake.com, , -").cc.first
+      assert_equal "a@f.com", Lazylead::PlainCC.new("a@f.com, , -").cc.first
     end
 
     test "cc has valid emails" do
       assert_equal %w[a@fake.com b@fake.com c@fake.com],
-                   Lazylead::CC.new("a@fake.com,b@fake.com,c@fake.com").cc
+                   Lazylead::PlainCC.new("a@fake.com,b@fake.com,c@fake.com").cc
+    end
+
+    test "cc count is correct" do
+      assert_equal 3, Lazylead::PlainCC.new("a@f.com,b@f.com,c@f.com").count
+    end
+
+    test "cc behaves as array" do
+      assert_equal %w[A@f.com B@f.com C@f.com],
+                   Lazylead::PlainCC.new("a@f.com,b@f.com,c@f.com")
+                                    .map(&:capitalize)
     end
   end
 
@@ -75,6 +86,48 @@ module Lazylead
                      "jdbc" => "j@fake.com ",
                      "jvm" => "j@fake.com,,v@fake.com,-, ,m@fake.com"
                    )["jdbc"]
+    end
+
+    # @todo #/DEV The test has performance issue. Jira has no way how to take
+    #  the emails for leads quickly due to https://bit.ly/2ZRZlWc.
+    #  Thus, for each component we need to find a lead, and only then detect
+    #  lead's email, thus, its took few minutes for huge projects.
+    test "cc by component is found" do
+      skip "Disabled due to performance issue with Jira API"
+      assert_equal ENV["cc_email"],
+                   ComponentCC.new(
+                     ENV["cc_project"],
+                     Jira.new(
+                       {
+                         username: ENV["JIRA_USER"],
+                         password: ENV["JIRA_PASS"],
+                         site: ENV["JIRA_URL"],
+                         context_path: ""
+                       }
+                     )
+                   ).cc(ENV["cc_component"])
+    end
+
+    test "detect plain cc" do
+      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+        home: ".",
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
+      )
+      assert_equal %w[leelakenny@mail.com maciecrane@mail.com],
+                   ORM::Task.find(3).detect_cc(nil)["cc"].cc
+    end
+
+    test "detect complex cc by predefined component" do
+      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+        home: ".",
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
+      )
+      assert_equal %w[tom@fake.com mike@fake.com],
+                   ORM::Task.find(165).detect_cc(nil)["cc"].cc("jvm", "jdbc")
     end
   end
 end

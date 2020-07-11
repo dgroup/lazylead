@@ -61,7 +61,7 @@ module Lazylead
         body_type: "HTML",
         to_recipients: to
       }
-      msg.update(cc_recipients: split("cc", opts)) if opts.key? "cc"
+      msg.update(cc_recipients: opts["cc"]) if opts.key? "cc"
       add_attachments(msg, opts)
       cli.send_message msg
       msg[:file_attachments].each(&:close) unless msg[:file_attachments].empty?

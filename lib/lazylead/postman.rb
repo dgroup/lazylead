@@ -57,7 +57,7 @@ module Lazylead
       mail = Mail.new
       mail.to opts[:to] || opts["to"]
       mail.from opts["from"]
-      mail.cc(detect_cc(opts)) if opts.key? "cc"
+      mail.cc opts["cc"] if opts.key? "cc"
       mail.subject opts["subject"]
       mail.html_part do
         content_type "text/html; charset=UTF-8"
@@ -67,12 +67,6 @@ module Lazylead
       mail.deliver
       @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
                  "Here is the body: #{html}"
-    end
-
-    def detect_cc(opts)
-      cc = opts["cc"]
-      cc = split("cc", opts) if !cc.nil? && cc.include?(",")
-      cc
     end
 
     def add_attachments(mail, opts)

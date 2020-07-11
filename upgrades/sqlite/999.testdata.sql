@@ -38,4 +38,6 @@ values ('echo', '* * * * *', 'false', 1, 1, 1, 'Lazylead::Task::Echo', '{}'),
         '{"cc":"leelakenny@mail.com,maciecrane@mail.com"}'),
        ('task', '* * * * *', 'false', 4, 2, 1, 'Lazylead::Task::Echo', '{}'),
        ('pman', '', '', 5, 2, 1, '', '{"postman":"Lazylead::Postman"}'),
-       ('issue 154', '* * * * *', 'false', 154, 1, 154, 'Lazylead::Task::AssigneeAlert', '{}');
+       ('issue 154', '* * * * *', 'false', 154, 1, 154, 'Lazylead::Task::AssigneeAlert', '{}'),
+       ('task with complex cc', '* * * * *', 'false', 165, 1, 1, 'Lazylead::Task::Echo',
+        '{"cc":{"type":"Lazylead::PredefinedCC","opts": {"jvm":"tom@fake.com","jdbc":"mike@fake.com"}}}');
