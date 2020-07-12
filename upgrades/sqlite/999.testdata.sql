@@ -40,4 +40,5 @@ values ('echo', '* * * * *', 'false', 1, 1, 1, 'Lazylead::Task::Echo', '{}'),
        ('pman', '', '', 5, 2, 1, '', '{"postman":"Lazylead::Postman"}'),
        ('issue 154', '* * * * *', 'false', 154, 1, 154, 'Lazylead::Task::AssigneeAlert', '{}'),
        ('task with complex cc', '* * * * *', 'false', 165, 1, 1, 'Lazylead::Task::Echo',
-        '{"cc":{"type":"Lazylead::PredefinedCC","opts": {"jvm":"tom@fake.com","jdbc":"mike@fake.com"}}}');
+        '{"cc":{"type":"Lazylead::PredefinedCC","opts": {"jvm":"tom@fake.com","jdbc":"mike@fake.com"}}}'),
+       ('issue 171', '* * * * *', 'false', 171, 1, 1, 'Lazylead::Task::Echo', '{"envkey":"${key171}"}');

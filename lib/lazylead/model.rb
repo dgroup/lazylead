@@ -65,7 +65,9 @@ module Lazylead
       opts.each_with_object({}) do |e, o|
         k = e[0]
         v = e[1]
-        v = ENV[v.slice(2, v.length - 3)] if v.start_with? "${"
+        if v.respond_to? :start_with?
+          v = ENV[v.slice(2, v.length - 3)] if v.start_with? "${"
+        end
         o[k] = v
       end
     end
@@ -110,9 +112,9 @@ module Lazylead
         @props ||= begin
                      if team.nil?
                        log.warn("Team for task #{id} isn't defined.")
-                       to_hash
+                       env(to_hash)
                      else
-                       team.to_hash.merge(to_hash)
+                       env(team.to_hash.merge(to_hash))
                      end
                    end
       end

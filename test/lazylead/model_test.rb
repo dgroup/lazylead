@@ -61,5 +61,16 @@ module Lazylead
       )
       assert_kind_of Lazylead::Postman, ORM::Task.find(5).postman
     end
+
+    test "task properties are using ENV variables" do
+      ENV["key171"] = "value"
+      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+        home: ".",
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
+      )
+      assert_equal "value", ORM::Task.find(171).props["envkey"]
+    end
   end
 end
