@@ -64,7 +64,9 @@ module Lazylead
       msg.update(cc_recipients: opts["cc"]) if opts.key? "cc"
       add_attachments(msg, opts)
       cli.send_message msg
-      msg[:file_attachments].each(&:close) unless msg[:file_attachments].empty?
+      unless msg[:file_attachments].nil? || msg[:file_attachments].empty?
+        msg[:file_attachments].each(&:close)
+      end
       @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
                  "Here is the body: #{html}"
     end
