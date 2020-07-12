@@ -71,6 +71,7 @@ Available options:"
     exit
   end
 end
+log.debug("Version: #{Lazylead::VERSION}")
 log.debug("Memory footprint at start is #{Lazylead::Allocated.new}")
 cmd = lambda do
   Lazylead::CLI::App.new(
