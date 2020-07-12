@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <style>
     /* CSS styles taken from https://github.com/yegor256/tacit */
@@ -68,13 +69,13 @@
   them accordingly or actualize the
   <span style="font-weight:bold">"Due date"</span> field for the following
   ticket(s):</p>
-<table>
+<table summary="table with ticket(s) which have expired due dates">
   <tr>
-    <th>Key</th>
-    <th>Due date</th>
-    <th>Priority</th>
-    <th>Reporter</th>
-    <th>Summary</th>
+    <th id="key">Key</th>
+    <th id="duedate">Due date</th>
+    <th id="priority">Priority</th>
+    <th id="reporter">Reporter</th>
+    <th id="summary">Summary</th>
   </tr>
   <% tickets.each do |ticket| %>
     <tr>

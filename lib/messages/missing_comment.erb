@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <style>    /* CSS styles taken from https://github.com/yegor256/tacit */
   th {
@@ -95,15 +96,15 @@
 <p>Hi <%= addressee %>,</p>
 
 <p>The following ticket(s) has missing <%= details %>:</p>
-<table>
+<table summary="ticket(s) without expected comment">
   <tr>
-    <th>Key</th>
-    <th>Due date</th>
-    <th>Priority</th>
-    <th>Assignee</th>
-    <th>Reporter</th>
-    <th>Summary</th>
-    <th>Last comments</th>
+    <th id="key">Key</th>
+    <th id="duedate">Due date</th>
+    <th id="priority">Priority</th>
+    <th id="assignee">Assignee</th>
+    <th id="reporter">Reporter</th>
+    <th id="summary">Summary</th>
+    <th id="comments">Last comments</th>
   </tr>
   <% comments.each do |comment| %>
     <tr>

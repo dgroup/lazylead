@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <style>
     /* CSS styles taken from https://github.com/yegor256/tacit */
@@ -87,14 +88,14 @@
 
 <p>The <span style='font-weight:bold'>'Fix Version'</span> for the following
   ticket(s) changed by not authorized person(s):</p>
-<table>
+<table summary="ticket(s) where fix version changed">
   <tr>
-    <th>Key</th>
-    <th>Priority</th>
-    <th>When</th>
-    <th>Who</th>
-    <th>Reporter</th>
-    <th>Summary</th>
+    <th id="key">Key</th>
+    <th id="priority">Priority</th>
+    <th id="when">When</th>
+    <th id="who">Who</th>
+    <th id="reporter">Reporter</th>
+    <th id="summary">Summary</th>
   </tr>
   <% versions.each do |v| %>
     <tr>
