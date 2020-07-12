@@ -79,8 +79,7 @@ module Lazylead
       assert_words %w[The following fields were propagated from PRJ-1:
                       ||Field||Value||
                       |customfield_101|Tomorrow|
-                      |customfield_102|Yesterday|
-                      Posted by [lazylead v0.0.0|https://bit.ly/2NjdndS]],
+                      |customfield_102|Yesterday|],
                    child.comment
     end
   end
