@@ -34,7 +34,7 @@ module Lazylead
       @issues = issues
     end
 
-    def issues(_, _)
+    def issues(*)
       @issues
     end
   end

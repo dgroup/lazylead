@@ -119,7 +119,7 @@ module Lazylead
                                    .first.cc
     end
 
-    test "reporter got alert about his/her tickets with expired due dates" do
+    test "reporter got alert about his/her tickets with expired DD" do
       Smtp.new.enable
       Task::ReporterAlert.new.run(
         NoAuthJira.new("https://jira.spring.io"),
