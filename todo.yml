@@ -1,6 +1,0 @@
-# @todo #/DEV Enable Travis CI as second CI server once the project
-#  became a public. This might be alternative for Circle CI (just in case)
-
-# @todo #/DEV Add Github integration for lazylead with the same methods as in Jira.
-
-# @todo #/DEV Add Trello integration for lazylead with the same methods as in Jira.
