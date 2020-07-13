@@ -21,6 +21,7 @@ jobs:
           command: |
             set -e
             COMMIT_URL="https://github.com/dgroup/lazylead/commit/${CIRCLE_SHA1}"
+            sed -i "s/0\.0\.0/${DOCKER_RELEASE_TAGS}/g" lib/lazylead/version.rb
             docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${COMMIT_URL}" --build-arg version="${DOCKER_RELEASE_TAGS:7}" \
               -t dgroup/lazylead:$CIRCLE_BRANCH . \
               -f .docker/Dockerfile
@@ -40,6 +41,7 @@ jobs:
           name: "Build & push LL VCS image"
           command: |
             sed -i "s/0\.0\.0/${DOCKER_RELEASE_TAGS}/g" .docker/vcs.dockerfile
+            sed -i "s/0\.0\.0/${DOCKER_RELEASE_TAGS}/g" lib/lazylead/version.rb
             docker build -t dgroup/lazylead:${DOCKER_RELEASE_TAGS}-vcs . -f .docker/vcs.dockerfile
             docker push dgroup/lazylead:${DOCKER_RELEASE_TAGS}-vcs
       - run:
