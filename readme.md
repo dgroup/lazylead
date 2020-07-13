@@ -19,7 +19,7 @@
 [![DevOps By Rultor.com](http://www.rultor.com/b/dgroup/lazylead)](http://www.rultor.com/p/dgroup/lazylead)
 [![EO badge](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org/#principles)
 
-⚠️ We're still in a very early alpha version, the API may change frequently until we release version 1.0.
+⚠️ We're still in a very early alpha version, the API may change frequently until we release version `1.0`.
 
 ### Overview
 Ticketing systems (Github, Jira, etc.) are strongly integrated into our processes and everyone understands their necessity. As soon as a developer becomes a lead/technical manager, he or she faces a set of routine tasks that are related to ticketing work. On large projects this becomes a problem, more and more you spend time running around on dashboards and tickets, looking for incorrect deviations in tickets and performing routine tasks instead of solving technical problems.
@@ -61,7 +61,7 @@ Join our telegram group [lazylead.org](https://t.me/lazyleads) for discussions.
 New ideas, bugs, suggestions or questions are welcome [via GitHub issues](https://github.com/dgroup/lazylead/issues/new)!
 
 ### Get started
-⚠️ We're still in a very early alpha version, the API may change frequently until we release version 1.0.
+⚠️ We're still in a very early alpha version, the API may change frequently until we release version `1.0`.
 
 Let's assume that:
 - your team is using jira as a ticketing system
