@@ -38,8 +38,8 @@ module Lazylead
     #
     def detect(emails, sys)
       return PlainCC.new(emails) if plain?(emails)
-      return EmptyCC unless emails.key? "type"
-      return EmptyCC if emails["type"].blank? || emails["type"].nil?
+      return EmptyCC.new unless emails.key? "type"
+      return EmptyCC.new if emails["type"].blank? || emails["type"].nil?
       type = emails["type"].constantize
       return ComponentCC.new(emails["project"], sys) if type.is_a? ComponentCC
       type.new(emails["opts"])
