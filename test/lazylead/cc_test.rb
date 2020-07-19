@@ -29,6 +29,26 @@ require_relative "../../lib/lazylead/cc"
 require_relative "../../lib/lazylead/system/jira"
 
 module Lazylead
+  class CcTest < Lazylead::Test
+    test "plain cc detected as text" do
+      assert Lazylead::CC.new.plain? "a@fake.com,b@fake.com"
+    end
+    test "plain cc not found in text" do
+      refute Lazylead::CC.new.plain? "justatext.com,eeeee.com"
+    end
+    test "plain cc detected as object" do
+      assert Lazylead::CC.new.recognized? Lazylead::PlainCC.new("a@fake.com")
+    end
+    test "cc is incorrect" do
+      refute Lazylead::CC.new.recognized? key: "value"
+    end
+    test "cc is not found in hash" do
+      assert Lazylead::CC.new.undefined? key: "value"
+    end
+    test "cc type is blank" do
+      assert Lazylead::CC.new.undefined? "type" => "    "
+    end
+  end
   class PlainCcTest < Lazylead::Test
     test "cc has valid email" do
       assert_equal "a@fake.com", Lazylead::PlainCC.new("a@fake.com").cc.first

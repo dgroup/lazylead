@@ -37,20 +37,26 @@ module Lazylead
     #  - Empty
     #
     def detect(emails, sys)
+      return emails if recognized?(emails)
       return PlainCC.new(emails) if plain?(emails)
-      return EmptyCC.new unless emails.key? "type"
-      return EmptyCC.new if emails["type"].blank? || emails["type"].nil?
+      return EmptyCC.new if undefined?(emails)
       type = emails["type"].constantize
       return ComponentCC.new(emails["project"], sys) if type.is_a? ComponentCC
       type.new(emails["opts"])
     end
 
-    private
-
     # Detect that raw CC is a string which may has plain email addresses
     def plain?(text)
-      (text.is_a? String) &&
-        (text.to_s.include?(",") || text.to_s.include?("@"))
+      (text.is_a? String) && text.to_s.include?("@")
+    end
+
+    def recognized?(emails)
+      [EmptyCC, PlainCC, ComponentCC, PredefinedCC].member? emails.class
+    end
+
+    def undefined?(emails)
+      return true unless emails.key? "type"
+      emails["type"].nil? || emails["type"].blank?
     end
   end
 

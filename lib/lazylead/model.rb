@@ -91,6 +91,10 @@ module Lazylead
       belongs_to :team, foreign_key: "team_id"
       belongs_to :system, foreign_key: "system"
 
+      # @todo #/DEV Add error handling for StandartError with support of
+      #  verbose key from ARGV like in /bin/lazylead. That will make error
+      #  messages more human readable. Maybe there is some integration between
+      #  Slop and ARGV in order to avoid logic duplication.
       def exec(log = Log::NOTHING)
         log.debug("Task ##{id} '#{name}' is started")
         sys = system.connect(log)
