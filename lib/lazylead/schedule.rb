@@ -22,7 +22,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "json"
+require "active_support"
 require "rufus-scheduler"
 require_relative "log"
 require_relative "model"
@@ -51,7 +51,9 @@ module Lazylead
     def register(task)
       raise "ll-002: task can't be a null" if task.nil?
       @trigger.cron task.cron do
-        task.exec @log
+        ActiveRecord::Base.connection_pool.with_connection do
+          task.exec @log
+        end
       end
       @log.debug "Task scheduled: #{task}"
     end

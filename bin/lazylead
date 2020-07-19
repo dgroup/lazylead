@@ -60,6 +60,9 @@ Available options:"
   o.string "--vcs4sql",
            "Home directory with database version control(vcs) scripts",
            default: "upgrades/sqlite"
+  o.integer "--max-connections",
+            "SQL connections pool size",
+            default: 5
   o.bool "--testdata",
          "Apply the database VCS migration with test data",
          default: false

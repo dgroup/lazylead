@@ -48,7 +48,7 @@ module Lazylead
 
       def run(opts)
         apply_vcs_migration opts
-        enable_active_record
+        enable_active_record opts
         @smtp.enable
         schedule_tasks
       end
@@ -63,10 +63,11 @@ module Lazylead
         @log.debug "Migration applied to #{@db} from #{vcs}"
       end
 
-      def enable_active_record
+      def enable_active_record(opts)
         ActiveRecord::Base.establish_connection(
           adapter: "sqlite3",
-          database: @db
+          database: @db,
+          pool: opts[:max_connections]
         )
         @log.debug "Database connection established"
       end
