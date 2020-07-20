@@ -22,8 +22,10 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "active_record"
+require "backtrace"
 require "require_all"
+require "forwardable"
+require "active_record"
 require_rel "task"
 require_rel "system"
 require_relative "cc"
@@ -91,18 +93,11 @@ module Lazylead
       belongs_to :team, foreign_key: "team_id"
       belongs_to :system, foreign_key: "system"
 
-      # @todo #/DEV Add error handling for StandartError with support of
-      #  verbose key from ARGV like in /bin/lazylead. That will make error
-      #  messages more human readable. Maybe there is some integration between
-      #  Slop and ARGV in order to avoid logic duplication.
       def exec(log = Log::NOTHING)
-        log.debug("Task ##{id} '#{name}' is started")
         sys = system.connect(log)
-        pman = postman(log)
-        opts = props(log)
+        opts = props
         opts = detect_cc(sys) if opts.key? "cc"
-        action.constantize.new(log).run(sys, pman, opts)
-        log.debug("Task ##{id} '#{name}' is completed")
+        action.constantize.new(log).run(sys, postman(log), opts)
       end
 
       def detect_cc(sys)
@@ -112,10 +107,9 @@ module Lazylead
         opts
       end
 
-      def props(log = Log::NOTHING)
+      def props
         @props ||= begin
                      if team.nil?
-                       log.warn("Team for task #{id} isn't defined.")
                        env(to_hash)
                      else
                        env(team.to_hash.merge(to_hash))
@@ -127,9 +121,38 @@ module Lazylead
         if props.key? "postman"
           props["postman"].constantize.new(log)
         else
-          log.warn "No postman details provided, an local stub is used."
           Postman.new
         end
+      end
+    end
+
+    # A task with extended logging
+    # @see Lazylead::ORM::Task
+    class VerboseTask
+      extend Forwardable
+      def_delegators :@orig, :id, :name, :team, :to_s, :inspect, :props
+
+      def initialize(orig, log = Log::NOTHING)
+        @orig = orig
+        @log = log
+      end
+
+      def exec
+        @log.debug "Task ##{id} '#{name}' is started."
+        @log.warn "Task ##{id} without postman, stub is used." unless postman?
+        @log.warn "Task ##{id} without team." if team.nil?
+        @orig.exec @log
+        @log.debug("Task ##{id} '#{name}' is completed")
+      rescue StandardError => e
+        msg = <<~MSG
+          ll-006: Task ##{id} #{e} (#{e.class}) at #{self}
+          #{Backtrace.new(e) if ARGV.include? '--trace'}"
+        MSG
+        @log.error msg
+      end
+
+      def postman?
+        props.key? "postman"
       end
     end
 

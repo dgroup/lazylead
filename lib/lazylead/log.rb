@@ -32,6 +32,10 @@ module Lazylead
   #  VERBOSE - all logging levels including debug
   #  ERRORS - for errors only which are critical for app.
   #
+  # @todo #/DEV Avoid logging level hard-code by using a new class like Log
+  #  which will take the necessary configuration of logging level from ARGV
+  #  and will allow to avoid injection of app loggers everywhere. All necessary
+  #  methods might be delegated using gem 'forwardable'.
   module Log
     # Coloring configuration for appender(s).
     Logging.color_scheme("bright",

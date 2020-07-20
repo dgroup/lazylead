@@ -30,6 +30,10 @@ module Lazylead
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
     class Echo
+      def initialize(log = Log::NOTHING)
+        @log = log
+      end
+
       def run(_, _, _)
         self.class.to_s
       end
