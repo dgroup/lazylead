@@ -48,7 +48,11 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        postman.send opts.merge(tickets: sys.issues(opts["sql"]))
+        tickets = sys.issues(
+          opts["sql"],
+          max_results: opts.fetch("max_results", 50)
+        )
+        postman.send opts.merge(tickets: tickets)
       end
     end
 
@@ -69,7 +73,7 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        sys.issues(opts["sql"])
+        sys.issues(opts["sql"], max_results: opts.fetch("max_results", 50))
            .group_by(&:assignee)
            .each do |a, t|
           postman.send opts.merge(to: a.email, addressee: a.name, tickets: t)
@@ -94,7 +98,7 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        sys.issues(opts["sql"])
+        sys.issues(opts["sql"], max_results: opts.fetch("max_results", 50))
            .group_by(&:reporter)
            .each do |a, t|
           postman.send opts.merge(to: a.email, addressee: a.name, tickets: t)

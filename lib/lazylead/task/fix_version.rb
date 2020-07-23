@@ -37,10 +37,14 @@ module Lazylead
 
       def run(sys, postman, opts)
         allowed = opts["allowed"].split(",").map(&:strip).reject(&:blank?)
+        issues = sys.issues(
+          opts["jql"],
+          expand: "changelog",
+          max_results: opts.fetch("max_results", 50)
+        )
         postman.send opts.merge(
-          versions: sys.issues(opts["jql"], expand: "changelog")
-                       .map { |i| Version.new(i, allowed) }
-                       .select(&:changed?)
+          versions: issues.map { |i| Version.new(i, allowed) }
+                          .select(&:changed?)
         )
       end
     end

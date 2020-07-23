@@ -42,10 +42,13 @@ module Lazylead
 
       def run(sys, postman, opts)
         opts["details"] = "text '#{opts['text']}'" if opts["details"].blank?
+        issues = sys.issues(
+          opts["jql"],
+          max_results: opts.fetch("max_results", 50)
+        )
         postman.send opts.merge(
-          comments: sys.issues(opts["jql"])
-                       .map { |i| Comments.new(i, sys) }
-                       .reject { |c| c.body? opts["text"] }
+          comments: issues.map { |i| Comments.new(i, sys) }
+                          .reject { |c| c.body? opts["text"] }
         )
       end
     end
