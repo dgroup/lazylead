@@ -129,7 +129,7 @@ module Lazylead
     end
 
     test "detect plain cc" do
-      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+      CLI::App.new(Log.new, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
@@ -140,7 +140,7 @@ module Lazylead
     end
 
     test "detect complex cc by predefined component" do
-      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+      CLI::App.new(Log.new, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",

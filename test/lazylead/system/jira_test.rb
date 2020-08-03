@@ -40,7 +40,7 @@ module Lazylead
 
     test "found issue by jira (ORM)" do
       skip "No Jira credentials provided" unless env? "jsi_usr", "jsi_psw"
-      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+      CLI::App.new(Log.new, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",

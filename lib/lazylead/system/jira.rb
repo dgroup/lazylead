@@ -35,7 +35,7 @@ module Lazylead
     # @todo #57/DEV The debug method should be moved outside of ctor.
     #  This was moved here from 'client' method because Rubocop failed the build
     #  due to 'Metrics/AbcSize' violation.
-    def initialize(opts, salt = NoSalt.new, log = Log::NOTHING)
+    def initialize(opts, salt = NoSalt.new, log = Log.new)
       @opts = opts
       @salt = salt
       @log = log
@@ -247,7 +247,7 @@ module Lazylead
   # Jira instance without authentication in order to access public filters
   #  or dashboards.
   class NoAuthJira
-    def initialize(url, path = "", log = Log::NOTHING)
+    def initialize(url, path = "", log = Log.new)
       @jira = Jira.new(
         { username: nil, password: nil, site: url, context_path: path },
         NoSalt.new,

@@ -35,7 +35,7 @@ module Lazylead
     # @todo #/DEV Support sub-task for link search. Potentially, the issue
     #  might have sub-tasks where discussion ongoing.
     class ConfluenceRef
-      def initialize(log = Log::NOTHING)
+      def initialize(log = Log.new)
         @log = log
       end
 

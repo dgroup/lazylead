@@ -36,7 +36,7 @@ module Lazylead
     #  nobody mentioned in comment the ftp location for recorded session.
     # Such cases needs to be reported.
     class MissingComment
-      def initialize(log = Log::NOTHING)
+      def initialize(log = Log.new)
         @log = log
       end
 

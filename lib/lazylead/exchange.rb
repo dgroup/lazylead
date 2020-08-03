@@ -42,7 +42,7 @@ module Lazylead
     include Emailing
 
     def initialize(
-      log = Log::NOTHING, salt = Salt.new("exchange_salt"), opts = ENV.to_h
+      log = Log.new, salt = Salt.new("exchange_salt"), opts = ENV.to_h
     )
       @log = log
       @salt = salt

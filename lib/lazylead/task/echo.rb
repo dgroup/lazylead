@@ -30,7 +30,7 @@ module Lazylead
     # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
     # License:: MIT
     class Echo
-      def initialize(log = Log::NOTHING)
+      def initialize(log = Log.new)
         @log = log
       end
 

@@ -36,7 +36,7 @@ module Lazylead
                                                              "exchange_user",
                                                              "exchange_password",
                                                              "exchange_to"
-      Exchange.new(Log::NOTHING, NoSalt.new).send(
+      Exchange.new(Log.new, NoSalt.new).send(
         to: ENV["exchange_to"],
         tickets: NoAuthJira.new("https://jira.spring.io")
                            .issues("key = DATAJDBC-480"),
@@ -52,7 +52,7 @@ module Lazylead
                                                              "enc_exchange_psw",
                                                              "enc_exchange_to"
       Exchange.new(
-        Log::NOTHING,
+        Log.new,
         Salt.new("exchange_salt"),
         "exchange_url" => ENV["exchange_url"],
         "exchange_user" => ENV["enc_exchange_usr"],
@@ -72,7 +72,7 @@ module Lazylead
                                                              "exchange_password",
                                                              "exchange_to"
       Exchange.new(
-        Log::NOTHING,
+        Log.new,
         Salt.new("exchange_salt"),
         "exchange_url" => ENV["exchange_url"],
         "exchange_user" => ENV["enc_exchange_usr"],

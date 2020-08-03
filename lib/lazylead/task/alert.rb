@@ -43,7 +43,7 @@ module Lazylead
     #  - prepare email based on predefined template (*.erb)
     #  - send the required notifications pre-defined "addressee".
     class Alert
-      def initialize(log = Log::NOTHING)
+      def initialize(log = Log.new)
         @log = log
       end
 
@@ -68,7 +68,7 @@ module Lazylead
     # The email message is sending to the assignee regarding all his/her issues,
     #  not like one email per each issue.
     class AssigneeAlert
-      def initialize(log = Log::NOTHING)
+      def initialize(log = Log.new)
         @log = log
       end
 
@@ -93,7 +93,7 @@ module Lazylead
     # The email message is sending to the assignee regarding all his/her issues,
     #  not like one email per each issue.
     class ReporterAlert
-      def initialize(log = Log::NOTHING)
+      def initialize(log = Log.new)
         @log = log
       end
 

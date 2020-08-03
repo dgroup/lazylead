@@ -23,20 +23,38 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "logging"
+require "forwardable"
 
 module Lazylead
-  # Loggers.
+  # The main application logger
+  class Log
+    extend Forwardable
+    def_delegators :@log, :debug, :info, :warn, :error
+
+    def initialize(log = Lazylead::Loggers::ERRORS)
+      @log = log
+      @log = Lazylead::Loggers::DEBUG if ARGV.include? "--trace"
+    end
+
+    def nothing
+      @log = Lazylead::Loggers::NOTHING
+      self
+    end
+
+    def verbose
+      @log = Lazylead::Loggers::DEBUG
+      self
+    end
+  end
+
+  # Predefined loggers.
   #
   # There are 3 colored loggers so far:
   #  NOTHING - for cases when logging isn't required
   #  VERBOSE - all logging levels including debug
   #  ERRORS - for errors only which are critical for app.
   #
-  # @todo #/DEV Avoid logging level hard-code by using a new class like Log
-  #  which will take the necessary configuration of logging level from ARGV
-  #  and will allow to avoid injection of app loggers everywhere. All necessary
-  #  methods might be delegated using gem 'forwardable'.
-  module Log
+  module Loggers
     # Coloring configuration for appender(s).
     Logging.color_scheme("bright",
                          levels: {
@@ -61,10 +79,10 @@ module Lazylead
     NOTHING.freeze
 
     # All levels including debug
-    VERBOSE = Logging.logger["verbose"]
-    VERBOSE.level = :debug
-    VERBOSE.add_appenders "stdout"
-    VERBOSE.freeze
+    DEBUG = Logging.logger["debug"]
+    DEBUG.level = :debug
+    DEBUG.add_appenders "stdout"
+    DEBUG.freeze
 
     # Alerts
     ERRORS = Logging.logger["errors"]

@@ -46,7 +46,7 @@ module Lazylead
   class Postman
     include Emailing
 
-    def initialize(log = Log::NOTHING)
+    def initialize(log = Log.new)
       @log = log
     end
 

@@ -31,7 +31,7 @@ module Lazylead
     # @todo #/DEV Each task should verify input arguments.
     #  The common API should be provided for each task.
     class FixVersion
-      def initialize(log = Log::NOTHING)
+      def initialize(log = Log.new)
         @log = log
       end
 

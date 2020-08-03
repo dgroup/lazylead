@@ -31,7 +31,7 @@ require_relative "../../lib/lazylead/schedule"
 module Lazylead
   class OrmTest < Lazylead::SqliteTest
     test "convert column to json" do
-      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+      CLI::App.new(Log.new, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
@@ -42,7 +42,7 @@ module Lazylead
 
     test "env properties injected" do
       ENV["usr"] = "Mike"
-      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+      CLI::App.new(Log.new, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
@@ -53,7 +53,7 @@ module Lazylead
     end
 
     test "postman initiated through orm" do
-      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+      CLI::App.new(Log.new, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
@@ -64,7 +64,7 @@ module Lazylead
 
     test "task properties are using ENV variables" do
       ENV["key171"] = "value"
-      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+      CLI::App.new(Log.new, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",

@@ -34,7 +34,7 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Smtp
-    def initialize(log = Log::NOTHING, salt = NoSalt.new, opts = {})
+    def initialize(log = Log.new, salt = NoSalt.new, opts = {})
       @log = log
       @salt = salt
       @opts = opts

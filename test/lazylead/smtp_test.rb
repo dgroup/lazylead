@@ -48,7 +48,7 @@ module Lazylead
     test "email has been sent to the remote server" do
       skip "Not implemented yet" unless env? "LL_SMTP_HOST", "LL_SMTP_USER"
       Smtp.new(
-        Log::NOTHING, NoSalt.new,
+        Log.new, NoSalt.new,
         smtp_host: ENV["LL_SMTP_HOST"],
         smtp_port: ENV["LL_SMTP_PORT"],
         smtp_user: ENV["LL_SMTP_USER"],

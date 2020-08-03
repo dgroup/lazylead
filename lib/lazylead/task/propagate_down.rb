@@ -39,7 +39,7 @@ module Lazylead
     #  - apply diff to sub-tasks
     #  - make a comment to sub-task with clarification.
     class PropagateDown
-      def initialize(log = Log::NOTHING)
+      def initialize(log = Log.new)
         @log = log
       end
 

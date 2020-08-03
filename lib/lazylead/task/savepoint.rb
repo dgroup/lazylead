@@ -34,7 +34,7 @@ module Lazylead
     # Send current configuration to admin user.
     #
     class Savepoint
-      def initialize(log = Log::NOTHING)
+      def initialize(log = Log.new)
         @log = log
       end
 

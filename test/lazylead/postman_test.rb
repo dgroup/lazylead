@@ -38,7 +38,7 @@ module Lazylead
                                                          "LL_SMTP_TO",
                                                          "LL_SMTP_FROM"
       Smtp.new(
-        Log::NOTHING,
+        Log.new,
         NoSalt.new,
         smtp_host: ENV["LL_SMTP_HOST"],
         smtp_port: ENV["LL_SMTP_PORT"],

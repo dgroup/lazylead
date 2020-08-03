@@ -40,7 +40,7 @@ module Lazylead
     #  schedule some task once or at particular time period like in next 200ms).
     #  For cron expressions we should define separate test suite which will test
     #  in parallel without blocking main CI process.
-    def initialize(log = Log::NOTHING, cling = true)
+    def initialize(log = Log.new, cling = true)
       @log = log
       @cling = cling
       @trigger = Rufus::Scheduler.new
@@ -75,7 +75,7 @@ module Lazylead
 
   # Fake application schedule for unit testing purposes
   class NoSchedule
-    def initialize(log = Log::NOTHING)
+    def initialize(log = Log.new)
       @log = log
     end
 

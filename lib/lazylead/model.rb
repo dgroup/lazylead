@@ -93,11 +93,11 @@ module Lazylead
       belongs_to :team, foreign_key: "team_id"
       belongs_to :system, foreign_key: "system"
 
-      def exec(log = Log::NOTHING)
-        sys = system.connect(log)
+      def exec
+        sys = system.connect
         opts = props
         opts = detect_cc(sys) if opts.key? "cc"
-        action.constantize.new(log).run(sys, postman(log), opts)
+        action.constantize.new(log).run(sys, postman, opts)
       end
 
       def detect_cc(sys)
@@ -117,9 +117,9 @@ module Lazylead
                    end
       end
 
-      def postman(log = Log::NOTHING)
+      def postman
         if props.key? "postman"
-          props["postman"].constantize.new(log)
+          props["postman"].constantize.new
         else
           Postman.new
         end
@@ -132,7 +132,7 @@ module Lazylead
       extend Forwardable
       def_delegators :@orig, :id, :name, :team, :to_s, :inspect, :props
 
-      def initialize(orig, log = Log::NOTHING)
+      def initialize(orig, log = Log.new)
         @orig = orig
         @log = log
       end
@@ -160,7 +160,7 @@ module Lazylead
       include ORM
 
       # Make an instance of ticketing system for future interaction.
-      def connect(log = Log::NOTHING)
+      def connect(log = Log.new)
         opts = to_hash
         if opts["type"].empty?
           log.warn "No task system details provided, an empty stub is used."
@@ -168,8 +168,7 @@ module Lazylead
         else
           opts["type"].constantize.new(
             env(opts.except("type", "salt")),
-            opts["salt"].blank? ? NoSalt.new : Salt.new(opts["salt"]),
-            log
+            opts["salt"].blank? ? NoSalt.new : Salt.new(opts["salt"])
           )
         end
       end

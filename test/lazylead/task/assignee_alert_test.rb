@@ -35,7 +35,7 @@ require_relative "../../../lib/lazylead/task/alert"
 module Lazylead
   class AssigneeAlertTest < Lazylead::Test
     test "issue #154: undefined method to_hash for nil object" do
-      CLI::App.new(Log::NOTHING, NoSchedule.new).run(
+      CLI::App.new(Log.new, NoSchedule.new).run(
         home: ".",
         sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
         vcs4sql: "upgrades/sqlite",
