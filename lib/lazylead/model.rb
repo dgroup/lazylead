@@ -138,21 +138,20 @@ module Lazylead
       end
 
       def exec
-        @log.debug "Task ##{id} '#{name}' is started."
-        @log.warn "Task ##{id} without postman, stub is used." unless postman?
-        @log.warn "Task ##{id} without team." if team.nil?
+        Logging.mdc["tid"] = "task #{id}"
+        @log.debug "'#{name}' is started."
+        @log.warn "No postman, stub is used." unless props.key? "postman"
+        @log.warn "No team." if team.nil?
         @orig.exec @log
-        @log.debug("Task ##{id} '#{name}' is completed")
+        @log.debug "'#{name}' is completed"
       rescue StandardError => e
         msg = <<~MSG
           ll-006: Task ##{id} #{e} (#{e.class}) at #{self}
           #{Backtrace.new(e) if ARGV.include? '--trace'}"
         MSG
         @log.error msg
-      end
-
-      def postman?
-        props.key? "postman"
+      ensure
+        Logging.mdc["tid"] = ""
       end
     end
 

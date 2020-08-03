@@ -50,7 +50,7 @@ module Lazylead
     Logging.appenders.stdout(
       "stdout",
       layout: Logging.layouts.pattern(
-        pattern: "[%d] %-5l %m\n",
+        pattern: "[%d] %-5l [%X{tid}] %m\n",
         color_scheme: "bright"
       )
     )
