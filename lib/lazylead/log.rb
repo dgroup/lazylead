@@ -31,30 +31,30 @@ module Lazylead
     extend Forwardable
     def_delegators :@log, :debug, :info, :warn, :error
 
-    def initialize(log = Lazylead::Loggers::ERRORS)
+    def initialize(log = Lazylead::Level::ERRORS)
       @log = log
-      @log = Lazylead::Loggers::DEBUG if ARGV.include? "--trace"
+      @log = Lazylead::Level::DEBUG if ARGV.include? "--trace"
     end
 
     def nothing
-      @log = Lazylead::Loggers::NOTHING
+      @log = Lazylead::Level::NOTHING
       self
     end
 
     def verbose
-      @log = Lazylead::Loggers::DEBUG
+      @log = Lazylead::Level::DEBUG
       self
     end
   end
 
-  # Predefined loggers.
+  # Predefined logging levels.
   #
   # There are 3 colored loggers so far:
   #  NOTHING - for cases when logging isn't required
   #  VERBOSE - all logging levels including debug
   #  ERRORS - for errors only which are critical for app.
   #
-  module Loggers
+  module Level
     # Coloring configuration for appender(s).
     Logging.color_scheme("bright",
                          levels: {
@@ -84,7 +84,7 @@ module Lazylead
     DEBUG.add_appenders "stdout"
     DEBUG.freeze
 
-    # Alerts
+    # Alerts/errors
     ERRORS = Logging.logger["errors"]
     ERRORS.level = :error
     ERRORS.add_appenders "stdout"

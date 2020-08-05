@@ -1,0 +1,146 @@
+<html>
+<head>
+  <style>
+    /* CSS styles taken from https://github.com/yegor256/tacit */
+    th {
+      font-weight: 600;
+      text-align: left;
+    }
+
+    td {
+      vertical-align: top;
+    }
+
+    table tr {
+      border-bottom-width: 2.16px
+    }
+
+    table tr th {
+      border-bottom-width: 2.16px
+    }
+
+    table tr td, table tr th {
+      overflow: hidden; /*padding: 5.4px 3.6px*/
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+
+    td:nth-child(3), td:nth-child(3) {
+      min-width: 120px;
+      max-width: 200px;
+    }
+
+    td:nth-child(4), td:nth-child(4) {
+      min-width: 300px;
+      max-width: 500px;
+    }
+
+    pre, code, kbd, samp, var, output {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 14.4px
+    }
+
+    pre code {
+      background: none;
+      border: 0;
+      line-height: 29.7px;
+      padding: 0
+    }
+
+    code, kbd {
+      background: #daf1e0;
+      border-radius: 3.6px;
+      color: #2a6f3b;
+      display: inline-block;
+      line-height: 18px;
+      padding: 3.6px 6.3px 2.7px
+    }
+
+    a {
+      color: #275a90;
+      text-decoration: none
+    }
+
+    a:hover {
+      text-decoration: underline
+    }
+
+    * {
+      border: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      box-sizing: border-box;
+      margin: 0;
+      max-width: 100%;
+      padding: 0;
+      vertical-align: baseline;
+      font-family: system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-stretch: normal;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 29.7px
+    }
+
+    html, body {
+      width: 100%
+    }
+
+    html {
+      height: 100%
+    }
+
+    body {
+      background: #fff;
+      color: #1a1919;
+      padding: 36px
+    }
+
+    .msg {
+      background: #eff6e8;
+      border-radius: 3.6px;
+      color: #2a6f3b;
+      display: inline-block;
+      line-height: 18px;
+      padding: 3.6px 6.3px 2.7px
+    }
+  </style>
+  <title>RCA</title>
+</head>
+<body>
+<p>Hi,</p>
+<p>The critical file(s) <code><%= files %></code> have been changed recently:</p>
+<table>
+  <tr>
+    <th>Revision</th>
+    <th>Author</th>
+    <th>When</th>
+    <th>File(s)</th>
+    <th>Commit</th>
+  </tr>
+  <% entries.each do |e| %>
+    <tr>
+      <td><a href="<%= commit_url %><%= e.revision %>"><%= e.revision %></a></td>
+      <td><a href="<%= user %><%= e.author %>"><%= e.author %></a></td>
+      <td><%= Time.strptime(e.date, "%Y-%m-%dT%H:%M").strftime("%Y-%m-%d %H:%M") %></td>
+      <td>
+        <% if e.paths.path.respond_to? :join %>
+          <%= e.paths
+               .path
+               .map { |file| "<a href='#{commit_url}#{e.revision}'>#{file}</a>" }
+               .join("<br/>") %>
+        <% else %>
+          <a href="<%= commit_url %><%= e.revision %>"><%= e.paths.path %></a>
+        <% end %>
+      </td>
+      <td>
+        <div class="msg"><%= e.msg %></div>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<p>Posted by
+  <a href="https://github.com/dgroup/lazylead">lazylead v<%= version %></a>.
+</p>
+</body>
+</html>
