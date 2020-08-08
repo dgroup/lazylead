@@ -42,7 +42,13 @@ module Lazylead
       def run(sys, _, opts)
         confluences = confluences(opts)
         return if confluences.empty?
-        sys.issues(opts["jql"], max_results: opts.fetch("max_results", 50))
+        sys.issues(
+          opts["jql"],
+          {
+            max_results: opts.fetch("max_results", 50),
+            fields: opts.fetch("fields", "").split(",").map(&:to_sym)
+          }
+        )
            .map { |i| Link.new(i, sys, confluences) }
            .each(&:fetch_links)
            .select(&:need_link?)

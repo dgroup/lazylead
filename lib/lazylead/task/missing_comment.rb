@@ -44,8 +44,12 @@ module Lazylead
         opts["details"] = "text '#{opts['text']}'" if opts["details"].blank?
         issues = sys.issues(
           opts["jql"],
-          max_results: opts.fetch("max_results", 50)
+          {
+            max_results: opts.fetch("max_results", 50),
+            fields: opts.fetch("fields", "").split(",").map(&:to_sym)
+          }
         )
+        return if issues.empty?
         postman.send opts.merge(
           comments: issues.map { |i| Comments.new(i, sys) }
                           .reject { |c| c.body? opts["text"] }

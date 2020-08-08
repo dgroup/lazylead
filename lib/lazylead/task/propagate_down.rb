@@ -47,7 +47,16 @@ module Lazylead
       #  split, groupBy(assignee, reporter, etc), blank?
       def run(sys, _, opts)
         fields = opts["fields"].split(",").map(&:strip).reject(&:blank?)
-        sys.issues(opts["jql"], fields: ["subtasks"] + fields)
+        sys.issues(
+          opts["jql"],
+          {
+            expand: "changelog",
+            max_results: opts.fetch("max_results", 50),
+            fields: ["subtasks"] + opts.fetch("fields", "")
+                                       .split(",")
+                                       .map(&:to_sym)
+          }
+        )
            .map { |i| Parent.new(i, sys, fields) }
            .select(&:subtasks?)
            .each(&:fetch)

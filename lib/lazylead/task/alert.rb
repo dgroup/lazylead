@@ -50,9 +50,12 @@ module Lazylead
       def run(sys, postman, opts)
         tickets = sys.issues(
           opts["sql"],
-          max_results: opts.fetch("max_results", 50)
+          {
+            max_results: opts.fetch("max_results", 50),
+            fields: opts.fetch("fields", "").split(",").map(&:to_sym)
+          }
         )
-        postman.send opts.merge(tickets: tickets)
+        postman.send opts.merge(tickets: tickets) unless tickets.empty?
       end
     end
 
@@ -73,8 +76,13 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        sys.issues(opts["sql"], max_results: opts.fetch("max_results", 50))
-           .group_by(&:assignee)
+        sys.issues(
+          opts["sql"],
+          {
+            max_results: opts.fetch("max_results", 50),
+            fields: opts.fetch("fields", "").split(",").map(&:to_sym)
+          }
+        ).group_by(&:assignee)
            .each do |a, t|
           postman.send opts.merge(to: a.email, addressee: a.name, tickets: t)
         end
@@ -98,8 +106,13 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        sys.issues(opts["sql"], max_results: opts.fetch("max_results", 50))
-           .group_by(&:reporter)
+        sys.issues(
+          opts["sql"],
+          {
+            max_results: opts.fetch("max_results", 50),
+            fields: opts.fetch("fields", "").split(",").map(&:to_sym)
+          }
+        ).group_by(&:reporter)
            .each do |a, t|
           postman.send opts.merge(to: a.email, addressee: a.name, tickets: t)
         end
