@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "jira-ruby"
+require "forwardable"
 require_relative "../salt"
 
 module Lazylead
@@ -247,23 +248,20 @@ module Lazylead
   # Jira instance without authentication in order to access public filters
   #  or dashboards.
   class NoAuthJira
+    extend Forwardable
+    def_delegators :@jira, :issues, :raw
+
     def initialize(url, path = "", log = Log.new)
       @jira = Jira.new(
-        { username: nil, password: nil, site: url, context_path: path },
+        {
+          username: nil,
+          password: nil,
+          site: url,
+          context_path: path
+        },
         NoSalt.new,
         log
       )
-    end
-
-    def issues(jql, opts = {})
-      @jira.issues(jql, opts)
-    end
-
-    # Execute request to the ticketing system using raw client.
-    # For Jira the raw client is 'jira-ruby' gem.
-    def raw(&block)
-      raise "ll-07: No block given to method" unless block_given?
-      @jira.raw(&block)
     end
   end
 

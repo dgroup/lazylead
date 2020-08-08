@@ -26,6 +26,7 @@ require "mail"
 
 require_relative "../../test"
 require_relative "../../../lib/lazylead/smtp"
+require_relative "../../../lib/lazylead/opts"
 require_relative "../../../lib/lazylead/postman"
 require_relative "../../../lib/lazylead/task/fix_version"
 
@@ -36,12 +37,14 @@ module Lazylead
       Task::FixVersion.new.run(
         NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
-        "to" => "lead@company.com",
-        "from" => "ll@company.com",
-        "jql" => "key in ('DATAJDBC-480') and fixVersion is not empty",
-        "allowed" => "tom,mike,bob",
-        "subject" => "FixVersion: How dare you?",
-        "template" => "lib/messages/illegal_fixversion_change.erb"
+        Opts.new(
+          "to" => "lead@company.com",
+          "from" => "ll@company.com",
+          "jql" => "key in ('DATAJDBC-480') and fixVersion is not empty",
+          "allowed" => "tom,mike,bob",
+          "subject" => "FixVersion: How dare you?",
+          "template" => "lib/messages/illegal_fixversion_change.erb"
+        )
       )
       assert_email "FixVersion: How dare you?",
                    %w[DATAJDBC-480 01-Apr-2020 Minor Mark\ Paluch tom,mike,bob EntityInstantiators]

@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../log"
+require_relative "../opts"
 require_relative "../version"
 require_relative "../system/jira"
 
@@ -46,15 +47,13 @@ module Lazylead
       # @todo #/DEV Define a new module Lazylead::Task with basic methods like
       #  split, groupBy(assignee, reporter, etc), blank?
       def run(sys, _, opts)
-        fields = opts["fields"].split(",").map(&:strip).reject(&:blank?)
+        fields = opts.slice("propagate", ",")
         sys.issues(
           opts["jql"],
           {
             expand: "changelog",
             max_results: opts.fetch("max_results", 50),
-            fields: ["subtasks"] + opts.fetch("fields", "")
-                                       .split(",")
-                                       .map(&:to_sym)
+            fields: ["subtasks"] + opts.jira_fields
           }
         )
            .map { |i| Parent.new(i, sys, fields) }

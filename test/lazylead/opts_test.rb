@@ -22,34 +22,45 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../log"
-require_relative "../opts"
-require_relative "../postman"
+require_relative "../test"
+require_relative "../../lib/lazylead/opts"
 
 module Lazylead
-  module Task
-    # A task which fetch issues by particular ticketing system query language
-    #  and find issues where comments has no expected text.
-    #
-    # Example:
-    #  you have a sub-task for demo session for your story;
-    #  demo session is recorded, placed to ftp;
-    #  nobody mentioned in comment the ftp location for recorded session.
-    # Such cases needs to be reported.
-    class MissingComment
-      def initialize(log = Log.new)
-        @log = log
-      end
+  class OptsTest < Lazylead::Test
+    test "able to read by symbol" do
+      assert_equal "1", Opts.new(one: "1", two: "2")[:one]
+    end
 
-      def run(sys, postman, opts)
-        opts["details"] = "text '#{opts['text']}'" if opts.blank? "details"
-        issues = sys.issues(opts["jql"], opts.jira_defaults)
-        return if issues.empty?
-        postman.send opts.merge(
-          comments: issues.map { |i| Comments.new(i, sys) }
-                          .reject { |c| c.body? opts["text"] }
-        )
-      end
+    test "able to read by key" do
+      assert_equal "1", Opts.new("one" => "1", two: "2")["one"]
+    end
+
+    test "able to write by key" do
+      opts = Opts.new
+      opts["key"] = "value"
+      assert_equal "value", opts["key"]
+    end
+
+    test "has jira defaults" do
+      assert_entries(
+        {
+          max_results: 50
+        },
+        Opts.new.jira_defaults
+      )
+    end
+
+    test "split and trim" do
+      assert_equal %w[one two three],
+                   Opts.new("text" => " one,two ,three, ").slice("text", ",")
+    end
+
+    test "blank for null value cases" do
+      assert Opts.new("one" => "1", "two" => nil).blank? "two"
+    end
+
+    test "to hash" do
+      assert_kind_of Hash, Opts.new("one" => "1", "two" => nil).to_h
     end
   end
 end

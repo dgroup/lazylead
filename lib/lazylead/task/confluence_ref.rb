@@ -26,6 +26,7 @@ require "json"
 require "faraday"
 require_relative "../system/jira"
 require_relative "../log"
+require_relative "../opts"
 require_relative "../confluence"
 
 module Lazylead
@@ -42,13 +43,7 @@ module Lazylead
       def run(sys, _, opts)
         confluences = confluences(opts)
         return if confluences.empty?
-        sys.issues(
-          opts["jql"],
-          {
-            max_results: opts.fetch("max_results", 50),
-            fields: opts.fetch("fields", "").split(",").map(&:to_sym)
-          }
-        )
+        sys.issues(opts["jql"], opts.jira_defaults)
            .map { |i| Link.new(i, sys, confluences) }
            .each(&:fetch_links)
            .select(&:need_link?)
@@ -56,7 +51,7 @@ module Lazylead
       end
 
       def confluences(opts)
-        return [] if opts["confluences"].nil? || opts["confluences"].blank?
+        return [] if opts.blank?["confluences"]
         JSON.parse(opts["confluences"], object_class: OpenStruct)
             .map { |c| Confluence.new(c) }
       end

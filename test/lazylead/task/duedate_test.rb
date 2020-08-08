@@ -41,10 +41,12 @@ module Lazylead
       Task::AssigneeAlert.new.run(
         NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
-        "from" => "fake@email.com",
-        "sql" => "filter=16743",
-        "subject" => "[DD] PDTN!",
-        "template" => "lib/messages/due_date_expired.erb"
+        Opts.new(
+          "from" => "fake@email.com",
+          "sql" => "filter=16743",
+          "subject" => "[DD] PDTN!",
+          "template" => "lib/messages/due_date_expired.erb"
+        )
       )
       assert_equal 2,
                    Mail::TestMailer.deliveries
@@ -75,10 +77,12 @@ module Lazylead
       Task::AssigneeAlert.new.run(
         NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
-        "from" => "fake@email.com",
-        "sql" => "key in ('STS-3599')",
-        "subject" => "[DD] HMCHT!",
-        "template" => "lib/messages/due_date_expired.erb"
+        Opts.new(
+          "from" => "fake@email.com",
+          "sql" => "key in ('STS-3599')",
+          "subject" => "[DD] HMCHT!",
+          "template" => "lib/messages/due_date_expired.erb"
+        )
       )
       assert_email "[DD] HMCHT!",
                    %w[STS-3599 2013-11-08 Major Miles\ Parker Use JavaFX WebView]
@@ -89,12 +93,14 @@ module Lazylead
       Task::Alert.new.run(
         NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
-        "from" => "fake@email.com",
-        "sql" => "key in ('STS-3599')",
-        "subject" => "ALRT: Frozen",
-        "template" => "lib/messages/due_date_expired.erb",
-        "to" => "big.boss@example.com",
-        "addressee" => "Boss"
+        Opts.new(
+          "from" => "fake@email.com",
+          "sql" => "key in ('STS-3599')",
+          "subject" => "ALRT: Frozen",
+          "template" => "lib/messages/due_date_expired.erb",
+          "to" => "big.boss@example.com",
+          "addressee" => "Boss"
+        )
       )
       assert_email "ALRT: Frozen",
                    %w[Hi Boss STS-3599 2013-11-08 Major Miles\ Parker Use JavaFX WebView]
@@ -105,13 +111,15 @@ module Lazylead
       Task::Alert.new.run(
         NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
-        "from" => "fake@email.com",
-        "sql" => "key in ('STS-3599')",
-        "subject" => "CC: Watching",
-        "template" => "lib/messages/due_date_expired.erb",
-        "to" => "big.boss@example.com",
-        "addressee" => "Boss",
-        "cc" => "another.boss@example.com,mom@home.com"
+        Opts.new(
+          "from" => "fake@email.com",
+          "sql" => "key in ('STS-3599')",
+          "subject" => "CC: Watching",
+          "template" => "lib/messages/due_date_expired.erb",
+          "to" => "big.boss@example.com",
+          "addressee" => "Boss",
+          "cc" => "another.boss@example.com,mom@home.com"
+        )
       )
       assert_equal %w[another.boss@example.com mom@home.com],
                    Mail::TestMailer.deliveries
@@ -124,10 +132,12 @@ module Lazylead
       Task::ReporterAlert.new.run(
         NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
-        "from" => "fake@email.com",
-        "sql" => "filter=16743",
-        "subject" => "DD Expired!",
-        "template" => "lib/messages/due_date_expired.erb"
+        Opts.new(
+          "from" => "fake@email.com",
+          "sql" => "filter=16743",
+          "subject" => "DD Expired!",
+          "template" => "lib/messages/due_date_expired.erb"
+        )
       )
       assert_equal 2,
                    Mail::TestMailer.deliveries

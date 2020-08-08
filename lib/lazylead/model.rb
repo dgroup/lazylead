@@ -30,6 +30,7 @@ require_rel "task"
 require_rel "system"
 require_relative "cc"
 require_relative "log"
+require_relative "opts"
 require_relative "postman"
 require_relative "exchange"
 
@@ -110,9 +111,9 @@ module Lazylead
       def props
         @props ||= begin
                      if team.nil?
-                       env(to_hash)
+                       Opts.new(env(to_hash))
                      else
-                       env(team.to_hash.merge(to_hash))
+                       Opts.new(env(team.to_hash.merge(to_hash)))
                      end
                    end
       end

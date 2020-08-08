@@ -66,8 +66,10 @@ module Lazylead
       Task::PropagateDown.new.run(
         Fake.new([parent, child]),
         [],
-        "jql" => "type=Defect and updated>-1h and has subtasks without fields",
-        "fields" => "customfield_101,customfield_102"
+        Opts.new(
+          "jql" => "type=Defect and updated>-1h and subtasks without fields",
+          "propagate" => "customfield_101,customfield_102"
+        )
       )
       assert_entries(
         {

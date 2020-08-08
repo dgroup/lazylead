@@ -22,34 +22,47 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../log"
-require_relative "../opts"
-require_relative "../postman"
+require "forwardable"
 
 module Lazylead
-  module Task
-    # A task which fetch issues by particular ticketing system query language
-    #  and find issues where comments has no expected text.
-    #
-    # Example:
-    #  you have a sub-task for demo session for your story;
-    #  demo session is recorded, placed to ftp;
-    #  nobody mentioned in comment the ftp location for recorded session.
-    # Such cases needs to be reported.
-    class MissingComment
-      def initialize(log = Log.new)
-        @log = log
-      end
+  #
+  # Default options for all lazylead tasks.
+  #
+  # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+  # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+  # License:: MIT
+  class Opts
+    extend Forwardable
+    def_delegators :@origin, :[], :[]=, :to_s, :key?, :fetch, :merge
 
-      def run(sys, postman, opts)
-        opts["details"] = "text '#{opts['text']}'" if opts.blank? "details"
-        issues = sys.issues(opts["jql"], opts.jira_defaults)
-        return if issues.empty?
-        postman.send opts.merge(
-          comments: issues.map { |i| Comments.new(i, sys) }
-                          .reject { |c| c.body? opts["text"] }
-        )
-      end
+    def initialize(origin = {})
+      @origin = origin
+    end
+
+    # Split text value by delimiter, trim all spaces and reject blank items
+    def slice(key, delim)
+      to_h[key].split(delim).map(&:strip).reject(&:blank?)
+    end
+
+    def blank?(key)
+      to_h[key].nil? || @origin[key].blank?
+    end
+
+    def to_h
+      @origin
+    end
+
+    # Default Jira options to use during search for all Jira-based tasks.
+    def jira_defaults
+      {
+        max_results: fetch("max_results", 50),
+        fields: jira_fields
+      }
+    end
+
+    # Default fields which to fetch within the Jira issue
+    def jira_fields
+      to_h.fetch("fields", "").split(",").map(&:to_sym)
     end
   end
 end

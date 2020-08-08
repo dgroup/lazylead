@@ -37,15 +37,17 @@ module Lazylead
       Task::MissingComment.new.run(
         NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
-        "to" => "lead@company.com",
-        "addressee" => "Tom",
-        "from" => "ll@company.com",
-        "jql" => "key=DATAJDBC-523",
-        "text" => "ftp.com/demo.avi",
-        "details" => "reference to <code>ftp.com/demo.avi</code>",
-        "subject" => "Expected ftp link is missing",
-        "template" => "lib/messages/missing_comment.erb",
-        "template_details" => "reference to <a href='file://ftp/path'>ftp</a>"
+        Opts.new(
+          "to" => "lead@company.com",
+          "addressee" => "Tom",
+          "from" => "ll@company.com",
+          "jql" => "key=DATAJDBC-523",
+          "text" => "ftp.com/demo.avi",
+          "details" => "reference to <code>ftp.com/demo.avi</code>",
+          "subject" => "Expected ftp link is missing",
+          "template" => "lib/messages/missing_comment.erb",
+          "template_details" => "reference to <a href='file://ftp/path'>ftp</a>"
+        )
       )
       assert_email "Expected ftp link is missing",
                    %w[DATAJDBC-523 Major Mark\ Paluch https://github.com/spring-projects/spring-data-jdbc/commit/aadbb667ed1d61139d5ac51a06eb3dd1b39316db#diff-510a5041bb8a0575e97fedf105606b83R130]

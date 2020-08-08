@@ -114,5 +114,14 @@ module Lazylead
                              .first
                              .status
     end
+
+    test "issue has 1 field" do
+      assert_equal 1,
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key='DATAJDBC-480'", fields: ["summary"])
+                             .first
+                             .fields
+                             .size
+    end
   end
 end

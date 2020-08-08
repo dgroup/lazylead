@@ -23,8 +23,9 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "date"
-require_relative "../system/jira"
 require_relative "../log"
+require_relative "../opts"
+require_relative "../system/jira"
 
 module Lazylead
   module Task
@@ -36,14 +37,9 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        allowed = opts["allowed"].split(",").map(&:strip).reject(&:blank?)
+        allowed = opts.slice("allowed", ",")
         issues = sys.issues(
-          opts["jql"],
-          {
-            expand: "changelog",
-            max_results: opts.fetch("max_results", 50),
-            fields: opts.fetch("fields", "").split(",").map(&:to_sym)
-          }
+          opts["jql"], opts.jira_defaults.merge(expand: "changelog")
         )
         return if issues.empty?
         postman.send opts.merge(

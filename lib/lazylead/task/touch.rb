@@ -25,6 +25,7 @@
 require "nokogiri"
 require "active_support/core_ext/hash/conversions"
 require_relative "../salt"
+require_relative "../opts"
 
 module Lazylead
   module Task
@@ -37,7 +38,7 @@ module Lazylead
       end
 
       def run(_, postman, opts)
-        files = opts["files"].split(",").map(&:strip)
+        files = opts.slice("files", ",")
         commits = touch(files, opts)
         postman.send(opts.merge(entries: commits)) unless commits.empty?
       end

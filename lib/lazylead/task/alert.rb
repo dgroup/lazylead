@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../log"
+require_relative "../opts"
 require_relative "../email"
 require_relative "../version"
 require_relative "../postman"
@@ -48,13 +49,7 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        tickets = sys.issues(
-          opts["sql"],
-          {
-            max_results: opts.fetch("max_results", 50),
-            fields: opts.fetch("fields", "").split(",").map(&:to_sym)
-          }
-        )
+        tickets = sys.issues(opts["sql"], opts.jira_defaults)
         postman.send opts.merge(tickets: tickets) unless tickets.empty?
       end
     end
@@ -76,13 +71,8 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        sys.issues(
-          opts["sql"],
-          {
-            max_results: opts.fetch("max_results", 50),
-            fields: opts.fetch("fields", "").split(",").map(&:to_sym)
-          }
-        ).group_by(&:assignee)
+        sys.issues(opts["sql"], opts.jira_defaults)
+           .group_by(&:assignee)
            .each do |a, t|
           postman.send opts.merge(to: a.email, addressee: a.name, tickets: t)
         end
@@ -106,13 +96,8 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        sys.issues(
-          opts["sql"],
-          {
-            max_results: opts.fetch("max_results", 50),
-            fields: opts.fetch("fields", "").split(",").map(&:to_sym)
-          }
-        ).group_by(&:reporter)
+        sys.issues(opts["sql"], opts.jira_defaults)
+           .group_by(&:reporter)
            .each do |a, t|
           postman.send opts.merge(to: a.email, addressee: a.name, tickets: t)
         end
