@@ -40,7 +40,7 @@ module Lazylead
                                                      "svn_user",
                                                      "svn_password"
       Lazylead::Smtp.new.enable
-      Task::Touch.new.run(
+      Task::SvnTouch.new.run(
         nil,
         Postman.new,
         "svn_url" => ENV["svn_url"],

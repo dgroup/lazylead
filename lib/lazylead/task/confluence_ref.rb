@@ -51,7 +51,7 @@ module Lazylead
       end
 
       def confluences(opts)
-        return [] if opts.blank?["confluences"]
+        return [] if opts.blank? "confluences"
         JSON.parse(opts["confluences"], object_class: OpenStruct)
             .map { |c| Confluence.new(c) }
       end
