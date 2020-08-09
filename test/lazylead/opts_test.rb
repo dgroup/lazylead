@@ -52,7 +52,7 @@ module Lazylead
 
     test "split and trim" do
       assert_equal %w[one two three],
-                   Opts.new("text" => " one,two ,three, ").slice("text", ",")
+                   Opts.new("text" => " one,two ,three, ,\n").slice("text", ",")
     end
 
     test "blank for null value cases" do
