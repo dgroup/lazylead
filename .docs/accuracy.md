@@ -65,11 +65,11 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     insert into systems(id, properties)    
                values (1,'{"type":"Lazylead::Jira", "username":"${jira_user}", "password":"${jira_password}", "site":"${jira_url}", "context_path":""}');
     insert into tasks (name, cron, enabled, id, system, team_id, action, properties)
-               values ('Propagate customfield_1 (External ID) to sub-tasks', 
+               values ('Post ticket score and accuracy to the tickets', 
                        '0 8 * * 1-5', 
                        'true',
                        1, 1, 1, 
-                       'Lazylead::Task::PropagateDown',
+                       'Lazylead::Task::Accuracy',
                        '{
                             "jql":    "filter=222", 
                             "to":     "lead@fake.com",
@@ -92,6 +92,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
 
 5.  Once task completed, please check your defects, they should have comment like
     ![jira comment](accuracy_jira_comment.jpg)
+
     and you'll get an email like
     ![email](accuracy_email.jpg)
     
