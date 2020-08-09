@@ -77,6 +77,12 @@ Style/HashTransformKeys:
 Style/HashTransformValues:
   Enabled: true
 
+# @todo #/DEV accuracy.rb is using % symbol in text message and rubocop
+#  complains about it. It's false-positive violation, thus, for now ignored for this file
+Style/FormatStringToken:
+  Exclude:
+    - "lib/lazylead/task/accuracy.rb"
+
 Lint/RaiseException:
   Enabled: true
 

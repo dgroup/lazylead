@@ -64,7 +64,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
                        'true',
                        1, 1, 1, 
                        'Lazylead::Task::PropagateDown',
-                       '{"jql":"filter=222", "fields":"customfield_1"}');
+                       '{"jql":"filter=222", "propagate":"customfield_1"}');
     
     ```
     Yes, for task scheduling we are using [cron](https://crontab.guru).

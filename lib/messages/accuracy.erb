@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style> /* CSS styles taken from https://github.com/yegor256/tacit */
+  th {
+    font-weight: 600
+  }
+
+  table tr {
+    border-bottom-width: 2.16px
+  }
+
+  table tr th {
+    border-bottom-width: 2.16px
+  }
+
+  table tr td, table tr th {
+    overflow: hidden;
+    padding: 5.4px 3.6px;
+    line-height: 14px;
+  }
+
+  #summary {
+    text-align: left;
+  }
+
+  .auto {
+    min-width: auto;
+    white-space: nowrap;
+  }
+
+  a {
+    color: #275a90;
+    text-decoration: none
+  }
+
+  a:hover {
+    text-decoration: underline
+  }
+
+  * {
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-sizing: border-box;
+    margin: 0;
+    max-width: 100%;
+    padding: 0;
+    vertical-align: baseline;
+    font-family: system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 29.7px
+  }
+
+  html, body {
+    width: 100%
+  }
+
+  html {
+    height: 100%
+  }
+
+  body {
+    background: #fff;
+    color: #1a1919;
+    padding: 36px
+  }
+  </style>
+  <title>Accuracy</title>
+</head>
+<body>
+<p>Hi,</p>
+<p>The triage score and accuracy posted to the following tickets::</p>
+<table summary="table with tickets triage score">
+  <tr>
+    <th id="key">Key</th>
+    <th id="duedate">Due date</th>
+    <th id="priority">Priority</th>
+    <th id="score">Score</th>
+    <th id="accuracy">Accuracy</th>
+    <th id="reporter">Reporter</th>
+    <th id="summary">Summary</th>
+  </tr>
+  <% tickets.sort_by { |s| s.issue.fields["priority"]["id"].to_i }
+            .each do |score| %>
+    <tr>
+      <td>
+        <div class="auto">
+          <a href="<%= score.issue.url %>"><%= score.issue.key %></a>
+        </div>
+      </td>
+      <td>
+        <div class="auto"><%= score.issue.duedate %></div>
+      </td>
+      <td><%= score.issue.priority %></td>
+      <td>
+        <span style="color: <%= score.color %>"><%= score.score %></span>
+      </td>
+      <td>
+        <span style="color: <%= score.color %>"><%= score.accuracy %>%</span>
+      </td>
+      <td>
+        <div class="auto">
+          <%= score.issue.reporter.name %>
+        </div>
+      </td>
+      <td><%= score.issue.summary %></td>
+    </tr>
+  <% end %>
+</table>
+<p>Posted by
+  <a href="https://github.com/dgroup/lazylead">lazylead v<%= version %></a>.
+</p>
+</body>
+</html>

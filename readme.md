@@ -38,6 +38,7 @@ Join our telegram group [lazylead.org](https://t.me/lazyleads) for discussions.
 | [Notify about illegal "Fix Version" modification](lib/lazylead/task/fix_version.rb) | ✅ | ❌ | ❌ | 
 | [Expected comment in ticket is missing](lib/lazylead/task/missing_comment.rb)       | ✅ | ⌛ | ⌛ |
 | [Propagate some fields from parent ticket into sub-tasks](.docs/propagate_down.md)  | ✅ | ❌ | ❌ |  
+| [Evaluate the ticket formatting accuracy](.docs/accuracy.md)                        | ✅ | ⌛ | ⌛ |  
 | Print the current capacity of team into newly created tasks                         | ⌛ | ⌛ | ⌛ |  
 | Create/retrofit the defect automatically into latest release                        | ⌛ | ⌛ | ❌ |  
 | [Notify about expired(ing) due dates](.docs/duedate_expired.md)                     | ✅ | ❌ | ⌛ |
@@ -112,13 +113,14 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     ll > docker-compose -f .github/tasks.yml up                                                         
     Creating lazylead ... done
     Attaching to lazylead
-    lazylead    | [2020-06-06T10:35:13] DEBUG Memory footprint at start is 52MB
-    lazylead    | [2020-06-06T10:35:13] DEBUG Database: '/lazylead/db/ll.db', sql migration dir: '/lazylead/upgrades/sqlite'
-    lazylead    | [2020-06-06T10:35:13] DEBUG Migration applied to /lazylead/db/ll.db from /lazylead/upgrades/sqlite
-    lazylead    | [2020-06-06T10:35:13] DEBUG Database connection established
-    lazylead    | [2020-06-06T10:35:13] WARN  SMTP connection enabled in test mode.
-    lazylead    | [2020-06-06T10:35:13] WARN  ll-001: No tasks found.
-    lazylead    | [2020-06-06T10:35:13] DEBUG Memory footprint at the end is 66MB
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Version: 0.4.0
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Memory footprint at start is 52MB
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Database: '/lazylead/db/ll.db', sql migration dir: '/lazylead/upgrades/sqlite'
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Migration applied to /lazylead/db/ll.db from /lazylead/upgrades/sqlite
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Database connection established
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] SMTP connection established with {host} as {user}.
+    lazylead    | [2020-08-09T06:17:32] WARN  [main] ll-001: No tasks found.
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Memory footprint at the end is 67MB
     lazylead exited with code 0
     ll > 
     ```
@@ -152,15 +154,14 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
     check the logs and stop container if needed
     ```bash
     ll > docker logs lazylead
-    2020-06-06T11:37:36] DEBUG Memory footprint at start is 52MB
-    [2020-06-06T11:37:37] DEBUG Database: '/lazylead/db/ll.db', sql migration dir: '/lazylead/upgrades/sqlite'
-    [2020-06-06T11:37:37] DEBUG Migration applied to /lazylead/db/ll.db from /lazylead/upgrades/sqlite
-    [2020-06-06T11:37:37] DEBUG Database connection established
-    [2020-06-06T11:37:37] WARN  SMTP connection enabled in test mode.
-    [2020-06-06T11:37:37] DEBUG Task scheduled: id='1', name='Expired due dates', cron='0 8 * * 1-5', system='1', action='Lazylead::Task::AssigneeAlert', team_id='1', description='', enabled='true', properties='{"sql":"filter=555", "cc":"my.email@google.com", "subject":"[LL] Expired due dates", "template":"lib/messages/due_date_expired.erb", "postman":"Lazylead::Exchange"}'
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Version: 0.4.0
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Memory footprint at start is 52MB
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Database: '/lazylead/db/ll.db', sql migration dir: '/lazylead/upgrades/sqlite'
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Migration applied to /lazylead/db/ll.db from /lazylead/upgrades/sqlite
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Database connection established
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] SMTP connection established with {host} as {user}.
+    lazylead    | [2020-08-09T06:17:32] DEBUG [main] Task scheduled: id='1', name='Expired due dates', cron='0 8 * * 1-5', system='1', action='Lazylead::Task::AssigneeAlert', team_id='1', description='', enabled='true', properties='{"sql":"filter=555", "cc":"my.email@google.com", "subject":"[LL] Expired due dates", "template":"lib/messages/due_date_expired.erb", "postman":"Lazylead::Exchange"}'
     ...
-    ll > docker stop lazylead
-    lazylead
     ```
 
 ### How to contribute?
@@ -173,4 +174,4 @@ bundle exec rake
 Everyone interacting in this project’s codebases, issue trackers, chat rooms is expected to follow the [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 Contributors:
- * [dgroup](https://github.com/dgroup) as Yurii Dubinka (yurii.dubinka@gmail.com)
+ * [dgroup](https://github.com/dgroup) as Yurii Dubinka ([yurii.dubinka@gmail.com](mailto:yurii.dubinka@gmail.com))
