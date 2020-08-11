@@ -81,7 +81,7 @@ Style/HashTransformValues:
 #  complains about it. It's false-positive violation, thus, for now ignored for this file
 Style/FormatStringToken:
   Exclude:
-    - "lib/lazylead/task/accuracy.rb"
+    - "lib/lazylead/task/accuracy/accuracy.rb"
 
 Lint/RaiseException:
   Enabled: true

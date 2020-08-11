@@ -22,14 +22,13 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "mail"
-require "json"
-require_relative "../../test"
-require_relative "../../../lib/lazylead/smtp"
-require_relative "../../../lib/lazylead/task/accuracy"
-require_relative "../../../lib/lazylead/opts"
-require_relative "../../../lib/lazylead/postman"
-require_relative "../../../lib/lazylead/system/jira"
+require_relative "../../../test"
+require_relative "../../../../lib/lazylead/smtp"
+require_relative "../../../../lib/lazylead/task/accuracy/accuracy"
+require_relative "../../../../lib/lazylead/opts"
+require_relative "../../../../lib/lazylead/postman"
+require_relative "../../../../lib/lazylead/cli/app"
+require_relative "../../../../lib/lazylead/system/jira"
 
 module Lazylead
   class AccuracyTest < Lazylead::Test
@@ -60,16 +59,15 @@ module Lazylead
                    %w[DATAJDBC-493 0.5 100% MyeongHyeonLee Deadlock\ occurs]
     end
 
-    test "affected version absent" do
-      refute RequirementAffectedBuild.new.passed(
-        OpenStruct.new(fields: { "versions" => [] })
+    test "construct accuracy from orm" do
+      CLI::App.new(Log.new, NoSchedule.new).run(
+        home: ".",
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
       )
-    end
-
-    test "affected version provided" do
-      assert RequirementAffectedBuild.new.passed(
-        OpenStruct.new(fields: { "versions" => ["0.4.0"] })
-      )
+      assert_kind_of Lazylead::Task::Accuracy,
+                     ORM::Task.find(195).action.constantize.new
     end
   end
 end

@@ -22,10 +22,11 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../log"
-require_relative "../email"
-require_relative "../version"
-require_relative "../postman"
+require_relative "../../log"
+require_relative "../../opts"
+require_relative "../../email"
+require_relative "../../version"
+require_relative "../../postman"
 
 module Lazylead
   module Task
@@ -42,6 +43,7 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
+        require_rules
         rules = opts.slice("rules", ",")
                     .map(&:constantize)
                     .map(&:new)
@@ -50,6 +52,12 @@ module Lazylead
                     .each(&:evaluate)
                     .each(&:post)
         postman.send opts.merge(tickets: raised) unless raised.empty?
+      end
+
+      # Load all ticket accuracy rules for future verification
+      def require_rules
+        rules = File.dirname(__FILE__)
+        $LOAD_PATH.unshift(rules) unless $LOAD_PATH.include?(rules)
       end
     end
   end
@@ -127,32 +135,6 @@ module Lazylead
                         .each { |e| e[0] = e[0].to_i }
                         .sort_by { |e| e[0] }
                   end
-    end
-  end
-
-  # An single requirement regarding ticket format.
-  class Requirement
-    attr_reader :score, :desc, :field
-
-    def initialize(desc, score, field)
-      @desc = desc
-      @score = score
-      @field = field
-    end
-
-    def passed(_)
-      true
-    end
-  end
-
-  # The requirement that Jira field "Affects Version/s" provided by reporter.
-  class RequirementAffectedBuild < Requirement
-    def initialize(score = 0.5)
-      super "Affected build", score, "Affects Version/s"
-    end
-
-    def passed(issue)
-      !issue.fields["versions"].nil? && !issue.fields["versions"].empty?
     end
   end
 end

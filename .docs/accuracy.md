@@ -100,8 +100,8 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
 #### Where is the code?
 | Logic | Tests |
 | :-----: | :------: |
-| [accuracy.rb](../lib/lazylead/task/accuracy.rb)| [accuracy_test.rb](../test/lazylead/task/accuracy_test.rb) | 
+| [accuracy.rb](../lib/lazylead/task/accuracy/accuracy.rb)| [accuracy_test.rb](../test/lazylead/task/accuracy/accuracy_test.rb) | 
 
 #### How can I add my own rules?
-They should extend `Lazylead::Requirement` class and available in `lib/lazylead/task` folder.
-After that you need to mention your custom rules in `rules` option in column `properties` from `tasks` table
+The custom rules should extend `Lazylead::Requirement` class and placed it to the `lib/lazylead/task/accuracy` folder.
+After that, you need to mention your custom rules in `rules` option in the column `properties` from `tasks` table

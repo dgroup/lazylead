@@ -41,4 +41,5 @@ values ('echo', '* * * * *', 'false', 1, 1, 1, 'Lazylead::Task::Echo', '{}'),
        ('issue 154', '* * * * *', 'false', 154, 1, 154, 'Lazylead::Task::AssigneeAlert', '{}'),
        ('task with complex cc', '* * * * *', 'false', 165, 1, 1, 'Lazylead::Task::Echo',
         '{"cc":{"type":"Lazylead::PredefinedCC","opts": {"jvm":"tom@fake.com","jdbc":"mike@fake.com"}}}'),
-       ('issue 171', '* * * * *', 'false', 171, 1, 1, 'Lazylead::Task::Echo', '{"envkey":"${key171}"}');
+       ('issue 171', '* * * * *', 'false', 171, 1, 1, 'Lazylead::Task::Echo', '{"envkey":"${key171}"}'),
+       ('issue 195', '* * * * *', 'false', 195, 1, 1, 'Lazylead::Task::Accuracy', '{"key":"value"}');
