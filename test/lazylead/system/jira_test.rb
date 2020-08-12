@@ -123,5 +123,23 @@ module Lazylead
                              .fields
                              .size
     end
+
+    test "make an jira comment" do
+      issue = Struct.new(:comment) do
+        def comments
+          self
+        end
+
+        def build
+          self
+        end
+
+        def save!(body)
+          self[:comment] = body
+        end
+      end.new
+      Issue.new(issue, Fake.new).post("Hi there!")
+      assert_equal "Hi there!", issue.comment[:body]
+    end
   end
 end

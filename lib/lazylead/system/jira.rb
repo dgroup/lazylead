@@ -202,6 +202,10 @@ module Lazylead
     def status
       @issue.status.attrs["name"]
     end
+
+    def post(markdown)
+      @issue.comments.build.save!(body: markdown)
+    end
   end
 
   # The jira issue comments
