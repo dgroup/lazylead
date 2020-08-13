@@ -73,7 +73,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
                        '{
                             "jql":    "filter=222", 
                             "to":     "lead@fake.com",
-                            "rules":  "Lazylead::RequirementAffectedBuild",
+                            "rules":  "Lazylead::AffectedBuild",
                             "colors": "{ "0": "#FF4F33", "35": "#FF9F33", "57": "#19DD1E", "90": "#0FA81A" }",
                             "docs":         "https://github.com/dgroup/lazylead/blob/master/.github/ISSUE_TEMPLATE/bug_report.md",
                             "max_results":  "200",
