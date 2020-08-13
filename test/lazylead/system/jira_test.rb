@@ -141,5 +141,12 @@ module Lazylead
       Issue.new(issue, Fake.new).post("Hi there!")
       assert_equal "Hi there!", issue.comment[:body]
     end
+
+    test "search by limit in 1 issue" do
+      assert_equal 1,
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key in (DATAJDBC-480, DATAJDBC-500)", max_results: "1")
+                             .size
+    end
   end
 end
