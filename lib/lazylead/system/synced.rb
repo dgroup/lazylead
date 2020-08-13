@@ -30,7 +30,8 @@ module Lazylead
       @sys = sys
     end
 
-    # @todo #/DEV Unit tests for 'issues' function
+    # @todo #/DEV Unit tests for 'issues' function, moreover the other methods
+    #  from ticketing system obj are required
     #
     def issues(jql)
       @mutex.synchronize do
