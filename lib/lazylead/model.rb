@@ -143,7 +143,7 @@ module Lazylead
         @log.debug "'#{name}' is started."
         @log.warn "No postman, stub is used." unless props.key? "postman"
         @log.warn "No team." if team.nil?
-        @orig.exec @log
+        @orig.exec
         @log.debug "'#{name}' is completed"
       rescue StandardError => e
         msg = <<~MSG
