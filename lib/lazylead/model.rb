@@ -98,7 +98,7 @@ module Lazylead
         sys = system.connect
         opts = props
         opts = detect_cc(sys) if opts.key? "cc"
-        action.constantize.new(log).run(sys, postman, opts)
+        action.constantize.new.run(sys, postman, opts)
       end
 
       def detect_cc(sys)
