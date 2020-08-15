@@ -62,5 +62,9 @@ module Lazylead
     test "to hash" do
       assert_kind_of Hash, Opts.new("one" => "1", "two" => nil).to_h
     end
+
+    test "except keys" do
+      assert_equal 1, Opts.new("one" => "1", "two" => "2").except("one").size
+    end
   end
 end

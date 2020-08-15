@@ -33,7 +33,7 @@ module Lazylead
   # License:: MIT
   class Opts
     extend Forwardable
-    def_delegators :@origin, :[], :[]=, :to_s, :key?, :fetch, :merge
+    def_delegators :@origin, :[], :[]=, :to_s, :key?, :fetch, :merge, :except
 
     def initialize(origin = {})
       @origin = origin
