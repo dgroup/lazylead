@@ -66,9 +66,9 @@ module Lazylead
         start = (now.to_time - opts["period"].to_i).to_datetime
         cmd = [
           "svn log --no-auth-cache",
-          "--username #{decrypt(opts["svn_user"])}",
-          "--password #{decrypt(opts["svn_password"])}",
-          "--xml -v -r {#{start}}:{#{now}} #{opts["svn_url"]}"
+          "--username #{decrypt(opts['svn_user'])}",
+          "--password #{decrypt(opts['svn_password'])}",
+          "--xml -v -r {#{start}}:{#{now}} #{opts['svn_url']}"
         ]
         raw = `#{cmd.join(" ")}`
         Nokogiri.XML(raw, nil, "UTF-8")

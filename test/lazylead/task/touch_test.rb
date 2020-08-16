@@ -25,39 +25,37 @@
 require "mail"
 require_relative "../../test"
 require_relative "../../../lib/lazylead/smtp"
-
+require_relative "../../../lib/lazylead/opts"
 require_relative "../../../lib/lazylead/postman"
 require_relative "../../../lib/lazylead/task/touch"
 
 module Lazylead
   class SvnTouchTest < Lazylead::Test
-    # @todo #/DEV Find stable svn repo which can be used for stable test, for
-    #  now only floating repo used for testing locally. Also, create a new
-    #  method "ping" which can be used during tests like
-    #  skip "No connection available to svn repo" unless ping("https://svn.com")
     test "important files changed in svn repo" do
-      skip "No svn credentials provided" unless env? "svn_url",
-                                                     "svn_user",
-                                                     "svn_password"
+      skip "No svn credentials provided" unless env? "svn_touch_user",
+                                                     "svn_touch_password"
+      skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
       Lazylead::Smtp.new.enable
       Task::SvnTouch.new.run(
         nil,
         Postman.new,
-        "svn_url" => ENV["svn_url"],
-        "svn_user" => ENV["svn_user"],
-        "svn_password" => ENV["svn_password"],
-        "commit_url" => "https://view.commit.com?rev=",
-        "user" => "https://user.com?id=",
-        "to" => "lead@fake.com",
-        "from" => "ll@fake.com",
-        "now" => "2020-07-12T17:24:45+01:00",
-        "period" => "864000",
-        "files" => "checkstyle.xml,checkstyle_suppressions.xml",
-        "subject" => "[SVN] Static analysis configuration has been changed!",
-        "template" => "lib/messages/svn_touch.erb"
+        Opts.new(
+          "svn_url" => "https://svn.riouxsvn.com/touch4ll",
+          "svn_user" => ENV["svn_touch_user"],
+          "svn_password" => ENV["svn_touch_password"],
+          "commit_url" => "https://view.commit.com?rev=",
+          "user" => "https://user.com?id=",
+          "to" => "lead@fake.com",
+          "from" => "ll@fake.com",
+          "now" => "2020-08-17T00:00:00+01:00",
+          "period" => "864000",
+          "files" => "189.md,absent.txt",
+          "subject" => "[SVN] Important files have been changed!",
+          "template" => "lib/messages/svn_touch.erb"
+        )
       )
-      assert_email "[SVN] Static analysis configuration has been changed!",
-                   %w[revision user ticket]
+      assert_email "[SVN] Important files have been changed!",
+                   %w[3 dgroup /189.md Add\ description\ for\ 189\ issue]
     end
   end
 end

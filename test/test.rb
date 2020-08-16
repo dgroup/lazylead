@@ -110,5 +110,14 @@ module Lazylead
                                    .first
                                    .body.parts.first.body.raw_source
     end
+
+    # Ping remote host
+    #  https://github.com/eitoball/net-ping
+    #  https://stackoverflow.com/a/35508446/6916890
+    #  https://rubygems.org/gems/net-ping/versions/2.0.8
+    def ping?(host)
+      require "net/ping"
+      Net::Ping::External.new(host).ping?
+    end
   end
 end
