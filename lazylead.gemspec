@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = "2.2"
   s.required_ruby_version = ">=2.6.5"
   s.name = "lazylead"
-  s.version = "0.0.0"
+  s.version = "0.4.3"
   s.license = "MIT"
   s.summary = "Eliminate the annoying work within bug-trackers."
   s.description = "Ticketing systems (Github, Jira, etc.) are strongly
@@ -45,7 +45,7 @@ tasks instead of solving technical problems."
   s.authors = ["Yurii Dubinka"]
   s.email = "yurii.dubinka@gmail.com"
   s.homepage = "http://github.com/dgroup/lazylead"
-  s.post_install_message = "Thanks for installing Lazylead v0.0.0!
+  s.post_install_message = "Thanks for installing Lazylead v0.4.3!
   Read our blog posts: https://lazylead.org
   Stay in touch with the community in Telegram: https://t.me/lazylead
   Follow us on Twitter: https://twitter.com/lazylead
