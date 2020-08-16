@@ -58,17 +58,19 @@ module Lazylead
 
       # Return all svn commits for particular date range in repo
       def svn_log(opts)
-        url = opts["svn_url"]
-        usr = decrypt(opts["svn_user"])
-        psw = decrypt(opts["svn_password"])
         now = if opts.key? "now"
                 DateTime.parse(opts["now"])
               else
                 DateTime.now
               end
         start = (now.to_time - opts["period"].to_i).to_datetime
-        raw = `svn log --no-auth-cache --username #{usr} --password #{psw}
-                --xml -v -r {#{start}}:{#{now}} #{url}`
+        cmd = [
+          "svn log --no-auth-cache",
+          "--username #{decrypt(opts["svn_user"])}",
+          "--password #{decrypt(opts["svn_password"])}",
+          "--xml -v -r {#{start}}:{#{now}} #{opts["svn_url"]}"
+        ]
+        raw = `#{cmd.join(" ")}`
         Nokogiri.XML(raw, nil, "UTF-8")
       end
 
