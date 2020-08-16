@@ -94,11 +94,31 @@ module Lazylead
       belongs_to :team, foreign_key: "team_id"
       belongs_to :system, foreign_key: "system"
 
+      # Execute task
       def exec
         sys = system.connect
         opts = props
         opts = detect_cc(sys) if opts.key? "cc"
         action.constantize.new.run(sys, postman, opts)
+      end
+
+      # Scheduling type.
+      # Current implementation is based on 'rufus-scheduler' gem and supports
+      #  the following types: 'cron', 'interval', 'in', 'at', 'every'
+      def type
+        trigger.first
+      end
+
+      # Scheduling unit.
+      # Current implementation is based on 'rufus-scheduler' gem thus each
+      # scheduling type has own arguments:
+      #  1. Scheduling type 'cron' has 'unit' = '00 09 * * *'
+      #  2. Scheduling type 'interval' has 'unit' = '2h'
+      #  3. Scheduling type 'every' has 'unit' = '3h'
+      #  4. Scheduling type 'in' has 'unit' = '10d'
+      #  5. Scheduling type 'at' has 'unit' = '2014/12/24 2000'
+      def unit
+        trigger.last
       end
 
       def detect_cc(sys)
@@ -125,13 +145,27 @@ module Lazylead
           Postman.new
         end
       end
+
+      private
+
+      # Parse scheduling #type and #unit
+      def trigger
+        @trigger ||= begin
+                       trg = schedule.split(":")
+                       unless trg.size == 2
+                         raise "ll-007: illegal schedule format '#{schedule}'"
+                       end
+                       trg.map(&:strip).map(&:chomp)
+                     end
+      end
     end
 
     # A task with extended logging
     # @see Lazylead::ORM::Task
     class VerboseTask
       extend Forwardable
-      def_delegators :@orig, :id, :name, :team, :to_s, :inspect, :props
+      def_delegators :@orig, :id, :name, :team, :to_s, :inspect, :props, :type,
+                     :unit
 
       def initialize(orig, log = Log.new)
         @orig = orig

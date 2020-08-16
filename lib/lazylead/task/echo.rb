@@ -22,6 +22,8 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require_relative "../log"
+
 module Lazylead
   module Task
     # Lazylead task which prints to STDOUT the current class name and team.
@@ -36,6 +38,22 @@ module Lazylead
 
       def run(_, _, _)
         self.class.to_s
+      end
+    end
+
+    # Lazylead task which prints the current time to a file.
+    #
+    # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
+    # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
+    # License:: MIT
+    class EchoIO
+      def initialize(log = Log.new, path = "test/resources/echo.txt")
+        @log = log
+        @path = path
+      end
+
+      def run(_, _, _)
+        File.open(@path, "w") { |f| f.write Time.now }
       end
     end
   end

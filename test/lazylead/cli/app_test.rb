@@ -39,14 +39,14 @@ module Lazylead
         assert_tables "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
                       systems: %w[id properties],
                       teams: %w[id name properties],
-                      tasks: %w[id name cron system action team_id enabled properties]
+                      tasks: %w[id name schedule system action team_id enabled properties]
         assert_fk "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
                   %w[tasks team_id teams id],
                   %w[tasks system systems id]
       end
 
       test "activesupport is activated for access to domain entities" do
-        CLI::App.new(Log.new, Schedule.new(cling: false)).run(
+        CLI::App.new(Log.new, NoSchedule.new).run(
           home: ".",
           sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
           vcs4sql: "upgrades/sqlite",
@@ -57,16 +57,16 @@ module Lazylead
                      "Required team record wasn't found in the database"
       end
 
-      # @todo #10/DEV Think about using "timecop" >v0.9.1 gem in order to make
-      #  E2E application skeleton https://stackoverflow.com/questions/59955571.
-      #  The depedency for gemspec should be after *thin* in .gemspec
-      #  ..
-      #  s.add_runtime_dependency "thin", "1.7.2"
-      #  s.add_runtime_dependency "timecop", "0.9.1"
-      #  ..
-      #  More https://github.com/travisjeffery/timecop
       test "scheduled task was triggered successfully" do
-        skip "Not implemented yet"
+        CLI::App.new(Log.new, Schedule.new(cling: false)).run(
+          home: ".",
+          sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+          vcs4sql: "upgrades/sqlite",
+          testdata: true
+        )
+        sleep 0.4
+        assert (Time.now - 5.seconds) < Time.parse(File.open("test/resources/echo.txt").first),
+               "Scheduled task wasn't executed few seconds ago"
       end
     end
   end

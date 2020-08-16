@@ -34,23 +34,18 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Schedule
-    # @todo #/DEV New scheduling types like 'at', 'once' is required.
-    #  The minimum time period for cron is 1 minute and it's not suitable for
-    #  unit testing, thus its better to introduce new types which allows to
-    #  schedule some task once or at particular time period like in next 200ms).
-    #  For cron expressions we should define separate test suite which will test
-    #  in parallel without blocking main CI process.
-    def initialize(log = Log.new, cling = true)
+    def initialize(log: Log.new, cling: true, trigger: Rufus::Scheduler.new)
       @log = log
       @cling = cling
-      @trigger = Rufus::Scheduler.new
+      @trigger = trigger
     end
 
-    # @todo #/DEV error code is required for reach 'raise' statement within the
-    #  application.
+    # @todo #/DEV error code is required for each 'raise' statement within the
+    #  application. Align the naming of existing one, the error code should be
+    #  like ll-xxx.
     def register(task)
       raise "ll-002: task can't be a null" if task.nil?
-      @trigger.cron task.cron do
+      @trigger.method(task.type).call(task.unit) do
         ActiveRecord::Base.connection_pool.with_connection do
           ORM::VerboseTask.new(task, @log).exec
         end
@@ -60,7 +55,9 @@ module Lazylead
 
     # @todo #/DEV inspect the current execution status. This method should
     #  support several format for output, by default is `json`.
-    def ps; end
+    def ps
+      @log.debug "#{self}#ps"
+    end
 
     def join
       @trigger.join if @cling
@@ -80,11 +77,15 @@ module Lazylead
     end
 
     def register(task)
-      @log.debug("Task registered: #{task}")
+      @log.debug "Task registered: #{task}"
     end
 
-    def ps; end
+    def ps
+      @log.debug "#{self}#ps"
+    end
 
-    def join; end
+    def join
+      @log.debug "#{self}#join"
+    end
   end
 end
