@@ -82,7 +82,7 @@ log.debug("Memory footprint at start is #{Lazylead::Allocated.new}")
 cmd = lambda do
   Lazylead::CLI::App.new(
     log,
-    Lazylead::Schedule.new(log),
+    Lazylead::Schedule.new(log: log),
     Lazylead::Smtp.new(
       log, Lazylead::Salt.new("smtp_salt"),
       smtp_host: ENV["smtp_host"],

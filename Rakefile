@@ -127,4 +127,6 @@ task :docker do
   system "docker-compose -f .docker/docker-compose.yml build "\
           " --build-arg release_tags='latest 1.0'"\
           " --build-arg version=1.0"
+  system "docker-compose -f .docker/docker-compose.yml rm --force -s lazylead"
+  system "docker-compose -f .docker/docker-compose.yml up"
 end
