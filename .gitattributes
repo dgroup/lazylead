@@ -7,3 +7,4 @@
 *.xml ident
 *.png binary
 *.pdf binary
+*.db binary
