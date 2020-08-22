@@ -36,5 +36,14 @@ module Lazylead
     def passed(_)
       true
     end
+
+    def blank?(issue, field)
+      return false if issue.nil?
+      issue.fields[field].nil? || issue.fields[field].blank?
+    end
+
+    def none_blank?(issue, field)
+      !blank?(issue, field)
+    end
   end
 end

@@ -22,21 +22,18 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../../../test"
-require_relative "../../../../lib/lazylead/task/accuracy/affected_build"
+require_relative "requirement"
 
 module Lazylead
-  class AffectedBuildTest < Lazylead::Test
-    test "affected version absent" do
-      refute AffectedBuild.new.passed(
-        OpenStruct.new(fields: { "versions" => [] })
-      )
+  # A requirement that Jira field "Environment" provided by the reporter.
+  class Environment < Requirement
+    def initialize(score = 0.5)
+      super "Environment details (URL, patches)", score, "Environment"
     end
 
-    test "affected version provided" do
-      assert AffectedBuild.new.passed(
-        OpenStruct.new(fields: { "versions" => ["0.4.0"] })
-      )
+    # @return true if an issue has non-empty "Environment" field
+    def passed(issue)
+      none_blank? issue, "environment"
     end
   end
 end

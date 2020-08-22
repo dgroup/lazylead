@@ -175,6 +175,10 @@ module Lazylead
     end
 
     def fields
+      return {} if @issue.nil?
+      return {} unless @issue.respond_to? :fields
+      return {} if @issue.fields.nil?
+      return {} unless @issue.fields.respond_to? :[]
       @issue.fields
     end
 

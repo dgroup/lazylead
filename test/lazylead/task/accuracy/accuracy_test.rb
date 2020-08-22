@@ -40,7 +40,7 @@ module Lazylead
         Opts.new(
           "from" => "ll@fake.com",
           "to" => "lead@fake.com",
-          "rules" => "Lazylead::RequirementAffectedBuild",
+          "rules" => "Lazylead::AffectedBuild",
           "silent" => "true",
           "colors" => {
             "0" => "#FF4F33",

@@ -22,22 +22,18 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../../log"
-require_relative "../../email"
-require_relative "../../version"
-require_relative "../../postman"
 require_relative "requirement"
 
 module Lazylead
   # A requirement that Jira field "Affects Version/s" provided by the reporter.
-  class RequirementAffectedBuild < Requirement
+  class AffectedBuild < Requirement
     def initialize(score = 0.5)
       super "Affected build", score, "Affects Version/s"
     end
 
     # @return true if an issue has non-empty "Affects Version/s" field
     def passed(issue)
-      !issue.fields["versions"].nil? && !issue.fields["versions"].empty?
+      none_blank? issue, "versions"
     end
   end
 end

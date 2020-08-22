@@ -23,19 +23,19 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../../../test"
-require_relative "../../../../lib/lazylead/task/accuracy/affected_build"
+require_relative "../../../../lib/lazylead/task/accuracy/environment"
 
 module Lazylead
-  class AffectedBuildTest < Lazylead::Test
-    test "affected version absent" do
-      refute AffectedBuild.new.passed(
-        OpenStruct.new(fields: { "versions" => [] })
+  class EnvironmentTest < Lazylead::Test
+    test "environment absent" do
+      refute Environment.new.passed(
+        OpenStruct.new(fields: { "environment" => "" })
       )
     end
 
-    test "affected version provided" do
-      assert AffectedBuild.new.passed(
-        OpenStruct.new(fields: { "versions" => ["0.4.0"] })
+    test "environment provided" do
+      assert Environment.new.passed(
+        OpenStruct.new(fields: { "environment" => "http://host:port" })
       )
     end
   end
