@@ -42,8 +42,8 @@ module Lazylead
       issue.fields[field].nil? || issue.fields[field].blank?
     end
 
-    def none_blank?(issue, field)
-      !blank?(issue, field)
+    def non_blank?(issue, field)
+      !blank? issue, field
     end
   end
 end

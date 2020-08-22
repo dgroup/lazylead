@@ -33,7 +33,7 @@ module Lazylead
 
     # @return true if an issue has non-empty "Environment" field
     def passed(issue)
-      none_blank? issue, "environment"
+      non_blank? issue, "environment"
     end
   end
 end

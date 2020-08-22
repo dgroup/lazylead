@@ -148,5 +148,13 @@ module Lazylead
                              .issues("key in (DATAJDBC-480, DATAJDBC-500)", max_results: "1")
                              .size
     end
+
+    test "description is correct" do
+      assert_words %w[DATACMNS-1639\ moved\ entity\ instantiators],
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key=DATAJDBC-480")
+                             .first
+                             .description
+    end
   end
 end

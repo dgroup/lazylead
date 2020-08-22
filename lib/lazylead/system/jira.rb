@@ -150,6 +150,10 @@ module Lazylead
       @issue.key
     end
 
+    def description
+      @issue.description
+    end
+
     def summary
       fields["summary"]
     end

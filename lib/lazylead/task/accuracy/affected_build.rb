@@ -33,7 +33,7 @@ module Lazylead
 
     # @return true if an issue has non-empty "Affects Version/s" field
     def passed(issue)
-      none_blank? issue, "versions"
+      non_blank? issue, "versions"
     end
   end
 end
