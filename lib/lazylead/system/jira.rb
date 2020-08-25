@@ -186,6 +186,12 @@ module Lazylead
       @issue.fields
     end
 
+    def components
+      return [] unless @issue.respond_to? :components
+      return [] if @issue.components.nil?
+      @issue.components.map(&:name)
+    end
+
     def history
       return [] unless @issue.respond_to? :changelog
       return [] if @issue.changelog == nil? || @issue.changelog.empty?

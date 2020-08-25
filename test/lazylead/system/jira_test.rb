@@ -156,5 +156,13 @@ module Lazylead
                              .first
                              .description
     end
+
+    test "component is correct" do
+      assert_equal %w[Stream\ Module],
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key=XD-3766")
+                             .first
+                             .components
+    end
   end
 end
