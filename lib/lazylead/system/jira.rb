@@ -151,6 +151,7 @@ module Lazylead
     end
 
     def description
+      return "" if @issue.description.nil?
       @issue.description
     end
 
