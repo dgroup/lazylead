@@ -164,5 +164,19 @@ module Lazylead
                              .first
                              .components
     end
+
+    test "field found" do
+      assert_includes NoAuthJira.new("https://jira.spring.io")
+                                .issues("key=DATAJDBC-480")
+                                .first["description"],
+                      "DATACMNS-1639 moved "
+    end
+
+    test "field not found" do
+      assert NoAuthJira.new("https://jira.spring.io")
+                       .issues("key=DATAJDBC-480")
+                       .first["absent field"]
+                       .blank?
+    end
   end
 end

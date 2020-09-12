@@ -187,6 +187,11 @@ module Lazylead
       @issue.fields
     end
 
+    def [](name)
+      return "" if fields[name].nil? || fields[name].blank?
+      fields[name]
+    end
+
     def components
       return [] unless @issue.respond_to? :components
       return [] if @issue.components.nil?
