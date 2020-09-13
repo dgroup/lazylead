@@ -30,7 +30,6 @@ module Lazylead
     test "test case header is absent" do
       refute Testcase.new.passed(
         OpenStruct.new(
-          components: ["Component"],
           description: "
           1. Xxxxx xxx xxxx
           2. Xxx xxxx (XXX xxx xxx x xx xxx x x xxxx)
@@ -49,7 +48,6 @@ module Lazylead
     test "er on the next line" do
       assert Testcase.new.passed(
         OpenStruct.new(
-          components: ["Component"],
           description: "
             TC:
             1. Xxxx xx xxx xXxxxx xxx ;
@@ -76,7 +74,6 @@ module Lazylead
     test "tc ar er case 1" do
       assert Testcase.new.passed(
         OpenStruct.new(
-          components: ["Component"],
           description: "
           *Preconditions:*
            # XXX+ Xxxxx Xxxxxxx XX[http://xxx.xxx.xxx:0000/xx/xxx.jsp?xx=_xxx]
@@ -109,7 +106,6 @@ module Lazylead
     test "tc ar er case 2" do
       assert Testcase.new.passed(
         OpenStruct.new(
-          components: ["Component"],
           description: "
             *Pre-requisites:*
             XXX xxxx xXXXX xx XXXXX.
@@ -137,7 +133,6 @@ module Lazylead
     test "tc ar er case 3" do
       assert Testcase.new.passed(
         OpenStruct.new(
-          components: ["Component"],
           description: "
             *Preconditions:*
              # XXX
@@ -174,10 +169,9 @@ module Lazylead
     test "tc ar er case 4" do
       assert Testcase.new.passed(
         OpenStruct.new(
-          components: ["Component"],
           description: "
             *Preconditions*
-            1. XXX
+            1. XXXx
             2. Xxxxx
 
             *Test Steps*
@@ -199,10 +193,9 @@ module Lazylead
     test "tc ar er case 5" do
       assert Testcase.new.passed(
         OpenStruct.new(
-          components: ["Component"],
           description: "
             *Preconditions*
-            1. XXXX
+            1. XXxxXX
             2. Xxxxxx
 
             *Test Steps*
@@ -224,7 +217,6 @@ module Lazylead
     test "tc ar er case 6" do
       assert Testcase.new.passed(
         OpenStruct.new(
-          components: ["Component"],
           description: "
             [https://xxxx.xxxx.xxx.com/]
 
