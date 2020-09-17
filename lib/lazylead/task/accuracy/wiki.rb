@@ -28,13 +28,14 @@ module Lazylead
   # Check that ticket has a remote link to external system with relationship
   #  type = "Wiki Page".
   class Wiki < Lazylead::Requirement
-    def initialize(score = 2)
+    def initialize(score = 2, relationship = "Wiki Page")
       super "Reference to design specification", score, "Ticket Links (Wiki)"
+      @relationship = relationship
     end
 
     def passed(issue)
       return false if issue.remote_links.nil? || issue.remote_links.empty?
-      issue.remote_links.any? { |l| "Wiki Page".eql? l.attrs["relationship"] }
+      issue.remote_links.any? { |l| @relationship.eql? l.attrs["relationship"] }
     end
   end
 end
