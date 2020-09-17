@@ -226,6 +226,10 @@ module Lazylead
     def post(markdown)
       @issue.comments.build.save!(body: markdown)
     end
+
+    def remote_links
+      @issue.remotelink.all
+    end
   end
 
   # The jira issue comments
