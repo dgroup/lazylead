@@ -230,6 +230,10 @@ module Lazylead
     def remote_links
       @issue.remotelink.all
     end
+
+    def attachments
+      @issue.attachments
+    end
   end
 
   # The jira issue comments
