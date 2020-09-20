@@ -106,7 +106,6 @@ module Lazylead
                         *LOGS [^xXXxxx.zip]*
 
                         Randomised words which don't look even slightly believable: http://xxx.xxx.xxx:0000/xxx/xxx.jsp#!board;xxxxxXx=xxxxx;xxxxXxx=xxx;xxxxXx=xxxxxx
-
                         If you are going to use a passage: http://xxx.xxx.xxx:0000"
     end
 
