@@ -39,6 +39,18 @@ module Lazylead
       )
     end
 
+    test "log file is present but name in uppercase" do
+      assert Logs.new.passed(
+        OpenStruct.new(
+          attachments: [
+            OpenStruct.new(
+              attrs: { "size" => 10_241, "filename" => "catalina.LOG" }
+            )
+          ]
+        )
+      )
+    end
+
     test "attachment isn't a log file" do
       refute Logs.new.passed(
         OpenStruct.new(
