@@ -31,13 +31,13 @@ module Lazylead
       refute Testcase.new.passed(
         OpenStruct.new(
           description: "
-          1. Xxxxx xxx xxxx
-          2. Xxx xxxx (XXX xxx xxx x xx xxx x x xxxx)
-          3. xxxxx xxx xx xxxx
-          4. Xxxxx
-          5. Xxxxx xxxxx xxxxx xxxx
-          ER: Xxxxx xx xxx xxxx
-          AR: XXXXX XX XX XXX: Xxxxx Xxxxx Xxxx Xxxxx -
+          1. Lorem Ipsum is
+          2. Text of the printing (and typesetting industry. Lorem Ipsum)
+          3. has been the industry's standard dummy text ever since the 1500s
+          4. When an unknown
+          5. Printer took a galley of type and scrambled it to make a type specimen book
+          ER: It has survived not only five centuries
+          AR: but also the leap into electronic typesetting, remaining essentially unchanged -
           {code:java}
           xxx.xxxxx.xxxxxx.xxxx.xxx.XxxxXxxxXxxXX: xxxx xxx xxx XX xxxxxx xxxxx XXXxxxXXxxXxxXxx]
           {code}"
@@ -50,14 +50,14 @@ module Lazylead
         OpenStruct.new(
           description: "
             TC:
-            1. Xxxx xx xxx xXxxxx xxx ;
-            2. Xxxx xx xxx xx 'Xxxx xXxxxx xxxx'
+            1. It was popularised in the 1960s ;
+            2. With the release of Letraset sheets containing 'Lorem Ipsum passages'
              !xxxx-xxx.png|thumbnail!
 
-            3.  Xxxx xx 'Xxxxx xXXXX xxxxx xxxx' xxxx xx Xxx xxx;
+            3.  and more recently with desktop 'publishing software li'ke Aldus PageMaker including version;
 
             ER:
-            Xxxx xx xxx xxxxxx xxx XX xx xXxxxx.
+            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots.
 
             AR:
 
@@ -77,23 +77,23 @@ module Lazylead
           description: "
           *Preconditions:*
            # XXX+ Xxxxx Xxxxxxx XX[http://xxx.xxx.xxx:0000/xx/xxx.jsp?xx=_xxx]
-           # Xxxx xxxxx xx XX xxx
+           # Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia,
 
           *Test steps:*
-           # Xxxxx xxxx xxx XX XXXXXXXX
-           # Xxxxx xxxxxxxx x (xxxxxxxx)
+           # Lorem Ipsum comes from sections 1.10.32 and 1.10.33
+           # This book is a treatise on the theory of ethics (very popular )
           !xxx.png|width=514,height=262!
-           # Xxxxx xxx xxx xxx
-          *ER: Xxxx Xxxxxx xxx xx xxxx xxx XXXX xx xxxxx*
+           # The first line of Lorem Ipsum, 'Lorem ipsum dolor sit amet..'
+          *ER: The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those intereste*
           *!xxx-xx-xx.png|width=535,height=61!*
-           # Xxxx xxx xxx x x > xxxx
-          *ER: XXX XXX XXX xxx xxx*
+           # Sections 1.10.32 and 1.10.33 from 'de Finibus Bonorum et Malorum' by Cicero are also  > xxxx
+          *ER: It is a long established fact that a reader will be distracted by the
           *!xxxxxxxx-xxx-x-xx.png|width=826,height=167!*
           *!xxxxxx-xxx-xx-xxx.png|width=373,height=59!*
-           #  Xxxxx xxxxxx xx XX xxx xxx Xxxxx Xxxxx xxxxx xxxx
+           #  The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,
 
-          *ER: Xxxx Xxxx xxxxx xxx xxxx Xxxx *
-          *AR: Xxxx xxxx xxxx xxx xx x xx xx *
+          *ER: As opposed to using 'Content here, content here', making *
+          *AR: it look like readable English *
           *!xxxxx-xx-x-x-xxx.png|width=1062,height=272!*
 
           *[^xxx-xxxx.log]*
@@ -108,24 +108,24 @@ module Lazylead
         OpenStruct.new(
           description: "
             *Pre-requisites:*
-            XXX xxxx xXXXX xx XXXXX.
+            Many desktop publishing packages.
 
             *TC:*
-             # Xxxxx xx xXxxxx.
-             # Xxxxx xx Xxxxx-xxxx xxx
-             # Xxxxx xx Xxxx xXxxx xxxxxx xxxxx
+             # Various versions have evolved over the years,
+             # sometimes by accident,
+             # sometimes on purpose (injected humour and the like).
 
             *ER:*  !ER.png|thumbnail!
 
-            *AR:* Xxxxxx xxxx xxx
+            *AR:* There are many variations of passages of Lorem Ipsum available,
 
             !AR.png|thumbnail!
 
             *LOGS [^xXXxxx.zip]*
 
-            Xxxxxx xx XXXXX: http://xxx.xxx.xxx:0000/xxx/xxx.jsp#!board;xxxxxXx=xxxxx;xxxxXxx=xxx;xxxxXx=xxxxxx
+            Randomised words which don't look even slightly believable: http://xxx.xxx.xxx:0000/xxx/xxx.jsp#!board;xxxxxXx=xxxxx;xxxxXxx=xxx;xxxxXx=xxxxxx
 
-            xXxxx xxxx: http://xxx.xxx.xxx:0000"
+            If you are going to use a passage: http://xxx.xxx.xxx:0000"
         )
       )
     end
@@ -135,23 +135,23 @@ module Lazylead
         OpenStruct.new(
           description: "
             *Preconditions:*
-             # XXX
-             # XX (x xx xxxx)
-             # XX xxxx XXx
-             # XX xxxxx XXx
-             # Xxxxxxxx xxxx xx
+             # All the Lorem Ipsum generators on the Internet
+             # tend to repeat predefined chunks as necessary, (x xx xxxx)
+             # making this the first true generator on the Internet.
+             # It uses a dictionary of over 200 Latin words,
+             # combined with a handful of model sentence structures,
 
             *Test case:*
-             1. Xxxxxx xx Xxxxxx Xxxxx Xxxxx -> Xxxxxx Xxxxx Xxxxxx-> Xxxxxx xxxxx (xxx xxxx)
-             2. Xxxxx xx [Xx-Xxxxx] xxx
-             3. Xxxxx xx [Xx-Xxxxx] xxx
-             4. Xxxxx xxx [Xxxxx] xxx xxx xxx xxx xx 'Xxx'
-             5. Xxxxxxx xx XXX Xxxx-> XXX-> XXX
-             6. Xxxx xxxx xx Xxxxx xxxxxx
+             1. to generate Lorem Ipsum which looks reasonable -> generated Lorem Ipsum -> is therefore always free from repetition (xxx xxxx)
+             2. [injected humour], or non-characteristic words etc.
+             3. Lorem ipsum dolor sit amet, consectetur [adipiscing] elit
+             4.  sed do eiusmod [tempor] incididunt ut 'labore' et dolore magna aliqua
+             5. Ut enim ad minim veniam,
+             6. Quis nostrud exercitation ullamco laboris
 
-            *ER =* Xxxxxx xxx xxxxx xxxx xxxx: [Xxxx Xxxx].[Xxxxx] = Xxx xx xxxx
+            *ER =* Duis aute irure dolor in reprehenderit: [Voluptate Velit].[dolore] = eu fugiat nulla pariatur
 
-            *AR =* Xxxxx Xxxxx xxx xxx xxx xxx xx XXXX
+            *AR =* Excepteur sint occaecat Cupidatat
 
               !image-2020-09-04-18-24-26-052.png|thumbnail!
 
@@ -171,21 +171,21 @@ module Lazylead
         OpenStruct.new(
           description: "
             *Preconditions*
-            1. XXXx
-            2. Xxxxx
+            1. Sed ut perspiciatis unde omnis iste
+            2. Natus error sit voluptatem accusantium doloremque
 
             *Test Steps*
-            1. Xxx xx Xxxxx → XXXX Xxxxx → Xxxxx Xxxxx → 'Xxxxxx' xxxx 
-            2. Xxxx 'Xxxxxx' xxxx xx 'Xxxxx Xxxxxx' xxxx
+            1. laudantium, totam → rem aperiam → eaque ipsa → 'quae ab illo ' 
+            2. inventore veritatis et quasi architecto beatae
 
-            *ER* = Xxxx xxxx xxx xxx xxxxx xxx Xxxx-Xxxxx
+            *ER* = Nemo enim ipsam voluptatem
 
-            *AR* = Xxxxx xxx xx Xxxxx xxx xxx xxx Xxxxx Xxxx Xxxx xxxx xxx xxxxx
+            *AR* = Neque porro quisquam est, qui dolorem ipsum quia dolor sit
 
             !image-2020-09-04-18-45-10-682.png|thumbnail!
 
             [http://xxxx.xxx:0000/xxx/xxx.jsp?xxx=xxxx#xxxXxx=xxx;xxxXxx=xxxxxx]
-            xxx_XXXX.x.XXXX.XXXX.XX.XxxxxXX_xxXXXX"
+            Ut enim ad minima veniam, quis nostrum exercitationem"
         )
       )
     end
@@ -195,21 +195,21 @@ module Lazylead
         OpenStruct.new(
           description: "
             *Preconditions*
-            1. XXxxXX
-            2. Xxxxxx
+            1. But I must explain to you how all
+            2. this mistaken idea of denouncing pleasure
 
             *Test Steps*
-            1. Xx xx Xxxxx → XXX Xxxxx → Xxxxxx Xxxxx → 'Xxxxxx' xxxx 
-            2. Xxxxxx 'Xxxxxx' xxxxx xxx 'Xxxxx Xxxxx' xxxxx
+            1. And praising → pain was → born and I will give
+            2. Nor again is there anyone who loves or pursues or desires to obtain pain
 
-            *ER* = Xxxxx xxxxx xxxx xxxxxx xxxxxxxx xxxxx xx XXxx-Xxxx
+            *ER* = To take a trivial example,
 
-            *AR* = XXxxxx xxx xxxxxx xxx Xxxxx xxx xxxx xxxx Xxxxx Xxxx Xxxx xxx
+            *AR* = Which of us ever undertakes laborious physical exercise
 
             !image-2020-xx-xx-xx-xx-xx-xxx.png|thumbnail!
 
             [http://xxx.xxx:0000/xxx/xxx.jsp?xxx=xxxx;xxxXx=4428;xxxXx=xxxx]
-            xxx_xxx.x.xxxx.xxx.xxx.xxxxXxx_xxx"
+            except to obtain some advantage from it? "
         )
       )
     end
@@ -220,18 +220,18 @@ module Lazylead
           description: "
             [https://xxxx.xxxx.xxx.com/]
 
-            *Precondition:* XXX xxxx xxxxxxxxx xxxxxx xxxxx XXXX
+            *Precondition:* But who has any right to find fault with a man who chooses
 
             *TC:*
-             # Xxxxx xx xXxxx xxxx: [xxx.xxx.com|https://xxx.xxx.com/]
-             # Xxx XXX xxxxx xxx xxx xxx: 8443286573113926860
-             # xxxxx [Xxxxx]
-             # xxxxx xx Xxxxxx xxxx xxxx xxx
-             # Xxxxx xxxx xxx XXX
+             # njoy a pleasure that has no annoying consequences, : [yyyyyy.zzz.com|https://xxx.yyyy.com/]
+             # At vero eos et accusamus et iusto odio dignissimos: 8443286573113926860
+             # ducimus qui blanditiis [praesentium]
+             # Et harum quidem rerum facilis est et expedita distinctio.
+             # Nam libero tempore, cum soluta nobis est eligendi
 
-            *ER:* xxxx xxxx xxxx xxxxx xxxxx
+            *ER:* omnis voluptas assumenda est,
 
-            *AR:* xxxx xxxx xxxx
+            *AR:* omnis dolor repellendus.
 
             [^screenshot-1.png]"
         )
