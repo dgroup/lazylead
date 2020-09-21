@@ -38,13 +38,15 @@ module Lazylead
 
       def run(sys, postman, opts)
         allowed = opts.slice("allowed", ",")
+        silent = opts.key? "silent"
         issues = sys.issues(
           opts["jql"], opts.jira_defaults.merge(expand: "changelog")
         )
         return if issues.empty?
         postman.send opts.merge(
-          versions: issues.map { |i| Version.new(i, allowed) }
+          versions: issues.map { |i| Version.new(i, allowed, silent) }
                           .select(&:changed?)
+                          .each(&:add_label)
         )
       end
     end
@@ -53,9 +55,10 @@ module Lazylead
     class Version
       attr_reader :issue
 
-      def initialize(issue, allowed)
+      def initialize(issue, allowed, silent)
         @issue = issue
         @allowed = allowed
+        @silent = silent
       end
 
       # Gives true when last change of "Fix Version" field was done
@@ -77,6 +80,10 @@ module Lazylead
             i["field"] == "Fix Version"
           end
         end
+      end
+
+      def add_label
+        @issue.add_label("LL.IllegalChangeOfFixVersion") unless @silent
       end
     end
   end
