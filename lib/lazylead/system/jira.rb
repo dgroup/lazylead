@@ -234,6 +234,16 @@ module Lazylead
     def attachments
       @issue.attachments
     end
+
+    def add_label(label)
+      labels = @issue.labels
+      labels << label
+      save!("fields" => { "labels" => labels.uniq })
+    end
+
+    def save!(opts)
+      @issue.save(opts)
+    end
   end
 
   # The jira issue comments
