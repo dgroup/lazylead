@@ -85,8 +85,9 @@ module Lazylead
 
     # Post the comment with score and accuracy to the ticket.
     def post
-      @issue.post comment unless @opts.key? "silent"
-      @issue.add_label "#{(@accuracy / 10) * 10}%" unless @opts.key? "silent"
+      return if @opts.key? "silent"
+      @issue.post comment
+      @issue.add_label "LL.accuracy", "#{(@accuracy / 10) * 10}%"
     end
 
     # The jira comment in markdown format

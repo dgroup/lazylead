@@ -235,9 +235,10 @@ module Lazylead
       @issue.attachments
     end
 
-    def add_label(label)
+    def add_label(label, *more)
       labels = @issue.labels
       labels << label
+      labels += more if more.size.positive?
       save!("fields" => { "labels" => labels.uniq })
     end
 
