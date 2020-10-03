@@ -71,46 +71,45 @@
       display: inline-block;
       line-height: 15px;
       font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-      font-size: 11px;
+      border: 1px solid #BCC6CC;
     }
 
     .commit * {
       padding-left: 4px;
+      font-size: 8px;
+      line-height: 15px;
     }
   </style>
   <title>SVN log</title>
 </head>
 <body>
 <p>Hi,</p>
-<p>The following file(s) changed since <code><%= since_rev %></code> rev:</p>
-<% stdout.split("------------------------------------------------------------------------").reject(&:blank?).each do |commit| %>
+<p>The following file(s) changed since <code><%= since_rev %></code> rev in <a href="<%= svn_url %>"><%= svn_url %></a>:</p>
+<% stdout.split("------------------------------------------------------------------------").reject(&:blank?).reverse.each do |commit| %>
   <div class="commit">
     <% commit.split("\n").reject(&:blank?).each_with_index do |line, index| %>
       <% if index.zero? %>
         <% details = line.split("|").map(&:strip).reject(&:blank?) %>
         <p style="background: gainsboro;">
-          <a href="<%= commit_url %><%= details[0][1..-1] %>"><%= details[0] %></a>
-          by<a href="<%= user %><%= details[1] %>"><%= details[1]%></a>
+          <a href="<%= commit_url %><%= details[0][1 .. -1] %>"><%= details[0] %></a>
+          by<a href="<%= user %><%= details[1] %>"><%= details[1] %></a>
           at<span style="color: #275a90;"><%= details[2] %></span>
         </p>
-        <%#= Time.strptime(details[2], "%Y-%m-%d %H:%M:%S T (").strftime("%Y-%m-%d %H:%M") %>
       <% else %>
         <% if line.start_with?("+++") || line.start_with?("---") %>
-          <p style="background: gainsboro;"><%= line %></p>
+          <p style="background: gainsboro;"><%= line.gsub("<", "&lt;") %></p>
         <% elsif line.start_with?("+") %>
-          <p style="<%= "background: darkseagreen;" %>"><%= line %></p>
+          <p style="<%= "background: darkseagreen;" %>"><%= line.gsub("<", "&lt;") %></p>
         <% elsif line.start_with?("-") %>
-          <p style="<%= "background: lightsalmon;" %>"><%= line %></p>
+          <p style="<%= "background: lightsalmon;" %>"><%= line.gsub("<", "&lt;") %></p>
         <% else %>
           <p style="background: gainsboro;"><%= line %></p>
         <% end %>
       <% end %>
     <% end %>
   </div>
-  <br/>
+  <br/><br/><br/>
 <% end %>
-
-
 <p>Posted by
   <a href="https://github.com/dgroup/lazylead">lazylead v<%= version %></a>.
 </p>
