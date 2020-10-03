@@ -28,7 +28,7 @@ module Lazylead
   # Java stacktrace or Oracle errors in {noformat} section
   class Stacktrace < Lazylead::Requirement
     def initialize(score = 3)
-      super "Stacktrace/errors in *\{noformat\}* for JIRA indexing", score,
+      super "Stacktrace/errors in *\\{noformat\\}* for JIRA indexing", score,
             "Description"
     end
 
