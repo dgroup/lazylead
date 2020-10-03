@@ -43,7 +43,7 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        require_rules
+        Dir[File.join(__dir__, "*.rb")].sort.each { |f| require f }
         rules = opts.slice("rules", ",")
                     .map(&:constantize)
                     .map(&:new)
@@ -52,12 +52,6 @@ module Lazylead
                     .each(&:evaluate)
                     .each(&:post)
         postman.send opts.merge(tickets: raised) unless raised.empty?
-      end
-
-      # Load all ticket accuracy rules for future verification
-      def require_rules
-        rules = File.dirname(__FILE__)
-        $LOAD_PATH.unshift(rules) unless $LOAD_PATH.include?(rules)
       end
     end
   end
