@@ -97,13 +97,13 @@
         </p>
       <% else %>
         <% if line.start_with?("+++") || line.start_with?("---") %>
-          <p style="background: gainsboro;"><%= line.gsub("<", "&lt;") %></p>
+          <p style="background: gainsboro;"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
         <% elsif line.start_with?("+") %>
-          <p style="<%= "background: darkseagreen;" %>"><%= line.gsub("<", "&lt;") %></p>
+          <p style="<%= "background: darkseagreen;" %>"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
         <% elsif line.start_with?("-") %>
-          <p style="<%= "background: lightsalmon;" %>"><%= line.gsub("<", "&lt;") %></p>
+          <p style="<%= "background: lightsalmon;" %>"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
         <% else %>
-          <p style="background: gainsboro;"><%= line %></p>
+          <p style="background: gainsboro;"><%= line.gsub(/[<>]/,'<' => '&lt;', '>' => '&gt;') %></p>
         <% end %>
       <% end %>
     <% end %>
