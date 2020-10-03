@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    /* CSS styles taken from https://github.com/yegor256/tacit */
+    pre, code, kbd, samp, var, output {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 14.4px
+    }
+
+    pre code {
+      background: none;
+      border: 0;
+      line-height: 29.7px;
+      padding: 0
+    }
+
+    code, kbd {
+      background: #daf1e0;
+      border-radius: 3.6px;
+      color: #2a6f3b;
+      display: inline-block;
+      line-height: 18px;
+      padding: 3.6px 6.3px 2.7px
+    }
+
+    a {
+      color: #275a90;
+      text-decoration: none
+    }
+
+    a:hover {
+      text-decoration: underline
+    }
+
+    * {
+      border: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      box-sizing: border-box;
+      margin: 0;
+      max-width: 100%;
+      padding: 0;
+      vertical-align: baseline;
+      font-family: system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-stretch: normal;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 29.7px
+    }
+
+    html, body {
+      width: 100%
+    }
+
+    html {
+      height: 100%
+    }
+
+    body {
+      background: #fff;
+      color: #1a1919;
+      padding: 36px
+    }
+
+    .commit {
+      min-width: 100%;
+      border-radius: 3.5px;
+      overflow: hidden;
+      display: inline-block;
+      line-height: 15px;
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 11px;
+    }
+
+    .commit * {
+      padding-left: 4px;
+    }
+  </style>
+  <title>SVN log</title>
+</head>
+<body>
+<p>Hi,</p>
+<p>The following file(s) changed since <code><%= since_rev %></code> rev:</p>
+<% stdout.split("------------------------------------------------------------------------").reject(&:blank?).each do |commit| %>
+  <div class="commit">
+    <% commit.split("\n").reject(&:blank?).each_with_index do |line, index| %>
+      <% if index.zero? %>
+        <% details = line.split("|").map(&:strip).reject(&:blank?) %>
+        <p style="background: gainsboro;">
+          <a href="<%= commit_url %><%= details[0][1..-1] %>"><%= details[0] %></a>
+          by<a href="<%= user %><%= details[1] %>"><%= details[1]%></a>
+          at<span style="color: #275a90;"><%= details[2] %></span>
+        </p>
+        <%#= Time.strptime(details[2], "%Y-%m-%d %H:%M:%S T (").strftime("%Y-%m-%d %H:%M") %>
+      <% else %>
+        <% if line.start_with?("+++") || line.start_with?("---") %>
+          <p style="background: gainsboro;"><%= line %></p>
+        <% elsif line.start_with?("+") %>
+          <p style="<%= "background: darkseagreen;" %>"><%= line %></p>
+        <% elsif line.start_with?("-") %>
+          <p style="<%= "background: lightsalmon;" %>"><%= line %></p>
+        <% else %>
+          <p style="background: gainsboro;"><%= line %></p>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <br/>
+<% end %>
+
+
+<p>Posted by
+  <a href="https://github.com/dgroup/lazylead">lazylead v<%= version %></a>.
+</p>
+</body>
+</html>

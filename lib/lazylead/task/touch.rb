@@ -66,18 +66,12 @@ module Lazylead
         start = (now.to_time - opts["period"].to_i).to_datetime
         cmd = [
           "svn log --no-auth-cache",
-          "--username #{decrypt(opts['svn_user'])}",
-          "--password #{decrypt(opts['svn_password'])}",
+          "--username #{opts.decrypt('svn_user', 'svn_salt')}",
+          "--password #{opts.decrypt('svn_password', 'svn_salt')}",
           "--xml -v -r {#{start}}:{#{now}} #{opts['svn_url']}"
         ]
         raw = `#{cmd.join(" ")}`
         Nokogiri.XML(raw, nil, "UTF-8")
-      end
-
-      # Decrypt text using cryptography salt
-      def decrypt(text, sid = "svn_salt")
-        return Salt.new(sid).decrypt(text) if ENV.key? sid
-        text
       end
 
       # Convert single revision(XML text) to entry object.
@@ -98,6 +92,27 @@ module Lazylead
         OpenStruct.new(
           hsh.transform_values { |v| v.is_a?(Hash) ? to_struct(v) : v }
         )
+      end
+    end
+
+    #
+    # Send notification about modification of svn files since particular
+    #  revision.
+    #
+    class SvnLog
+      def initialize(log = Log.new)
+        @log = log
+      end
+
+      def run(_, postman, opts)
+        cmd = [
+          "svn log --diff --no-auth-cache",
+          "--username #{opts.decrypt('svn_user', 'svn_salt')}",
+          "--password #{opts.decrypt('svn_password', 'svn_salt')}",
+          "-r#{opts['since_rev']}:HEAD #{opts['svn_url']}"
+        ]
+        stdout = `#{cmd.join(" ")}`
+        postman.send(opts.merge(stdout: stdout)) unless stdout.blank?
       end
     end
   end

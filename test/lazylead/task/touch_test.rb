@@ -37,7 +37,7 @@ module Lazylead
       skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
       Lazylead::Smtp.new.enable
       Task::SvnTouch.new.run(
-        nil,
+        [],
         Postman.new,
         Opts.new(
           "svn_url" => "https://svn.riouxsvn.com/touch4ll",
@@ -56,6 +56,33 @@ module Lazylead
       )
       assert_email "[SVN] Important files have been changed!",
                    %w[3 dgroup /189.md Add\ description\ for\ 189\ issue]
+    end
+  end
+
+  class SvnLogTest < Lazylead::Test
+    test "changes since revision" do
+      skip "No svn credentials provided" unless env? "svn_log_user",
+                                                     "svn_log_password"
+      skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
+      Lazylead::Smtp.new.enable
+      Task::SvnLog.new.run(
+        [],
+        Postman.new,
+        Opts.new(
+          "from" => "svnlog@test.com",
+          "svn_url" => "https://svn.riouxsvn.com/touch4ll",
+          "svn_user" => ENV["svn_log_user"],
+          "svn_password" => ENV["svn_log_password"],
+          "commit_url" => "https://view.commit.com?rev=",
+          "user" => "https://user.com?id=",
+          "to" => "lead@fake.com",
+          "since_rev" => "1",
+          "subject" => "[SVN] Changed since rev1",
+          "template" => "lib/messages/svn_log.erb"
+        )
+      )
+      assert_email_line "[SVN] Changed since rev1",
+                        %w[r2 by dgroup at 2020-08-16]
     end
   end
 end

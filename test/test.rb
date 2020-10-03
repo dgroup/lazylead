@@ -111,6 +111,22 @@ module Lazylead
                                    .body.parts.first.body.raw_source
     end
 
+    # Assert that email sent using 'mail' gem in test mode
+    #  has expected subject and line with expected words
+    # @todo #/DEV Gem 'mail' sends email as a single line, find a way how to add
+    #  symbol '\n' to each line for email during unit testing.
+    def assert_email_line(subject, words)
+      words = [words] unless words.respond_to? :each
+      mail = Mail::TestMailer.deliveries
+                             .filter { |m| m.subject.eql? subject }
+                             .first
+                             .body.parts.first.body.raw_source
+                             .split("\n")
+                             .reject(&:blank?)
+      assert mail.any? { |line| words.all? { |w| line.include? w } },
+             "Words '#{words.join(',')}' wasn't found in '#{mail.join('\n')}'"
+    end
+
     # Ping remote host
     #  https://github.com/eitoball/net-ping
     #  https://stackoverflow.com/a/35508446/6916890

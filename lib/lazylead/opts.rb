@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "forwardable"
+require_relative "salt"
 
 module Lazylead
   #
@@ -63,6 +64,17 @@ module Lazylead
     # Default fields which to fetch within the Jira issue
     def jira_fields
       to_h.fetch("fields", "").split(",").map(&:to_sym)
+    end
+
+    # Decrypt particular option using cryptography salt
+    # @param key option to be decrypted
+    # @param sid the name of the salt to be used for the description
+    # @see Lazylead::Salt
+    def decrypt(key, sid)
+      text = to_h[key]
+      return text if text.blank? || text.nil?
+      return Salt.new(sid).decrypt(text) if ENV.key? sid
+      text
     end
   end
 end
