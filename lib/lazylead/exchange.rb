@@ -54,19 +54,26 @@ module Lazylead
     def send(opts)
       to = opts["to"] || opts[:to]
       to = [to] unless to.is_a? Array
-      html = make_body(opts)
-      msg = {
-        subject: opts["subject"],
-        body: html,
-        body_type: "HTML",
-        to_recipients: to
-      }
+      if to.reject { |e| e.nil? || e.blank? }.empty?
+        @log.warn "Email can't be sent to '#{to}, more: '#{opts}'"
+        return
+      end
+      msg = make_msg(to, opts)
       msg.update(cc_recipients: opts["cc"]) if opts.key? "cc"
       add_attachments(msg, opts)
       cli.send_message msg
       close_attachments msg
       @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
                  "Here is the body: #{html}"
+    end
+
+    def make_msg(to, opts)
+      {
+        subject: opts["subject"],
+        body: make_body(opts),
+        body_type: "HTML",
+        to_recipients: to
+      }
     end
 
     def add_attachments(msg, opts)
