@@ -64,7 +64,7 @@ module Lazylead
       cli.send_message msg
       close_attachments msg
       @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
-                 "Here is the body: #{html}"
+                 "Here is the body: '#{msg[:body]}'"
     end
 
     def make_msg(to, opts)
