@@ -58,16 +58,16 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
                values (1, 'Dream team with lazylead', '{}');
     insert into systems(id, properties)    
                values (1,'{"type":"Lazylead::Jira", "username":"${jira_user}", "password":"${jira_password}", "site":"${jira_url}", "context_path":""}');
-    insert into tasks (name, cron, enabled, id, system, team_id, action, properties)
+    insert into tasks (name, schedule, enabled, id, system, team_id, action, properties)
                values ('Propagate customfield_1 (External ID) to sub-tasks', 
-                       '0 8 * * 1-5', 
+                       'cron:0 8 * * 1-5', 
                        'true',
                        1, 1, 1, 
                        'Lazylead::Task::PropagateDown',
                        '{"jql":"filter=222", "propagate":"customfield_1"}');
     
     ```
-    Yes, for task scheduling we are using [cron](https://crontab.guru).
+    Yes, for task scheduling we are using [cron](https://crontab.guru) here, but you may use other scheduling types from [rufus-scheduler](https://github.com/jmettraux/rufus-scheduler).
 
 4.  Once you changed `./ll.db`, please restart the container using `docker-compose -f .github/tasks.yml restart`
     ```bash
