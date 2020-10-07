@@ -178,5 +178,13 @@ module Lazylead
                        .first["absent field"]
                        .blank?
     end
+
+    test "labels found" do
+      assert_includes NoAuthJira.new("https://jira.spring.io")
+                                .issues("key=XD-3766")
+                                .first
+                                .labels,
+                      "Spring"
+    end
   end
 end
