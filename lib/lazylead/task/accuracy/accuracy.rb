@@ -81,7 +81,7 @@ module Lazylead
     def post
       return if @opts.key? "silent"
       @issue.post comment
-      @issue.add_label "LL.accuracy", "#{(@accuracy / 10) * 10}%"
+      @issue.add_label "LL.accuracy", grade(@accuracy)
     end
 
     # The jira comment in markdown format
@@ -131,6 +131,15 @@ module Lazylead
                         .each { |e| e[0] = e[0].to_i }
                         .sort_by { |e| e[0] }
                   end
+    end
+
+    # Calculate grade for accuracy
+    # For example,
+    #  grade(7.5)   => 0
+    #  grade(12)    => 10
+    #  grade(25.5)  => 20
+    def grade(value)
+      (value / 10).floor * 10
     end
   end
 end

@@ -55,7 +55,7 @@ module Lazylead
     # Detect index of line with test case
     def detect_tc(line, index)
       return unless @tc.negative?
-      @tc = index if %w[testcase: tc: teststeps: teststeps].any? do |e|
+      @tc = index if %w[testcase: tc: teststeps: teststeps steps:].any? do |e|
         e.eql? line
       end
     end
