@@ -65,8 +65,7 @@ module Lazylead
       end
       add_attachments mail, opts
       mail.deliver
-      @log.debug "Email was generated from #{opts} and send by #{__FILE__}. " \
-                 "Here is the body: #{html}"
+      @log.debug "#{__FILE__} sent email based on #{opts}."
     end
 
     def add_attachments(mail, opts)
