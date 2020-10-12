@@ -38,13 +38,23 @@ module Lazylead
       return false if issue.description.nil?
       @tc = @ar = @er = -1
       issue.description.split("\n").reject(&:blank?).each_with_index do |l, i|
-        line = l.gsub(/[^a-zA-Z(:|=)]/, "").downcase
-        detect_tc line, i
-        detect_ar line, i
-        detect_er line, i
+        line = escape(l.strip.downcase)
+        detect_tc(line, i)
+        detect_ar(line, i)
+        detect_er(line, i)
         break if with_tc_ar_er?
       end
       with_tc_ar_er?
+    end
+
+    def escape(line)
+      if line.include?("{color")
+        line.gsub(
+          /({color:(#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})|[A-Za-z]+)})|{color}/, ""
+        )
+      else
+        line.gsub(/[^a-zA-Z(:|=)]/, "")
+      end
     end
 
     # @return true if description has test case, AR and ER
