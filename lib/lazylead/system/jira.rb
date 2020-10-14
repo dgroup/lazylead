@@ -236,6 +236,7 @@ module Lazylead
     end
 
     def add_label(label, *more)
+      return if labels.nil?
       lbl = labels
       lbl << label
       lbl += more if more.size.positive?
