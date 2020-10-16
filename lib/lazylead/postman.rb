@@ -53,19 +53,25 @@ module Lazylead
     # Send an email.
     # :opts   :: the mail configuration like to, from, cc, subject, template.
     def send(opts)
-      html = make_body(opts)
+      mail = make_email(opts)
+      mail.deliver
+      @log.debug "#{__FILE__} sent '#{mail.subject}' to '#{mail.to}'."
+    end
+
+    # Construct an email based on input arguments
+    def make_email(opts)
       mail = Mail.new
       mail.to opts[:to] || opts["to"]
       mail.from opts["from"]
       mail.cc opts["cc"] if opts.key? "cc"
       mail.subject opts["subject"]
+      html = make_body(opts)
       mail.html_part do
         content_type "text/html; charset=UTF-8"
         body html
       end
       add_attachments mail, opts
-      mail.deliver
-      @log.debug "#{__FILE__} sent email based on #{opts}."
+      mail
     end
 
     def add_attachments(mail, opts)

@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "mail"
+require "colorize"
 require_relative "log"
 require_relative "salt"
 
@@ -45,7 +46,8 @@ module Lazylead
         Mail.defaults do
           delivery_method :test
         end
-        @log.warn "SMTP connection enabled in test mode."
+        @log.warn "SMTP connection enabled in " \
+                  "#{'test'.colorize(:light_yellow)} mode."
       else
         setup_smtp
       end

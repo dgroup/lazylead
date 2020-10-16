@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "logging"
+require "colorize"
 require "forwardable"
 
 module Lazylead
@@ -68,7 +69,7 @@ module Lazylead
     Logging.appenders.stdout(
       "stdout",
       layout: Logging.layouts.pattern(
-        pattern: "[%d] %-5l [%X{tid}] %m\n",
+        pattern: "[%d] %-5l #{'[%X{tid}]'.colorize(:light_green)} %m\n",
         color_scheme: "bright"
       )
     )

@@ -63,7 +63,7 @@ module Lazylead
       add_attachments(msg, opts)
       cli.send_message msg
       close_attachments msg
-      @log.debug "#{__FILE__} sent email based on #{opts}."
+      @log.debug "#{__FILE__} sent '#{opts['subject']}' to '#{to}'."
     end
 
     def make_msg(to, opts)

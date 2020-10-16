@@ -26,7 +26,7 @@ require "rubygems"
 require "rake"
 require "date"
 require "rdoc"
-require "rainbow"
+require "colorize"
 require "rake/clean"
 
 # @todo #/DEV Investigate the possibility of using migrations from active_record
@@ -112,9 +112,10 @@ task :sqlint do
     total += violations.count { |lint| lint.type == :error }
   end
   if total.positive?
-    abort "#{Rainbow(total).red} SQL violations found."
+    abort "#{total.colorize(:red)} SQL violations found."
   else
-    puts "#{src.size} files inspected, #{Rainbow('no offenses').green} detected"
+    puts "#{src.size} files inspected, #{'no offenses'.colorize(:green)} " \
+          "detected"
   end
 end
 

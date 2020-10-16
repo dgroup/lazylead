@@ -22,6 +22,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require "colorize"
 require "vcs4sql/sqlite/migration"
 require_relative "../smtp"
 require_relative "../schedule"
@@ -58,9 +59,11 @@ module Lazylead
       def apply_vcs_migration(opts)
         @db = File.expand_path(opts[:home]) + "/" + opts[:sqlite]
         vcs = File.expand_path(opts[:home]) + "/" + opts[:vcs4sql]
-        @log.debug "Database: '#{@db}', sql migration dir: '#{vcs}'"
+        @log.debug "Database: '#{@db.colorize(:light_blue)}', "\
+                   "sql migration dir: '#{vcs.colorize(:light_blue)}'"
         Vcs4sql::Sqlite::Migration.new(@db).upgrade vcs, opts[:testdata]
-        @log.debug "Migration applied to #{@db} from #{vcs}"
+        @log.debug "Migration applied to '#{@db.colorize(:light_blue)}' from " \
+                   "'#{vcs.colorize(:light_blue)}'"
       end
 
       def enable_active_record(opts)

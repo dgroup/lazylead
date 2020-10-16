@@ -29,7 +29,7 @@ STDOUT.sync = true
 
 require "slop"
 require "sqlite3"
-require "rainbow"
+require "colorize"
 require "logging"
 require "backtrace"
 require "memory_profiler"
@@ -77,8 +77,9 @@ Available options:"
     exit
   end
 end
-log.debug("Version: #{Lazylead::VERSION}")
-log.debug("Memory footprint at start is #{Lazylead::Allocated.new}")
+log.debug "Version: #{Lazylead::VERSION.colorize(:green)}"
+log.debug "Memory footprint at start is " \
+          "#{Lazylead::Allocated.new.to_s.colorize(:light_blue)}."
 cmd = lambda do
   Lazylead::CLI::App.new(
     log,
@@ -103,5 +104,6 @@ if opts["memory-dump"]
 else
   code = cmd.call
 end
-log.debug("Memory footprint at the end is #{Lazylead::Allocated.new}")
+log.debug "Memory footprint at the end is " \
+          "#{Lazylead::Allocated.new.to_s.colorize(:light_blue)}."
 exit(code) unless code.zero?
