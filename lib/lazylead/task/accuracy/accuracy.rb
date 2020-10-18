@@ -81,7 +81,7 @@ module Lazylead
     def post
       return if @opts.key? "silent"
       @issue.post comment
-      @issue.add_label "LL.accuracy", grade(@accuracy).to_s
+      @issue.add_label "LL.accuracy", "#{grade(@accuracy)}%"
     end
 
     # The jira comment in markdown format
