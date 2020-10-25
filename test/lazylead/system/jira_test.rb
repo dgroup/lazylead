@@ -142,13 +142,6 @@ module Lazylead
       assert_equal "Hi there!", issue.comment[:body]
     end
 
-    test "search by limit in 1 issue" do
-      assert_equal 1,
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key in (DATAJDBC-480, DATAJDBC-500)", max_results: "1")
-                             .size
-    end
-
     test "description is correct" do
       assert_words %w[DATACMNS-1639\ moved\ entity\ instantiators],
                    NoAuthJira.new("https://jira.spring.io")
@@ -185,6 +178,12 @@ module Lazylead
                                 .first
                                 .labels,
                       "Spring"
+    end
+
+    test "bulk search in few iterations" do
+      assert NoAuthJira.new("https://jira.spring.io")
+                       .issues("key>DATAJDBC-500")
+                       .size >= 118
     end
   end
 end

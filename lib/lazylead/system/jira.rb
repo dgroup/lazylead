@@ -25,6 +25,7 @@
 require "jira-ruby"
 require "forwardable"
 require_relative "../salt"
+require_relative "../opts"
 
 module Lazylead
   # Jira system for manipulation with issues.
@@ -45,16 +46,30 @@ module Lazylead
                  " and salt #{@salt.id} (found=#{@salt.specified?})"
     end
 
-    def issues(jql, opts = {})
+    # Find the jira issues by 'JQL'
+    # @param 'jql' - Jira search query
+    # @param 'opts' - Parameters for Jira search query.
+    #   :max_results => maximum number of tickets per one iteration.
+    #   :fields      => ticket fields to be fetched like assignee, summary, etc.
+    def issues(jql, opts = { max_results: 50, fields: nil, expand: nil })
       raw do |jira|
-        jira.Issue.jql(jql, opts).map { |i| Lazylead::Issue.new(i, jira) }
+        start = 0
+        tickets = []
+        total = jira.Issue.jql(jql, max_results: 0)
+        loop do
+          tickets.concat(jira.Issue.jql(jql, opts.merge(start_at: start))
+                             .map { |i| Lazylead::Issue.new(i, jira) })
+          start += opts.fetch(:max_results, 50).to_i
+          break if start > total
+        end
+        tickets
       end
     end
 
     # Execute request to the ticketing system using raw client.
     # For Jira the raw client is 'jira-ruby' gem.
     def raw
-      raise "ll-06: No block given to method" unless block_given?
+      raise "ll-009: No block given to method" unless block_given?
       yield client
     end
 
@@ -325,7 +340,7 @@ module Lazylead
 
     # Execute request to the ticketing system using raw client.
     def raw
-      raise "ll-08: No block given to method" unless block_given?
+      raise "ll-008: No block given to method" unless block_given?
       yield(OpenStruct.new(Issue: self))
     end
 
