@@ -37,18 +37,57 @@ module Lazylead
       !frames(issue.description).select { |f| oracle?(f) || java?(f) }.empty?
     end
 
-    # Detect all {noformat} frames in description field
+    # Detect all {noformat}, {code} frames in ticket description
     def frames(description)
-      description.enum_for(:scan, /(?={noformat})/)
-                 .map { Regexp.last_match.offset(0).first }
-                 .each_slice(2).map do |f|
-        description[f.first, f.last - f.first + "{noformat}".size]
+      noformat(description).concat(code(description))
+    end
+
+    # Detect all noformat blocks and give all text snippets in array
+    # @param desc The jira ticket description
+    def noformat(desc)
+      return [] unless desc.include? "{noformat}"
+      desc.enum_for(:scan, /(?={noformat})/)
+          .map { Regexp.last_match.offset(0).first }
+          .each_slice(2).map do |f|
+        desc[f.first, f.last - f.first + "{noformat}".size]
       end
+    end
+
+    # Detect all {code:*} blocks and give all text snippets in array
+    # @param desc The jira ticket description
+    def code(desc)
+      return [] unless desc.include?("{code:") || desc.include?("{code}")
+      words = desc.gsub(/{code/, " {code")
+                  .gsub("}", "} ")
+                  .gsub("Caused by:", "Caused_by:")
+                  .split(" ")
+                  .map(&:strip)
+                  .reject(&:blank?)
+      pairs(words, "{code").map { |s| words[s.first..s.last].join("\n") }
+    end
+
+    # Detect indexes of pairs  which are starting from particular text
+    # @param words is array of words
+    # @param text is a label for pairs
+    #
+    #  paris([aa,tag,bb,cc,tag,dd], "tag")        => [[1, 4]]
+    #  paris([aa,tag,bb,cc,tag,dd,tag,ee], "tag") => [[1, 4]]    # non closed
+    #
+    def pairs(words, text)
+      snippets = [[]]
+      words.each_with_index do |e, i|
+        next unless e.start_with? text
+        pair = snippets.last
+        pair << i if pair.size.zero? || pair.size == 1
+        snippets[-1] = pair
+        snippets << [] if pair.size == 2
+      end
+      snippets.select { |s| s.size == 2 }
     end
 
     # @return true if frame has few lines with java stack frames
     def java?(frame)
-      allowed = ["at ", "Caused by:"]
+      allowed = ["at", "Caused by:", "Caused_by:"]
       frame.split("\n")
            .map(&:strip)
            .count { |l| allowed.any? { |a| l.start_with? a } } > 3
