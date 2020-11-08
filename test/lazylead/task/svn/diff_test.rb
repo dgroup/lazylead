@@ -23,49 +23,20 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "mail"
-require_relative "../../test"
-require_relative "../../../lib/lazylead/smtp"
-require_relative "../../../lib/lazylead/opts"
-require_relative "../../../lib/lazylead/postman"
-require_relative "../../../lib/lazylead/task/touch"
+require_relative "../../../test"
+require_relative "../../../../lib/lazylead/smtp"
+require_relative "../../../../lib/lazylead/opts"
+require_relative "../../../../lib/lazylead/postman"
+require_relative "../../../../lib/lazylead/task/svn/diff"
 
 module Lazylead
-  class SvnTouchTest < Lazylead::Test
-    test "important files changed in svn repo" do
-      skip "No svn credentials provided" unless env? "svn_touch_user",
-                                                     "svn_touch_password"
-      skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
-      Lazylead::Smtp.new.enable
-      Task::SvnTouch.new.run(
-        [],
-        Postman.new,
-        Opts.new(
-          "svn_url" => "https://svn.riouxsvn.com/touch4ll",
-          "svn_user" => ENV["svn_touch_user"],
-          "svn_password" => ENV["svn_touch_password"],
-          "commit_url" => "https://view.commit.com?rev=",
-          "user" => "https://user.com?id=",
-          "to" => "lead@fake.com",
-          "from" => "ll@fake.com",
-          "now" => "2020-08-17T00:00:00+01:00",
-          "period" => "864000",
-          "files" => "189.md,absent.txt",
-          "subject" => "[SVN] Important files have been changed!",
-          "template" => "lib/messages/svn_touch.erb"
-        )
-      )
-      assert_email "[SVN] Important files have been changed!",
-                   %w[3 dgroup /189.md Add\ description\ for\ 189\ issue]
-    end
-  end
-
-  class SvnLogTest < Lazylead::Test
+  class DiffTest < Lazylead::Test
     test "changes since revision" do
       skip "No svn credentials provided" unless env? "svn_log_user",
                                                      "svn_log_password"
       skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
       Lazylead::Smtp.new.enable
-      Task::SvnLog.new.run(
+      Task::Svn::Diff.new.run(
         [],
         Postman.new,
         Opts.new(
@@ -78,8 +49,8 @@ module Lazylead
           "to" => "lead@fake.com",
           "since_rev" => "1",
           "subject" => "[SVN] Changed since rev1",
-          "template" => "lib/messages/svn_log.erb",
-          "template-attachment" => "lib/messages/svn_log_attachment.erb"
+          "template" => "lib/messages/svn_diff.erb",
+          "template-attachment" => "lib/messages/svn_diff_attachment.erb"
         )
       )
       assert_email_line "[SVN] Changed since rev1",
@@ -104,7 +75,7 @@ module Lazylead
         smtp_user: ENV["LL_SMTP_USER"],
         smtp_pass: ENV["LL_SMTP_PASS"]
       ).enable
-      Task::SvnLog.new.run(
+      Task::Svn::Diff.new.run(
         [],
         Postman.new,
         Opts.new(
@@ -117,8 +88,8 @@ module Lazylead
           "to" => ENV["LL_SMTP_TO"],
           "since_rev" => "1",
           "subject" => "[SVN] Changed since rev1",
-          "template" => "lib/messages/svn_log.erb",
-          "template-attachment" => "lib/messages/svn_log_attachment.erb"
+          "template" => "lib/messages/svn_diff.erb",
+          "template-attachment" => "lib/messages/svn_diff_attachment.erb"
         )
       )
     end
