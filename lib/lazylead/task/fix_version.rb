@@ -85,6 +85,10 @@ module Lazylead
       def add_label
         @issue.add_label("LL.IllegalChangeOfFixVersion") unless @silent
       end
+
+      def current
+        @issue.fields["fixVersions"].first["name"]
+      end
     end
   end
 end
