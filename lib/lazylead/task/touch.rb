@@ -22,6 +22,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require "tmpdir"
 require "nokogiri"
 require "active_support/core_ext/hash/conversions"
 require_relative "../salt"
@@ -112,7 +113,26 @@ module Lazylead
           "-r#{opts['since_rev']}:HEAD #{opts['svn_url']}"
         ]
         stdout = `#{cmd.join(" ")}`
-        postman.send(opts.merge(stdout: stdout)) unless stdout.blank?
+        send_email stdout, postman, opts unless stdout.blank?
+      end
+
+      # Send email with svn log as an attachment
+      # The attachment won't be stored locally and we'll be removed once it sent
+      def send_email(stdout, postman, opts)
+        Dir.mktmpdir do |dir|
+          name = "svn-log-#{Date.today.strftime('%d-%b-%Y')}.html"
+          f = File.open(File.join(dir, name), "w")
+          f.write(
+            Email.new(
+              opts["template-attachment"],
+              opts.merge(stdout: stdout, version: Lazylead::VERSION)
+            ).render
+          )
+          postman.send opts.merge(stdout: stdout, attachments: [f.path])
+        rescue StandardError => e
+          @log.error "ll-010: Can't send an email for #{opts} based on "\
+                     "'#{stdout}'", e
+        end
       end
     end
   end

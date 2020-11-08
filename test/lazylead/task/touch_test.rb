@@ -78,11 +78,49 @@ module Lazylead
           "to" => "lead@fake.com",
           "since_rev" => "1",
           "subject" => "[SVN] Changed since rev1",
-          "template" => "lib/messages/svn_log.erb"
+          "template" => "lib/messages/svn_log.erb",
+          "template-attachment" => "lib/messages/svn_log_attachment.erb"
         )
       )
       assert_email_line "[SVN] Changed since rev1",
                         %w[r2 by dgroup at 2020-08-16]
+    end
+
+    test "changes since revision with attachment" do
+      skip "No svn credentials provided" unless env? "svn_log_user",
+                                                     "svn_log_password"
+      skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
+      skip "No postman credentials provided" unless env? "LL_SMTP_HOST",
+                                                         "LL_SMTP_PORT",
+                                                         "LL_SMTP_USER",
+                                                         "LL_SMTP_PASS",
+                                                         "LL_SMTP_TO",
+                                                         "LL_SMTP_FROM"
+      Lazylead::Smtp.new(
+        Log.new,
+        NoSalt.new,
+        smtp_host: ENV["LL_SMTP_HOST"],
+        smtp_port: ENV["LL_SMTP_PORT"],
+        smtp_user: ENV["LL_SMTP_USER"],
+        smtp_pass: ENV["LL_SMTP_PASS"]
+      ).enable
+      Task::SvnLog.new.run(
+        [],
+        Postman.new,
+        Opts.new(
+          "from" => ENV["LL_SMTP_FROM"],
+          "svn_url" => "https://svn.riouxsvn.com/touch4ll",
+          "svn_user" => ENV["svn_log_user"],
+          "svn_password" => ENV["svn_log_password"],
+          "commit_url" => "https://view.commit.com?rev=",
+          "user" => "https://user.com?id=",
+          "to" => ENV["LL_SMTP_TO"],
+          "since_rev" => "1",
+          "subject" => "[SVN] Changed since rev1",
+          "template" => "lib/messages/svn_log.erb",
+          "template-attachment" => "lib/messages/svn_log_attachment.erb"
+        )
+      )
     end
   end
 end

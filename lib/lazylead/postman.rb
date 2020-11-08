@@ -75,9 +75,10 @@ module Lazylead
     end
 
     def add_attachments(mail, opts)
-      return unless opts.key? "attachments"
-      opts["attachments"].select { |a| File.file? a }
-                         .each { |a| mail.add_file a }
+      return unless opts.key?("attachments") || opts.key?(:attachments)
+      attach = opts["attachments"] || opts[:attachments]
+      return if attach.nil?
+      attach.select { |a| File.file? a }.each { |a| mail.add_file a }
     end
   end
 end

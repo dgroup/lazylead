@@ -34,7 +34,7 @@ module Lazylead
 
     def passed(issue)
       return false if issue.description.nil?
-      !frames(issue.description).select { |f| oracle?(f) || java?(f) }.empty?
+      frames(issue.description).any? { |f| oracle?(f) || java?(f) }
     end
 
     # Detect all {noformat}, {code} frames in ticket description
