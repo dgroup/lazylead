@@ -74,5 +74,29 @@ module Lazylead
         )
       )
     end
+
+    test "rotated log file is present" do
+      assert Logs.new.passed(
+        OpenStruct.new(
+          attachments: [
+            OpenStruct.new(
+              attrs: { "size" => 10_241, "filename" => "catalina.log111" }
+            )
+          ]
+        )
+      )
+    end
+
+    test "log txt file is present" do
+      assert Logs.new.passed(
+        OpenStruct.new(
+          attachments: [
+            OpenStruct.new(
+              attrs: { "size" => 10_241, "filename" => "catalina.txt" }
+            )
+          ]
+        )
+      )
+    end
   end
 end
