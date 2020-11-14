@@ -63,12 +63,12 @@ module Lazylead
       )
     end
 
-    test "log file size less than 10KB" do
+    test "log file size less than 5KB" do
       refute Logs.new.passed(
         OpenStruct.new(
           attachments: [
             OpenStruct.new(
-              attrs: { "size" => 10_000, "filename" => "catalina.log" }
+              attrs: { "size" => 5000, "filename" => "catalina.log" }
             )
           ]
         )
