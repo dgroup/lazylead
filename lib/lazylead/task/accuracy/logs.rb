@@ -33,10 +33,10 @@ module Lazylead
 
     # Ensure that ticket has a '*.log' file more '5KB'
     def matching(attachment)
-      attachment.attrs["size"].to_i > 5120 &&
-        File.extname(attachment.attrs["filename"])
-            .downcase
-            .start_with?(".log", ".txt")
+      name = attachment.attrs["filename"].downcase
+      return false unless attachment.attrs["size"].to_i > 5120
+      return true if File.extname(name).start_with?(".log", ".txt")
+      %w[.log.zip .log.gz .log.tar.gz].any? { |l| name.end_with? l }
     end
   end
 end

@@ -98,5 +98,41 @@ module Lazylead
         )
       )
     end
+
+    test "zip log file is present" do
+      assert Logs.new.passed(
+        OpenStruct.new(
+          attachments: [
+            OpenStruct.new(
+              attrs: { "size" => 10_241, "filename" => "catalina.log.zip" }
+            )
+          ]
+        )
+      )
+    end
+
+    test "gz log file is present" do
+      assert Logs.new.passed(
+        OpenStruct.new(
+          attachments: [
+            OpenStruct.new(
+              attrs: { "size" => 10_241, "filename" => "catalina.log.gz" }
+            )
+          ]
+        )
+      )
+    end
+
+    test "tar gz log file is present" do
+      assert Logs.new.passed(
+        OpenStruct.new(
+          attachments: [
+            OpenStruct.new(
+              attrs: { "size" => 10_241, "filename" => "catalina.log.tar.gz" }
+            )
+          ]
+        )
+      )
+    end
   end
 end
