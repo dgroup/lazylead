@@ -38,7 +38,7 @@ module Lazylead
       return false if issue.description.nil?
       @tc = @ar = @er = -1
       issue.description.split("\n").reject(&:blank?).each_with_index do |l, i|
-        line = escape(l.strip.downcase)
+        line = escape(l.downcase.gsub(/\s+/, ""))
         detect_tc(line, i)
         detect_ar(line, i)
         detect_er(line, i)
@@ -65,21 +65,27 @@ module Lazylead
     # Detect index of line with test case
     def detect_tc(line, index)
       return unless @tc.negative?
-      @tc = index if %w[testcase: tc: teststeps: teststeps steps:].any? do |e|
-        e.eql? line
-      end
+      @tc = index if eql?(line, %w[testcase: tc: teststeps: teststeps steps:])
     end
 
     # Detect index of line with actual result
     def detect_ar(line, index)
       return unless @ar.negative? && index > @tc
-      @ar = index if %w[ar: actualresult: ar=].any? { |e| line.start_with? e }
+      @ar = index if starts?(line, %w[ar: actualresult: ar= *ar*= *ar*:])
     end
 
     # Detect index of line with expected result
     def detect_er(line, index)
       return unless @er.negative? && index > @tc
-      @er = index if %w[er: expectedresult: er=].any? { |e| line.start_with? e }
+      @er = index if starts?(line, %w[er: expectedresult: er= *er*= *er*:])
+    end
+
+    def starts?(line, text)
+      text.any? { |t| line.start_with? t }
+    end
+
+    def eql?(line, text)
+      text.any? { |t| t.eql? line }
     end
   end
 end
