@@ -88,9 +88,10 @@ module Lazylead
     # @return true if frame has few lines with java stack frames
     def java?(frame)
       allowed = ["at", "Caused by:", "Caused_by:"]
-      frame.split("\n")
-           .map(&:strip)
-           .count { |l| allowed.any? { |a| l.start_with? a } } > 3
+      frame.match?(/\s\S+\.\S+Exception:\s/) ||
+        frame.split("\n")
+             .map(&:strip)
+             .count { |l| allowed.any? { |a| l.start_with? a } } > 3
     end
 
     # @return true if frame has Oracle error

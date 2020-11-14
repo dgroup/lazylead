@@ -95,6 +95,14 @@ module Lazylead
       )
     end
 
+    test "exception is found" do
+      assert Stacktrace.new.passed(
+        OpenStruct.new(
+          description: "{noformat}sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target; nested exception is javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target{noformat}"
+        )
+      )
+    end
+
     test "ORA error is found" do
       assert Stacktrace.new.passed(
         OpenStruct.new(
