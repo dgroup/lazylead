@@ -43,7 +43,7 @@ module Lazylead
            .reject(&:blank?)
            .map(&:strip)
            .flat_map { |l| l.split(" ").map(&:strip) }
-           .select { |w| w.start_with?("http://", "https://") }
+           .select { |w| w.include?("http://") || w.include?("https://") }
            .any? { |u| @envs.any? { |e| u.match? e } }
     end
   end
