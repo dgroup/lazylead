@@ -56,9 +56,11 @@ module Lazylead
         start = 0
         tickets = []
         total = jira.Issue.jql(jql, max_results: 0)
+        @log.debug "Found #{total} ticket(s) in '#{jql}'"
         loop do
           tickets.concat(jira.Issue.jql(jql, opts.merge(start_at: start))
                              .map { |i| Lazylead::Issue.new(i, jira) })
+          @log.debug "Fetched #{tickets.size}"
           start += opts.fetch(:max_results, 50).to_i
           break if start > total
         end
