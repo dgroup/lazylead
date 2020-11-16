@@ -45,8 +45,8 @@ module Lazylead
     # Detect all noformat blocks and give all text snippets in array
     # @param desc The jira ticket description
     def noformat(desc)
-      return [] unless desc.include? "{noformat}"
-      desc.enum_for(:scan, /(?={noformat})/)
+      return [] unless desc.match?(/{(n|N)(o|O)(f|F)(o|O)(r|R)(m|M)(a|A)(t|T)}/)
+      desc.enum_for(:scan, /(?=\{(n|N)(o|O)(f|F)(o|O)(r|R)(m|M)(a|A)(t|T)})/)
           .map { Regexp.last_match.offset(0).first }
           .each_slice(2).map do |f|
         desc[f.first, f.last - f.first + "{noformat}".size]
@@ -56,8 +56,8 @@ module Lazylead
     # Detect all {code:*} blocks and give all text snippets in array
     # @param desc The jira ticket description
     def code(desc)
-      return [] unless desc.include?("{code:") || desc.include?("{code}")
-      words = desc.gsub(/{code/, " {code")
+      return [] unless desc.match?(/{(c|C)(o|O)(d|D)(e|E)(:\S+)?}/)
+      words = desc.gsub(/{(c|C)(o|O)(d|D)(e|E)/, " {code")
                   .gsub("}", "} ")
                   .gsub("Caused by:", "Caused_by:")
                   .split(" ")
