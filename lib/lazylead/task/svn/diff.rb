@@ -24,6 +24,7 @@
 
 require "tmpdir"
 require "nokogiri"
+require "backtrace"
 require "active_support/core_ext/hash/conversions"
 require_relative "../../salt"
 require_relative "../../opts"
@@ -66,8 +67,8 @@ module Lazylead
             )
             postman.send opts.merge(stdout: stdout, attachments: [f.path])
           rescue StandardError => e
-            @log.error "ll-010: Can't send an email for #{opts} based on "\
-                     "'#{stdout}'", e
+            @log.error "ll-010: Can't send an email for #{opts} due to " \
+                       "#{Backtrace.new(e)}' based on #{stdout}'"
           end
         end
       end
