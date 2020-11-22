@@ -217,6 +217,35 @@ module Lazylead
                         *{color:#DE10AA}AR{color}* = YYYY"
     end
 
+    test "tc with ar er in brackets" do
+      assert testcase? "*TC Steps:*
+                         # Step 1
+                         # Step ..
+                         # Step N
+                        *[ER]* = XXXX
+                        *[AR]* = YYYY"
+    end
+
+    test "tc with ar er in noformat" do
+      assert testcase? "*TC Steps:*
+                         # Step 1
+                         # Step ..
+                         # Step N
+                        {noformat}
+                        *[ER]* = XXXX
+                        *[AR]* = YYYY
+                        {noformat}"
+    end
+
+    test "tc with colored ar er in brackets" do
+      assert testcase? "*TC Steps:*
+                         # Step 1
+                         # Step ..
+                         # Step N
+                        *{color:#00673A}[ER]{color}* = XXXX
+                        *{color:#DE10AA}[AR]{color}* = YYYY"
+    end
+
     # ensure that issue description has a test case, AR and ER
     def testcase?(desc)
       Testcase.new.passed(OpenStruct.new(description: desc))
