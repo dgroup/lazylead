@@ -80,6 +80,13 @@ module Lazylead
       JSON.parse(properties).to_h
     end
 
+    def to_h?
+      return true unless to_hash.nil?
+      false
+    rescue StandardError => _e
+      false
+    end
+
     def to_s
       attributes.map { |k, v| "#{k}='#{v}'" }.join(", ")
     end

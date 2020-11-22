@@ -81,7 +81,12 @@ module Lazylead
           @log.warn "ll-001: No tasks found."
         else
           todo.find_each do |task|
-            @schedule.register task
+            if task.to_h?
+              @schedule.register task
+            else
+              @log.warn "ll-011: Scheduling skipped due to configuration " \
+                        "mistake in #{task}"
+            end
           end
           @schedule.join
         end

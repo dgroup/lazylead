@@ -72,5 +72,15 @@ module Lazylead
       )
       assert_equal "value", ORM::Task.find(171).props["envkey"]
     end
+
+    test "task properties are parsed despite on wrong config" do
+      CLI::App.new(Log.new, NoSchedule.new).run(
+        home: ".",
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
+      )
+      refute ORM::Task.find(260).to_h?
+    end
   end
 end
