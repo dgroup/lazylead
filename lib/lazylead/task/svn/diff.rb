@@ -22,7 +22,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require "tmpdir"
+require "tempfile"
 require "nokogiri"
 require "backtrace"
 require "active_support/core_ext/hash/conversions"
@@ -59,17 +59,25 @@ module Lazylead
           Dir.mktmpdir do |dir|
             name = "svn-log-#{Date.today.strftime('%d-%b-%Y')}.html"
             f = File.open(File.join(dir, name), "w")
-            f.write(
-              Email.new(
-                opts["template-attachment"],
-                opts.merge(stdout: stdout, version: Lazylead::VERSION)
-              ).render
-            )
-            postman.send opts.merge(stdout: stdout, attachments: [f.path])
+            begin
+              f.write make_attachment(stdout, opts)
+              f.close
+              postman.send opts.merge(stdout: stdout, attachments: [f.path])
+            ensure
+              File.delete(f)
+            end
           rescue StandardError => e
             @log.error "ll-010: Can't send an email for #{opts} due to " \
                        "#{Backtrace.new(e)}' based on #{stdout}'"
           end
+        end
+
+        # Assemble HTML for attachment based on SVN output
+        def make_attachment(stdout, opts)
+          Email.new(
+            opts["template-attachment"],
+            opts.merge(stdout: stdout, version: Lazylead::VERSION)
+          ).render
         end
       end
     end
