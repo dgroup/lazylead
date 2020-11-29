@@ -42,6 +42,7 @@ module Lazylead
           "from" => "ll@company.com",
           "jql" => "key in ('DATAJDBC-480') and fixVersion is not empty",
           "allowed" => "tom,mike,bob",
+          "fields" => "description,reporter,priority,summary,created,fixVersions",
           "subject" => "FixVersion: How dare you?",
           "template" => "lib/messages/illegal_fixversion_change.erb"
         )

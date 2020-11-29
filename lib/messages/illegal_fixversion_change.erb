@@ -92,7 +92,8 @@
   <tr>
     <th id="key">Key</th>
     <th id="priority">Priority</th>
-    <th id="version">Fix Version</th>
+    <th id="from">From</th>
+    <th id="to">To</th>
     <th id="when">When</th>
     <th id="who">Who</th>
     <th id="reporter">Reporter</th>
@@ -102,7 +103,12 @@
     <tr>
       <td><a href='<%= v.issue.url %>'><%= v.issue.key %></a></td>
       <td><%= v.issue.priority %></td>
-      <td><%= v.current %></td>
+      <td><%= v.last["items"]
+               .select { |h| h["field"] == "Fix Version" }
+               .map { |h| h["fromString"] }
+               .reject(&:blank?)
+               .join(",") %></td>
+      <td><%= v.to %></td>
       <td><%= DateTime.parse(v.last["created"])
                       .strftime('%d-%b-%Y %I:%M:%S %p') %></td>
       <td><span style='color: red'><%= v.last["author"]["displayName"] %></span>

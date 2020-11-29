@@ -86,8 +86,10 @@ module Lazylead
         @issue.add_label("LL.IllegalChangeOfFixVersion") unless @silent
       end
 
-      def current
-        @issue.fields["fixVersions"].first["name"]
+      def to
+        versions = @issue.fields["fixVersions"]
+        return "" if versions.nil? || versions.empty?
+        versions.map { |x| x["name"] }.join(",")
       end
     end
   end
