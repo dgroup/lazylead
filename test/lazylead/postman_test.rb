@@ -24,6 +24,7 @@
 
 require_relative "../test"
 require_relative "../../lib/lazylead/log"
+require_relative "../../lib/lazylead/opts"
 require_relative "../../lib/lazylead/salt"
 require_relative "../../lib/lazylead/smtp"
 require_relative "../../lib/lazylead/postman"
@@ -46,11 +47,13 @@ module Lazylead
         smtp_pass: ENV["LL_SMTP_PASS"]
       ).enable
       Postman.new.send(
-        "to" => ENV["LL_SMTP_TO"],
-        "from" => ENV["LL_SMTP_FROM"],
-        "attachments" => ["readme.md"],
-        "subject" => "[LL] Attachments",
-        "template" => "lib/messages/savepoint.erb"
+        Opts.new(
+          "to" => ENV["LL_SMTP_TO"],
+          "from" => ENV["LL_SMTP_FROM"],
+          "attachments" => ["readme.md"],
+          "subject" => "[LL] Attachments",
+          "template" => "lib/messages/savepoint.erb"
+        )
       )
     end
   end

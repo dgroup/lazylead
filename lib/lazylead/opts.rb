@@ -34,7 +34,8 @@ module Lazylead
   # License:: MIT
   class Opts
     extend Forwardable
-    def_delegators :@origin, :[], :[]=, :to_s, :key?, :fetch, :merge, :except
+    def_delegators :@origin, :[], :[]=, :to_s, :key?, :fetch, :except, :each,
+                   :each_pair, :sort_by
 
     def initialize(origin = {})
       @origin = origin
@@ -76,6 +77,52 @@ module Lazylead
       return text if text.blank? || text.nil?
       return Salt.new(sid).decrypt(text) if ENV.key? sid
       text
+    end
+
+    def merge(args)
+      return self unless args.is_a? Hash
+      Opts.new @origin.merge(args)
+    end
+
+    # Construct html document from template and binds.
+    def msg_body
+      Email.new(
+        to_h["template"],
+        to_h.merge(version: Lazylead::VERSION)
+      ).render
+    end
+
+    def msg_to(delim = ",")
+      sliced delim, :to, "to"
+    end
+
+    def msg_cc(delim = ",")
+      sliced delim, :cc, "cc"
+    end
+
+    def msg_from(delim = ",")
+      sliced delim, :from, "from"
+    end
+
+    def msg_attachments(delim = ",")
+      sliced(delim, :attachments, "attachments").select { |f| File.file? f }
+    end
+
+    #
+    # Find the option by key and split by delimiter
+    #   Opts.new("key" => "a,b").sliced(",", "key")     => [a, b]
+    #   Opts.new(key: "a,b").sliced(",", :key)          => [a, b]
+    #   Opts.new(key: "a,b").sliced(",", "key", :key)   => [a, b]
+    #   Opts.new(key: "").sliced ",", :key)             => []
+    #
+    def sliced(delim, *keys)
+      return [] if keys.empty?
+      key = keys.detect { |k| key? k }
+      val = to_h[key]
+      return [] if val.nil? || val.blank?
+      return val if val.is_a? Array
+      return [val] unless val.include? delim
+      slice key, delim
     end
   end
 end

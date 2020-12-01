@@ -44,8 +44,6 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Postman
-    include Emailing
-
     def initialize(log = Log.new)
       @log = log
     end
@@ -53,32 +51,29 @@ module Lazylead
     # Send an email.
     # :opts   :: the mail configuration like to, from, cc, subject, template.
     def send(opts)
-      mail = make_email(opts)
-      mail.deliver
-      @log.debug "#{__FILE__} sent '#{mail.subject}' to '#{mail.to}'."
+      if opts.msg_to.empty?
+        @log.warn "ll-013: Email can't be sent to '#{opts.msg_to}," \
+                  " more: '#{opts}'"
+      else
+        mail = make_email(opts)
+        mail.deliver
+        @log.debug "#{__FILE__} sent '#{mail.subject}' to '#{mail.to}'."
+      end
     end
 
     # Construct an email based on input arguments
     def make_email(opts)
       mail = Mail.new
-      mail.to opts[:to] || opts["to"]
-      mail.from opts["from"]
-      mail.cc opts["cc"] if opts.key? "cc"
+      mail.to opts.msg_to
+      mail.from opts.msg_from
+      mail.cc opts.msg_cc if opts.key? "cc"
       mail.subject opts["subject"]
-      html = make_body(opts)
       mail.html_part do
         content_type "text/html; charset=UTF-8"
-        body html
+        body opts.msg_body
       end
-      add_attachments mail, opts
+      opts.msg_attachments.each { |f| mail.add_file f }
       mail
-    end
-
-    def add_attachments(mail, opts)
-      return unless opts.key?("attachments") || opts.key?(:attachments)
-      attach = opts["attachments"] || opts[:attachments]
-      return if attach.nil?
-      attach.select { |a| File.file? a }.each { |a| mail.add_file a }
     end
   end
 end

@@ -39,8 +39,6 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class Exchange
-    include Emailing
-
     def initialize(
       log = Log.new, salt = Salt.new("exchange_salt"), opts = ENV.to_h
     )
@@ -52,38 +50,28 @@ module Lazylead
     # Send an email.
     # :opts   :: the mail configuration like from, cc, subject, template.
     def send(opts)
-      to = opts["to"] || opts[:to]
-      to = [to] unless to.is_a? Array
-      if to.reject { |e| e.nil? || e.blank? }.empty?
-        @log.warn "Email can't be sent to '#{to}, more: '#{opts}'"
-        return
+      if opts.msg_to.empty?
+        @log.warn "ll-012: Email can't be sent to '#{opts.msg_to}," \
+                  " more: '#{opts}'"
+      else
+        msg = make_msg opts
+        cli.send_message msg
+        msg[:file_attachments].each(&:close) unless opts.msg_attachments.empty?
+        @log.debug "#{__FILE__} sent '#{opts['subject']}' to '#{opts.msg_to}'."
       end
-      msg = make_msg(to, opts)
-      msg.update(cc_recipients: opts["cc"]) if opts.key? "cc"
-      add_attachments(msg, opts)
-      cli.send_message msg
-      close_attachments msg
-      @log.debug "#{__FILE__} sent '#{opts['subject']}' to '#{to}'."
     end
 
-    def make_msg(to, opts)
-      {
+    def make_msg(opts)
+      msg = {
         subject: opts["subject"],
-        body: make_body(opts),
+        body: opts.msg_body,
         body_type: "HTML",
-        to_recipients: to
+        to_recipients: opts.msg_to
       }
-    end
-
-    def add_attachments(msg, opts)
-      return unless opts.key? "attachments"
-      files = split("attachments", opts).map { |f| File.open(f, "r") }
-      msg[:file_attachments] = files
-    end
-
-    def close_attachments(msg)
-      return if msg[:file_attachments].nil? || msg[:file_attachments].empty?
-      msg[:file_attachments].each(&:close)
+      files = opts.msg_attachments.map { |f| File.open(f, "r") }
+      msg[:file_attachments] = files unless files.empty?
+      msg[:cc_recipients] = opts["cc"] if opts.key? "cc"
+      msg
     end
 
     private

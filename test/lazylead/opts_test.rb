@@ -66,5 +66,40 @@ module Lazylead
     test "except keys" do
       assert_equal 1, Opts.new("one" => "1", "two" => "2").except("one").size
     end
+
+    test "attachment is blank" do
+      assert_empty Opts.new("attachments" => "").msg_attachments
+    end
+
+    test "attachment is nil" do
+      assert_empty Opts.new("attachments" => nil).msg_attachments
+    end
+
+    test "attachment is absent" do
+      assert_empty Opts.new({}).msg_attachments
+    end
+
+    test "attachment is present" do
+      assert_equal %w[readme.md],
+                   Opts.new("attachments" => "readme.md").msg_attachments
+    end
+
+    test "attachments are present" do
+      assert_equal %w[readme.md license.txt],
+                   Opts.new("attachments" => "readme.md,license.txt")
+                       .msg_attachments
+    end
+
+    test "attachments are present as symbol" do
+      assert_equal %w[readme.md license.txt],
+                   Opts.new(attachments: " readme.md , license.txt ")
+                       .msg_attachments
+    end
+
+    test "attachments is present as array" do
+      assert_equal %w[readme.md license.txt],
+                   Opts.new(attachments: %w[readme.md license.txt])
+                       .msg_attachments
+    end
   end
 end

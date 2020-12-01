@@ -24,6 +24,7 @@
 
 require_relative "../../test"
 require_relative "../../../lib/lazylead/smtp"
+require_relative "../../../lib/lazylead/opts"
 require_relative "../../../lib/lazylead/postman"
 require_relative "../../../lib/lazylead/task/savepoint"
 
@@ -36,10 +37,12 @@ module Lazylead
       Task::Savepoint.new.run(
         [],
         Postman.new,
-        "from" => "fake@email.com",
-        "subject" => "[LL] Configuration backup",
-        "template" => "lib/messages/savepoint.erb",
-        "to" => "big.boss@example.com"
+        Opts.new(
+          "from" => "fake@email.com",
+          "subject" => "[LL] Configuration backup",
+          "template" => "lib/messages/savepoint.erb",
+          "to" => "big.boss@example.com"
+        )
       )
       assert_equal 'text/markdown; filename="readme.md"',
                    Mail::TestMailer.deliveries
