@@ -41,7 +41,7 @@ module Lazylead
         Postman.new,
         Opts.new(
           "from" => "svnlog@test.com",
-          "text" => "ping,https://github.com/dgroup/lazylead",
+          "text" => "ping",
           "svn_url" => "https://svn.riouxsvn.com/touch4ll",
           "svn_user" => ENV["svn_log_user"],
           "svn_password" => ENV["svn_log_password"],
@@ -56,6 +56,48 @@ module Lazylead
       )
       assert_email_line "[SVN] Changes with text",
                         %w[r2 by dgroup at 2020-08-16]
+    end
+
+    test "test" do
+      diff = <<~MSG
+
+        r3 | dgroup | 2020-08-16 11:27:01 +0300 (Sun, 16 Aug 2020) | 1 line
+
+        Add description for 189 issue
+
+        Index: 189.md
+        ===================================================================
+        --- 189.md	(nonexistent)
+        +++ 189.md	(revision 3)
+        @@ -0,0 +1,9 @@
+        +*Issue 189*
+        +https://github.com/dgroup/lazylead/issues/189
+        +
+        +Find stable svn repo which can be used for stable test, for
+        +now only floating repo used for testing locally. Also, create a new
+        +method "ping" which can be used during tests like
+        +```ruby
+        +skip "No connection available to svn repo" unless ping("https://riouxsvn.com")
+        +```
+        \ No newline at end of file
+        Index: readme.md
+        ===================================================================
+        --- readme.md	(revision 2)
+        +++ readme.md	(revision 3)
+        @@ -3,4 +3,5 @@
+         More
+          - https://github.com/dgroup/lazylead
+          - https://github.com/dgroup/lazylead/blob/master/lib/lazylead/task/touch.rb
+        - - https://github.com/dgroup/lazylead/blob/master/test/lazylead/task/touch_test.rb
+        \ No newline at end of file
+        + - https://github.com/dgroup/lazylead/blob/master/test/lazylead/task/touch_test.rb
+        +
+        \ No newline at end of file
+
+
+      MSG
+      assert_equal 15, Entry.new(diff).diff(%w[ping]).size,
+                   "There is one commit with 'ping' word where diff has 14 lines"
     end
   end
 end

@@ -107,5 +107,26 @@ module Lazylead
     def header
       @header ||= lines.first.split(" | ").reject(&:blank?)
     end
+
+    # Detect SVN diff lines with particular text
+    def diff(text)
+      @diff ||= begin
+                  files = affected(text).uniq
+                  @commit.split("Index: ")
+                         .select { |i| files.any? { |f| i.start_with? f } }
+                         .map { |i| i.split "\n" }
+                         .flatten
+                end
+    end
+
+    # Detect affected files with particular text
+    def affected(text)
+      occurrences = lines.each_index.select do |i|
+        lines[i].start_with?("+") && text.any? { |t| lines[i].include? t }
+      end
+      occurrences.map do |occ|
+        lines[2..occ].reverse.find { |l| l.start_with? "Index: " }[7..-1]
+      end
+    end
   end
 end

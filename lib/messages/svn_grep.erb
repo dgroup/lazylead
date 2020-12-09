@@ -93,7 +93,7 @@
       by <a href="<%= user %><%= commit.author %>"><%= commit.author %></a>
       at <span style="color: #275a90;"><%= commit.time %></span>
     </p>
-    <% commit.lines[2..-1].each do |line| %>
+    <% commit.diff(text.split(",")).each do |line| %>
       <% if line.start_with?("+++") || line.start_with?("---") %>
         <p style="background: gainsboro;"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
       <% elsif text.split(",").any? { |t| line.include? t } %>
