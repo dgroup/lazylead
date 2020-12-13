@@ -27,18 +27,18 @@ require_relative "attachment"
 module Lazylead
   # Check that ticket has log file(s) in attachment.
   class Logs < Lazylead::Attachment
-    def initialize
+    def initialize(files = %w[log.zip logs.zip log.gz logs.gz log.tar.gz
+                              logs.tar.gz log.7z logs.7z log.tar logs.tar])
       super("Log files", 2, "Attachments")
+      @files = files
     end
 
     # Ensure that ticket has a '*.log' file more '5KB'
     def matching(attachment)
       name = attachment.attrs["filename"].downcase
       return false unless attachment.attrs["size"].to_i > 5120
-      return true if File.extname(name).start_with?(".log", ".txt")
-      %w[.log.zip .log.gz .log.tar.gz logs.7z log.7z].any? do |l|
-        name.end_with? l
-      end
+      return true if File.extname(name).start_with? ".log", ".txt", ".out"
+      @files.any? { |l| name.end_with? l }
     end
   end
 end
