@@ -64,7 +64,7 @@
       padding: 36px
     }
 
-    .commit {
+    .commit, .table-of-contents {
       min-width: 100%;
       border-radius: 3.5px;
       overflow: hidden;
@@ -74,26 +74,36 @@
       border: 1px solid #BCC6CC;
     }
 
-    .commit * {
+    .commit *, .table-of-contents * {
       padding-left: 4px;
       font-size: 8px;
       line-height: 15px;
+    }
+
+    .table-of-contents {
+      border: none;
     }
   </style>
   <title>SVN log</title>
 </head>
 <body>
 <p>Hi,</p>
-<p>The following file(s) changed since <code><%= since_rev %></code> rev in <a href="<%= svn_url %>"><%= svn_url %></a>:</p>
+<p>Commit(s) since <code><%= since_rev %></code> revision in <a href="<%= svn_url %>"><%= svn_url %></a>:</p>
+<div id="table-of-contents" class="table-of-contents">
+  <ul>
+    <% stdout.split("------------------------------------------------------------------------").reject(&:blank?).reverse.each do |commit| %>
+      <% details = commit.split("\n").reject(&:blank?).first.split("|").map(&:strip).reject(&:blank?) %>
+      <li><a href="#<%= details[0] %>"><%= details[0] %></a> by <%= details[1] %> at <%= details[2] %></li>
+    <% end %>
+  </ul>
+</div>
 <% stdout.split("------------------------------------------------------------------------").reject(&:blank?).reverse.each do |commit| %>
   <div class="commit">
     <% commit.split("\n").reject(&:blank?).each_with_index do |line, index| %>
       <% if index.zero? %>
         <% details = line.split("|").map(&:strip).reject(&:blank?) %>
-        <p style="background: gainsboro;">
-          <a href="<%= commit_url %><%= details[0][1 .. -1] %>"><%= details[0] %></a>
-          by <a href="<%= user %><%= details[1] %>"><%= details[1] %></a>
-          at <span style="color: #275a90;"><%= details[2] %></span>
+        <p style="background: gainsboro;" id="<%= details[0] %>"><a href="<%= commit_url %><%= details[0][1..-1] %>"><%= details[0] %></a> by <a href="<%= user %><%= details[1] %>"><%= details[1] %></a> at <span style="color: #275a90;"><%= details[2] %></span>
+          <a href="#table-of-contents">&#8593;</a>
         </p>
       <% else %>
         <% if line.start_with?("+++") || line.start_with?("---") %>
@@ -103,7 +113,7 @@
         <% elsif line.start_with?("-") %>
           <p style="<%= "background: lightsalmon;" %>"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
         <% else %>
-          <p style="background: gainsboro;"><%= line.gsub(/[<>]/,'<' => '&lt;', '>' => '&gt;') %></p>
+          <p style="background: gainsboro;"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
         <% end %>
       <% end %>
     <% end %>

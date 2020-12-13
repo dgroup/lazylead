@@ -49,35 +49,27 @@ module Lazylead
             "-r#{opts['since_rev']}:HEAD #{opts['svn_url']}"
           ]
           stdout = `#{cmd.join(" ")}`
-          send_email stdout, postman, opts unless stdout.blank?
+          send_email postman, opts.merge(stdout: stdout) unless stdout.blank?
         end
 
         # Send email with svn log as an attachment.
         # The attachment won't be stored locally and we'll be removed once
         #  mail sent.
-        def send_email(stdout, postman, opts)
+        def send_email(postman, opts)
           Dir.mktmpdir do |dir|
             name = "svn-log-#{Date.today.strftime('%d-%b-%Y')}.html"
             f = File.open(File.join(dir, name), "w")
             begin
-              f.write make_attachment(stdout, opts)
+              f.write opts.msg_body("template-attachment")
               f.close
-              postman.send opts.merge(stdout: stdout, attachments: [f.path])
+              postman.send opts.merge(attachments: [f.path])
             ensure
               File.delete(f)
             end
           rescue StandardError => e
             @log.error "ll-010: Can't send an email for #{opts} due to " \
-                       "#{Backtrace.new(e)}' based on #{stdout}'"
+                       "#{Backtrace.new(e)}'"
           end
-        end
-
-        # Assemble HTML for attachment based on SVN output
-        def make_attachment(stdout, opts)
-          Email.new(
-            opts["template-attachment"],
-            opts.merge(stdout: stdout, version: Lazylead::VERSION)
-          ).render
         end
       end
     end

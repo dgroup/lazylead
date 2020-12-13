@@ -85,9 +85,9 @@ module Lazylead
     end
 
     # Construct html document from template and binds.
-    def msg_body
+    def msg_body(template = "template")
       Email.new(
-        to_h["template"],
+        to_h[template],
         to_h.merge(version: Lazylead::VERSION)
       ).render
     end
