@@ -106,6 +106,7 @@ module Lazylead
         sys = system.connect
         opts = props
         opts = detect_cc(sys) if opts.key? "cc"
+        opts["system"] = second_sys if opts.numeric? "system"
         action.constantize.new.run(sys, postman, opts)
       end
 
@@ -151,6 +152,12 @@ module Lazylead
         else
           Postman.new
         end
+      end
+
+      def second_sys
+        sys = System.find(props["system"])
+        raise "ll-014: No ticketing system found for #{self}" if sys.nil?
+        sys.connect
       end
 
       private

@@ -124,5 +124,14 @@ module Lazylead
       return [val] unless val.include? delim
       slice key, delim
     end
+
+    # Ensure that particular key from options is a positive numer
+    #   Opts.new("key" => "1").numeric? "key"   => true
+    #   Opts.new("key" => "0").numeric? "key"   => false
+    #   Opts.new("key" => ".").numeric? "key"   => false
+    #   Opts.new("key" => "nil").numeric? "key" => false
+    def numeric?(key)
+      to_h[key].to_i.positive?
+    end
   end
 end

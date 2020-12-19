@@ -82,5 +82,15 @@ module Lazylead
       )
       refute ORM::Task.find(260).to_h?
     end
+
+    test "second ticketing system is found" do
+      CLI::App.new(Log.new, NoSchedule.new).run(
+        home: ".",
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
+      )
+      assert_kind_of Jira, ORM::Task.find(270).second_sys
+    end
   end
 end

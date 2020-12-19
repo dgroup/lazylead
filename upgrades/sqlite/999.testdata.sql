@@ -38,4 +38,5 @@ values ('echo', 'cron:* * * * *', 'false', 1, 1, 1, 'Lazylead::Task::Echo', '{}'
        ('issue 171', '', 'false', 171, 1, 1, 'Lazylead::Task::Echo', '{"envkey":"${key171}"}'),
        ('issue 195', '', 'false', 195, 1, 1, 'Lazylead::Task::Accuracy', '{"key":"value"}'),
        ('issue 130', 'in:0.001s', 'true', 130, 1, 1, 'Lazylead::Task::EchoIO', '{}'),
-       ('issue 260', 'cron:* * * * *', 'false', 260, 1, 1, 'Lazylead::Task::EchoIO', '{abc}');
+       ('issue 260', 'cron:* * * * *', 'false', 260, 1, 1, 'Lazylead::Task::EchoIO', '{abc}'),
+       ('270', 'cron:* * * * *', 'false', 270, 1, 1, 'Lazylead::Task::EchoIO', '{"system":"1"}');

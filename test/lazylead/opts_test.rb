@@ -101,5 +101,17 @@ module Lazylead
                    Opts.new(attachments: %w[readme.md license.txt])
                        .msg_attachments
     end
+
+    test "value has numeric value" do
+      assert Opts.new("key" => "1").numeric? "key"
+    end
+
+    test "text value is not a numeric" do
+      refute Opts.new("key" => "val").numeric? "key"
+    end
+
+    test "nil is not a numeric" do
+      refute Opts.new("key" => nil).numeric? "key"
+    end
   end
 end
