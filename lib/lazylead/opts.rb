@@ -44,7 +44,13 @@ module Lazylead
     # Split text value by delimiter, trim all spaces and reject blank items
     def slice(key, delim)
       return [] unless to_h.key? key
-      to_h[key].split(delim).map(&:chomp).map(&:strip).reject(&:blank?)
+      trim to_h[key].split(delim)
+    end
+
+    # Trim all spaces and reject blank items in array
+    def trim(arr)
+      return [] if arr.nil?
+      arr.map(&:chomp).map(&:strip).reject(&:blank?)
     end
 
     def blank?(key)

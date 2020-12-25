@@ -257,11 +257,18 @@ module Lazylead
       lbl = [] if lbl.nil?
       lbl << label
       lbl += more if more.size.positive?
-      save!("fields" => { "labels" => lbl.uniq })
+      labels! lbl
     end
 
+    # Get the labels for a particular issue
     def labels
       fields["labels"]
+    end
+
+    # Update the labels for a particular issue
+    def labels!(lbl)
+      return if lbl.nil? || lbl.empty?
+      save!("fields" => { "labels" => lbl.uniq })
     end
 
     def save!(opts)
