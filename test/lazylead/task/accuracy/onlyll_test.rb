@@ -24,6 +24,8 @@
 
 require_relative "../../../test"
 require_relative "../../../../lib/lazylead/opts"
+require_relative "../../../../lib/lazylead/smtp"
+require_relative "../../../../lib/lazylead/postman"
 require_relative "../../../../lib/lazylead/system/jira"
 require_relative "../../../../lib/lazylead/task/accuracy/onlyll"
 
@@ -47,6 +49,26 @@ module Lazylead
                   .first,
         Opts.new("grid" => "PullRequest", "author" => "grussell")
       ).changed?
+    end
+
+    test "email notification" do
+      Lazylead::Smtp.new.enable
+      Lazylead::Task::OnlyLL.new.run(
+        NoAuthJira.new("https://jira.spring.io"),
+        Postman.new,
+        Opts.new(
+          "from" => "ll@fake.com",
+          "to" => "lead@fake.com",
+          "grid" => "PullRequest",
+          "jql" => "key=XD-3725",
+          "max_results" => 200,
+          "subject" => "[LL] Only",
+          "fields" => "priority,summary,reporter,labels",
+          "template" => "lib/messages/only_ll.erb"
+        )
+      )
+      assert_email "[LL] Only",
+                   %w[XD-3725 Blocker EmbeddedHeadersMessageConverter]
     end
   end
 end

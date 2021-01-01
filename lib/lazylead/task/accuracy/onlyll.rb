@@ -40,19 +40,22 @@ module Lazylead
         @log = log
       end
 
-      def run(sys, _, opts)
-        sys.issues(opts["jql"],
-                   opts.jira_defaults.merge(expand: "changelog"))
-           .map { |i| Grid.new(i, opts) }
-           .select(&:labels?)
-           .reject(&:changed?)
-           .each(&:remove)
+      def run(sys, postman, opts)
+        found = sys.issues(opts["jql"],
+                           opts.jira_defaults.merge(expand: "changelog"))
+                   .map { |i| Grid.new(i, opts) }
+                   .select(&:labels?)
+                   .reject(&:changed?)
+                   .each(&:remove)
+        postman.send opts.merge(tickets: found) unless found.empty?
       end
     end
   end
 
   # The ticket with grid labels
   class Grid
+    attr_reader :issue
+
     def initialize(issue, opts)
       @issue = issue
       @opts = opts
