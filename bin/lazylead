@@ -30,6 +30,7 @@ STDOUT.sync = true
 require "slop"
 require "sqlite3"
 require "colorize"
+require "inifile"
 require "logging"
 require "backtrace"
 require "memory_profiler"
@@ -81,6 +82,7 @@ log.debug "Version: #{Lazylead::VERSION.colorize(:green)}"
 log.debug "Memory footprint at start is " \
           "#{Lazylead::Allocated.new.to_s.colorize(:light_blue)}."
 cmd = lambda do
+  IniFile.new(filename: "lazylead.ini").each { |_, k, v| ENV[k] = v }
   Lazylead::CLI::App.new(
     log,
     Lazylead::Schedule.new(log: log),

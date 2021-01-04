@@ -22,6 +22,8 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require "inifile"
+require "tempfile"
 require_relative "../test"
 
 module Lazylead
@@ -33,6 +35,17 @@ module Lazylead
     end
     test "ENV has no key" do
       refute env? "c"
+    end
+    test "ini file found" do
+      Tempfile.create do |f|
+        f << "EnvTest=value"
+        f.flush
+        IniFile.new(filename: f).each { |_, k, v| ENV[k] = v }
+        assert_equal "value", ENV["EnvTest"]
+      end
+    end
+    test "ini file not found" do
+      assert_empty IniFile.new(filename: "absent.ini").to_h
     end
   end
 end
