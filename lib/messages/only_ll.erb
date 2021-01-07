@@ -73,14 +73,15 @@
 </head>
 <body>
 <p>Hi,</p>
-<p>The LL labels from the following tickets were cleaned by LL:</p>
+<p>The LL accuracy labels are cleaned from the following tickets:</p>
 <table summary="table with tickets triage score">
   <tr>
     <th id="key">Key</th>
     <th id="priority">Priority</th>
     <th id="reporter">Reporter</th>
-    <th id="labels">Labels</th>
+    <th id="violators">Violators</th>
     <th id="summary">Summary</th>
+    <th id="labels">Labels</th>
   </tr>
   <% tickets.each do |t| %>
     <tr>
@@ -91,12 +92,11 @@
       </td>
       <td><%= t.issue.priority %></td>
       <td>
-        <div class="auto">
-          <%= t.issue.reporter.name %>
-        </div>
+        <div class="auto"><%= t.issue.reporter.name %></div>
       </td>
-      <td><%= t.issue.labels.join(',') %></td>
+      <td><%= t.violators.join(', ') %></td>
       <td><%= t.issue.summary %></td>
+      <td><%= t.issue.labels.join(', ') %></td>
     </tr>
   <% end %>
 </table>

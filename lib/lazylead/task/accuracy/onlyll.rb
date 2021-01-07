@@ -43,9 +43,9 @@ module Lazylead
       def run(sys, postman, opts)
         found = sys.issues(opts["jql"],
                            opts.jira_defaults.merge(expand: "changelog"))
-                   .map { |i| Grid.new(i, opts) }
-                   .select(&:labels?)
-                   .reject(&:changed?)
+                   .map { |i| Labels.new(i, opts) }
+                   .select(&:exists?)
+                   .reject(&:valid?)
                    .each(&:remove)
         postman.send opts.merge(tickets: found) unless found.empty?
       end
@@ -53,7 +53,7 @@ module Lazylead
   end
 
   # The ticket with grid labels
-  class Grid
+  class Labels
     attr_reader :issue
 
     def initialize(issue, opts)
@@ -62,27 +62,35 @@ module Lazylead
     end
 
     # Ensure that issue has evaluation labels for accuracy rules
-    def labels?
+    def exists?
       return false if @issue.labels.nil? || @issue.labels.empty?
       return false unless @issue.labels.is_a? Array
       grid.any? { |g| @issue.labels.any? { |l| g.eql? l } }
     end
 
-    # @return true if evaluation labels in issue were changed by LL
-    def changed?
-      @issue.history
-            .reverse
-            .select { |h| h["author"]["key"].eql? @opts["author"] }
-            .any? do |h|
-        lbl = h["items"].find { |f| f["field"].eql? "labels" }["toString"]
-        @opts.trim(lbl.split(","))
-             .any? { |l| grid.any? { |g| l.eql? g } }
-      end
+    # Compare the score evaluated by LL and current ticket score.
+    # @return true if current score equal to LL evaluation
+    def valid?
+      score.eql?(@issue.labels.sort.find { |l| grid.any? { |g| l.eql? g } })
     end
 
-    # Remove grid labels from the ticket
-    def remove
-      @issue.labels!(@issue.labels - grid)
+    # Find expected ticket score evaluated by LL.
+    # If LL evaluated the same ticket several times (no matter why),
+    #  then the last score would be returned.
+    def score
+      to_l(
+        @issue.history
+              .select { |h| h["author"]["key"].eql? @opts["author"] }
+              .select { |h| to_l(h) }
+              .reverse
+              .first
+      ).fetch("toString", "").split(",").find { |l| grid.any? { |g| l.eql? g } }
+    end
+
+    # Find history record with labels changes.
+    def to_l(history)
+      return {} if history.nil? || history.empty?
+      history["items"].find { |f| f["field"].eql? "labels" }
     end
 
     # Detect the percentage grid for tickets, by default its 0%, 10%, 20%, etc.
@@ -91,6 +99,33 @@ module Lazylead
                   return @opts.slice("grid", ",") if @opts.key? "grid"
                   %w[0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%]
                 end
+    end
+
+    # Remove score labels from the ticket.
+    def remove
+      @issue.labels!(@issue.labels - grid)
+    end
+
+    # Detect the violators with their changes.
+    #   .violators  => ["Tom Hhhh set 40%", "Bob Mmmm set 50%"]
+    def violators
+      @issue.history
+            .reject { |h| h["author"]["key"].eql? @opts["author"] }
+            .select { |h| to_l(h) }
+            .group_by { |h| h["author"]["key"] }
+            .map do |a|
+        "#{a.last.first['author']['displayName']} set #{hacked(a)}"
+      end
+    end
+
+    # Hacked score by violator in ticket history.
+    def hacked(record)
+      record.last.flat_map { |h| h["items"] }
+            .select { |h| h["field"].eql? "labels" }
+            .map { |h| h["toString"] }
+            .join(",")
+            .split(",")
+            .find { |l| grid.any? { |g| l.eql? g } }
     end
   end
 end
