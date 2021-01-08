@@ -84,7 +84,7 @@ module Lazylead
               .select { |h| to_l(h) }
               .reverse
               .first
-      ).fetch("toString", "").split(",").find { |l| grid.any? { |g| l.eql? g } }
+      ).fetch("toString", "").split(" ").find { |l| grid.any? { |g| l.eql? g } }
     end
 
     # Find history record with labels changes.
@@ -111,20 +111,40 @@ module Lazylead
     def violators
       @issue.history
             .reject { |h| h["author"]["key"].eql? @opts["author"] }
-            .select { |h| to_l(h) }
+            .select { |h| grid?(h) }
             .group_by { |h| h["author"]["key"] }
             .map do |a|
-        "#{a.last.first['author']['displayName']} set #{hacked(a)}"
+        "#{a.last.first['author']['displayName']} set #{hacked(a.last)}"
       end
     end
 
-    # Hacked score by violator in ticket history.
+    # Ensure that history record has label change related to LL grid labels.
+    # @return true if LL grid labels added
+    def grid?(record)
+      diff(record).any? do |h|
+        from = []
+        from = h.first.split(" ") unless h.first.nil?
+        to = h.last.split(" ")
+        (to - from).find { |l| grid.any? { |g| l.eql? g } }
+      end
+    end
+
+    # Detect label diff in single history record from ticket's history.
+    def diff(record)
+      record["items"].select { |f| f["field"].eql? "labels" }
+                     .reject { |f| f["toString"].nil? || f["toString"].blank? }
+                     .map do |f|
+        [f["fromString"], f["toString"]]
+      end
+    end
+
+    # Hacked score by violator in ticket's history.
     def hacked(record)
-      record.last.flat_map { |h| h["items"] }
+      record.flat_map { |h| h["items"] }
             .select { |h| h["field"].eql? "labels" }
             .map { |h| h["toString"] }
-            .join(",")
-            .split(",")
+            .join(" ")
+            .split(" ")
             .find { |l| grid.any? { |g| l.eql? g } }
     end
   end
