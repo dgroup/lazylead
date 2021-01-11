@@ -27,10 +27,6 @@ require_relative "requirement"
 module Lazylead
   # Check that ticket has an attachment.
   class Attachment < Lazylead::Requirement
-    def initialize(desc, score, field)
-      super(desc, score, field)
-    end
-
     def passed(issue)
       issue.attachments.any?(&method(:matching))
     end

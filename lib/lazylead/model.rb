@@ -68,9 +68,7 @@ module Lazylead
       opts.each_with_object({}) do |e, o|
         k = e[0]
         v = e[1]
-        if v.respond_to? :start_with?
-          v = ENV[v.slice(2, v.length - 3)] if v.start_with? "${"
-        end
+        v = ENV[v.slice(2, v.length - 3)] if v.respond_to?(:start_with?) && v.start_with?("${")
         o[k] = v
       end
     end
@@ -138,12 +136,12 @@ module Lazylead
 
       def props
         @props ||= begin
-                     if team.nil?
-                       Opts.new(env(to_hash))
-                     else
-                       Opts.new(env(team.to_hash.merge(to_hash)))
-                     end
-                   end
+          if team.nil?
+            Opts.new(env(to_hash))
+          else
+            Opts.new(env(team.to_hash.merge(to_hash)))
+          end
+        end
       end
 
       def postman
@@ -165,12 +163,10 @@ module Lazylead
       # Parse scheduling #type and #unit
       def trigger
         @trigger ||= begin
-                       trg = schedule.split(":")
-                       unless trg.size == 2
-                         raise "ll-007: illegal schedule format '#{schedule}'"
-                       end
-                       trg.map(&:strip).map(&:chomp)
-                     end
+          trg = schedule.split(":")
+          raise "ll-007: illegal schedule format '#{schedule}'" unless trg.size == 2
+          trg.map(&:strip).map(&:chomp)
+        end
       end
     end
 
@@ -186,6 +182,9 @@ module Lazylead
         @log = log
       end
 
+      # @todo #/DEV Remove the suppression during next refactoring (or enhancements)
+      #  for the method below
+      # rubocop:disable Metrics/AbcSize
       def exec
         Logging.mdc["tid"] = "task #{id}"
         @log.debug "'#{name}' is started."
@@ -196,12 +195,13 @@ module Lazylead
       rescue StandardError => e
         msg = <<~MSG
           ll-006: Task ##{id} #{e} (#{e.class}) at #{self}
-          #{Backtrace.new(e) if ARGV.include? '--trace'}"
+          #{Backtrace.new(e) if ARGV.include? '--trace'}
         MSG
         @log.error msg
       ensure
         Logging.mdc["tid"] = ""
       end
+      # rubocop:enable Metrics/AbcSize
     end
 
     # Ticketing systems to monitor.

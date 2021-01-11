@@ -104,16 +104,22 @@ module Lazylead
     end
 
     # Detect links mentioned in ticket comments
+    # @todo #/DEV Refactor this method in order to make it more human-readable and remove the
+    #  suppresion below
+    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/PerceivedComplexity
     def mentioned_links(ticket)
       ticket.comments
             .map { |cmnt| cmnt.attrs["body"] }
             .select { |cmnt| @confl.any? { |c| cmnt.include? c.url } }
-            .flat_map { |cmnt| cmnt.split " " }
+            .flat_map(&:split)
             .select { |cmnt| @confl.any? { |c| cmnt.start_with? c.url } }
             .map(&method(:to_page_id))
             .reject(&:blank?)
             .uniq
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/PerceivedComplexity
 
     # Convert confluence page url to the following format:
     #  http://confluence.com/pages/viewpage.action?pageId=xxxxx

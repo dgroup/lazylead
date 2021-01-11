@@ -114,9 +114,7 @@ module Lazylead
     end
 
     def color
-      if colors.nil? || !defined?(@score) || !@score.is_a?(Numeric)
-        return "#061306"
-      end
+      return "#061306" if colors.nil? || !defined?(@score) || !@score.is_a?(Numeric)
       colors.reverse_each do |color|
         return color.last if @accuracy >= color.first
       end
@@ -125,12 +123,12 @@ module Lazylead
 
     def colors
       @colors ||= begin
-                    JSON.parse(@opts["colors"])
-                        .to_h
-                        .to_a
-                        .each { |e| e[0] = e[0].to_i }
-                        .sort_by { |e| e[0] }
-                  end
+        JSON.parse(@opts["colors"])
+            .to_h
+            .to_a
+            .each { |e| e[0] = e[0].to_i }
+            .sort_by { |e| e[0] }
+      end
     end
 
     # Calculate grade for accuracy

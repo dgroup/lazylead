@@ -81,12 +81,12 @@ module Lazylead
 
     def cc
       @cc ||= begin
-                if @text.include? ","
-                  @text.split(",").map(&:strip).select { |e| e[@regxp] }
-                elsif @text[@regxp]
-                  [@text.strip]
-                end
-              end
+        if @text.include? ","
+          @text.split(",").map(&:strip).select { |e| e[@regxp] }
+        elsif @text[@regxp]
+          [@text.strip]
+        end
+      end
     end
 
     def each(&block)
@@ -126,14 +126,14 @@ module Lazylead
 
     def to_h
       @to_h ||= begin
-                  if @orig.is_a? Hash
-                    @orig.each_with_object({}) do |i, o|
-                      o[i.first] = Lazylead::PlainCC.new(i.last).cc
-                    end
-                  else
-                    {}
-                  end
-                end
+        if @orig.is_a? Hash
+          @orig.each_with_object({}) do |i, o|
+            o[i.first] = Lazylead::PlainCC.new(i.last).cc
+          end
+        else
+          {}
+        end
+      end
     end
   end
 
@@ -145,18 +145,19 @@ module Lazylead
   # License:: MIT
   class ComponentCC < Lazylead::PredefinedCC
     def initialize(prj, jira)
+      super({})
       @prj = prj
       @jira = jira
     end
 
     def to_h
       @to_h ||= begin
-                  components.each_with_object({}) do |c, h|
-                    email = lead(c.attrs["id"])
-                    next if email.nil? || email.blank?
-                    h[c.attrs["name"]] = email
-                  end
-                end
+        components.each_with_object({}) do |c, h|
+          email = lead(c.attrs["id"])
+          next if email.nil? || email.blank?
+          h[c.attrs["name"]] = email
+        end
+      end
     end
 
     private

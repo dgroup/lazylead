@@ -57,8 +57,8 @@ module Lazylead
       private
 
       def apply_vcs_migration(opts)
-        @db = File.expand_path(opts[:home]) + "/" + opts[:sqlite]
-        vcs = File.expand_path(opts[:home]) + "/" + opts[:vcs4sql]
+        @db = "#{File.expand_path(opts[:home])}/#{opts[:sqlite]}"
+        vcs = "#{File.expand_path(opts[:home])}/#{opts[:vcs4sql]}"
         @log.debug "Database: '#{@db.colorize(:light_blue)}', "\
                    "sql migration dir: '#{vcs.colorize(:light_blue)}'"
         Vcs4sql::Sqlite::Migration.new(@db).upgrade vcs, opts[:testdata]

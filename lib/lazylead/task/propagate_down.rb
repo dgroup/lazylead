@@ -106,7 +106,7 @@ module Lazylead
           v = a.last
           d[k] = expected[k] if v.nil? || v.blank?
           next if v.nil?
-          d[k] = v + "," + expected[k] unless v.to_s.include? expected[k]
+          d[k] = "#{v},#{expected[k]}" unless v.to_s.include? expected[k]
         end
       end
 

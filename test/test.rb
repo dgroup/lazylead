@@ -39,7 +39,7 @@ require "timeout"
 require "active_support"
 require "mail"
 
-STDOUT.sync = true
+$stdout.sync = true
 Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
 
 module Lazylead

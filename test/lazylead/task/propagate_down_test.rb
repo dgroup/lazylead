@@ -28,6 +28,7 @@ require_relative "../../../lib/lazylead/task/propagate_down"
 
 module Lazylead
   class PropagateDownTest < Lazylead::Test
+    # rubocop:disable Naming/VariableNumber
     test "propagate fields from parent ticket to sub-tasks" do
       parent = OpenStruct.new(
         id: 1,
@@ -38,7 +39,7 @@ module Lazylead
           customfield_102: "Yesterday"
         }.stringify_keys
       )
-      Child = Struct.new(:id, :key, :fields, :comment) do
+      child = Struct.new(:id, :key, :fields, :comment) do
         def save(diff)
           fields.merge! diff[:fields]
         end
@@ -54,8 +55,7 @@ module Lazylead
         def save!(body)
           self[:comment] = body[:body]
         end
-      end
-      child = Child.new(
+      end.new(
         2, "PRJ-2",
         {
           subtasks: [],
@@ -84,5 +84,6 @@ module Lazylead
                       |customfield_102|Yesterday|],
                    child.comment
     end
+    # rubocop:enable Naming/VariableNumber
   end
 end

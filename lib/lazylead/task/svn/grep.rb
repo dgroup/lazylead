@@ -47,21 +47,28 @@ module Lazylead
 
         # Return all svn commits for particular date range in repo
         def svn_log(opts)
-          now = if opts.key? "now"
-                  DateTime.parse(opts["now"])
-                else
-                  DateTime.now
-                end
-          start = (now.to_time - opts["period"].to_i).to_datetime
           cmd = [
             "svn log --diff --no-auth-cache",
             "--username #{opts.decrypt('svn_user', 'svn_salt')}",
             "--password #{opts.decrypt('svn_password', 'svn_salt')}",
-            "-r {#{start}}:{#{now}} #{opts['svn_url']}"
+            "-r {#{from(opts)}}:{#{now(opts)}} #{opts['svn_url']}"
           ]
           stdout = `#{cmd.join(" ")}`
-          stdout.split("-" * 72).reject(&:blank?).reverse
-                .map { |e| Entry.new(e) }
+          stdout.split("-" * 72).reject(&:blank?).reverse.map { |e| Entry.new(e) }
+        end
+
+        # The start date & time for search range
+        def from(opts)
+          (now(opts).to_time - opts["period"].to_i).to_datetime
+        end
+
+        # The current date & time for search range
+        def now(opts)
+          if opts.key? "now"
+            DateTime.parse(opts["now"])
+          else
+            DateTime.now
+          end
         end
       end
     end
@@ -96,8 +103,8 @@ module Lazylead
     # The modified lines contains expected text
     def includes?(text)
       text = [text] unless text.respond_to? :each
-      lines[4..-1].select { |l| l.start_with? "+" }
-                  .any? { |l| text.any? { |t| l.include? t } }
+      lines[4..].select { |l| l.start_with? "+" }
+                .any? { |l| text.any? { |t| l.include? t } }
     end
 
     def lines
@@ -111,12 +118,12 @@ module Lazylead
     # Detect SVN diff lines with particular text
     def diff(text)
       @diff ||= begin
-                  files = affected(text).uniq
-                  @commit.split("Index: ")
-                         .select { |i| files.any? { |f| i.start_with? f } }
-                         .map { |i| i.split "\n" }
-                         .flatten
-                end
+        files = affected(text).uniq
+        @commit.split("Index: ")
+               .select { |i| files.any? { |f| i.start_with? f } }
+               .map { |i| i.split "\n" }
+               .flatten
+      end
     end
 
     # Detect affected files with particular text
@@ -125,7 +132,7 @@ module Lazylead
         lines[i].start_with?("+") && text.any? { |t| lines[i].include? t }
       end
       occurrences.map do |occ|
-        lines[2..occ].reverse.find { |l| l.start_with? "Index: " }[7..-1]
+        lines[2..occ].reverse.find { |l| l.start_with? "Index: " }[7..]
       end
     end
   end

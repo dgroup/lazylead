@@ -42,7 +42,7 @@ module Lazylead
     end
 
     test "url to failed entity found in description" do
-      assert Servers.new(envs: [%r{(http|https):\/\/\w+\:\d+\/.{10,}}]).passed(
+      assert Servers.new(envs: [%r{(http|https)://\w+:\d+/.{10,}}]).passed(
         Task.new(
           "1. Open the dedicated app
            2. Click on https://server:6900/object?id=2000
@@ -53,7 +53,7 @@ module Lazylead
     end
 
     test "url to failed entity not present in description" do
-      refute Servers.new(envs: [%r{(http|https):\/\/\w+\:\d+\/.{10,}}]).passed(
+      refute Servers.new(envs: [%r{(http|https)://\w+:\d+/.{10,}}]).passed(
         Task.new(
           "1. Open the dedicated app
            2. Click on https://server:6900/

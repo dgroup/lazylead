@@ -177,7 +177,7 @@ module Lazylead
     end
 
     def url
-      @issue.attrs["self"].split("/rest/api/").first + "/browse/" + key
+      "#{@issue.attrs['self'].split('/rest/api/').first}/browse/#{key}"
     end
 
     def duedate

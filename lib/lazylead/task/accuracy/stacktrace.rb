@@ -60,7 +60,7 @@ module Lazylead
       words = desc.gsub(/{(c|C)(o|O)(d|D)(e|E)/, " {code")
                   .gsub("}", "} ")
                   .gsub("Caused by:", "Caused_by:")
-                  .split(" ")
+                  .split
                   .map(&:strip)
                   .reject(&:blank?)
       pairs(words, "{code").map { |s| words[s.first..s.last].join("\n") }

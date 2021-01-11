@@ -49,6 +49,7 @@ module Lazylead
       assert Lazylead::CC.new.undefined? "type" => "    "
     end
   end
+
   class PlainCcTest < Lazylead::Test
     test "cc has valid email" do
       assert_equal "a@fake.com", Lazylead::PlainCC.new("a@fake.com").cc.first

@@ -39,6 +39,7 @@ module Lazylead
   #
   class Salt
     attr_reader :id
+
     #
     # Each salt should be defined as a environment variable with id, like
     #  salt1=E1F53135E559C253

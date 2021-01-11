@@ -52,9 +52,7 @@ module Lazylead
           svn_log(opts).xpath("//logentry[paths/path[#{xpath}]]")
                        .map(&method(:to_entry))
                        .each do |e|
-            if e.paths.path.respond_to? :delete_if
-              e.paths.path.delete_if { |p| files.none? { |f| p.include? f } }
-            end
+            e.paths.path.delete_if { |p| files.none? { |f| p.include? f } } if e.paths.path.respond_to? :delete_if
           end
         end
 

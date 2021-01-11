@@ -38,13 +38,22 @@ module Lazylead
 
     def passed(issue)
       return true if @envs.empty?
-      lines = issue["environment"].to_s + "\n" + issue.description
-      lines.split("\n")
-           .reject(&:blank?)
-           .map(&:strip)
-           .flat_map { |l| l.split(" ").map(&:strip) }
-           .select { |w| w.include?("http://") || w.include?("https://") }
-           .any? { |u| @envs.any? { |e| u.match? e } }
+      "#{issue['environment']}\n#{issue.description}".split("\n")
+                                                     .reject(&:blank?)
+                                                     .map(&:strip)
+                                                     .flat_map { |l| l.split.map(&:strip) }
+                                                     .select(&method(:url?))
+                                                     .any?(&method(:match?))
+    end
+
+    # Ensure that particular text contains web url
+    def url?(text)
+      text.include?("http://") || text.include?("https://")
+    end
+
+    # Ensure that particular url matches expected servers urls
+    def match?(url)
+      @envs.any? { |e| url.match? e }
     end
   end
 end

@@ -84,7 +84,7 @@ module Lazylead
               .select { |h| to_l(h) }
               .reverse
               .first
-      ).fetch("toString", "").split(" ").find { |l| grid.any? { |g| l.eql? g } }
+      ).fetch("toString", "").split.find { |l| grid.any? { |g| l.eql? g } }
     end
 
     # Find history record with labels changes.
@@ -96,9 +96,12 @@ module Lazylead
     # Detect the percentage grid for tickets, by default its 0%, 10%, 20%, etc.
     def grid
       @grid ||= begin
-                  return @opts.slice("grid", ",") if @opts.key? "grid"
-                  %w[0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%]
-                end
+        if @opts.key? "grid"
+          @opts.slice("grid", ",")
+        else
+          %w[0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%]
+        end
+      end
     end
 
     # Remove score labels from the ticket.
@@ -130,8 +133,8 @@ module Lazylead
                      .reject { |f| f["toString"].nil? || f["toString"].blank? }
                      .map do |f|
         from = []
-        from = f["fromString"].split(" ") unless f["fromString"].nil?
-        f["toString"].split(" ") - from
+        from = f["fromString"].split unless f["fromString"].nil?
+        f["toString"].split - from
       end
     end
 

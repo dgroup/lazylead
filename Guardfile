@@ -25,7 +25,7 @@
 # Guardfile for Lazylead
 guard :minitest, all_after_pass: false, all_on_start: false do
   # with Minitest::Unit
-  watch(%r{^test/(.*)\/?test_(.*)\.rb$})
+  watch(%r{^test/(.*)/?test_(.*)\.rb$})
   watch(%r{^test/test\.rb$}) { "test" }
   watch(%r{^lib/lazylead/(.*/)?([^/]+)\.rb$}) do |m|
     "test/#{m[1]}test_#{m[2]}.rb"
