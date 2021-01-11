@@ -184,6 +184,7 @@ module Lazylead
 
       # @todo #/DEV Remove the suppression during next refactoring (or enhancements)
       #  for the method below
+      #
       # rubocop:disable Metrics/AbcSize
       def exec
         Logging.mdc["tid"] = "task #{id}"
