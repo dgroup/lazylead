@@ -55,7 +55,7 @@ tasks instead of solving technical problems."
   s.test_files = s.files.grep(%r{^(test|features)/})
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[readme.md license.txt]
-  s.add_runtime_dependency "activerecord", "6.0.3"
+  s.add_runtime_dependency "activerecord", "6.0.3.4"
   s.add_runtime_dependency "backtrace", "0.3"
   s.add_runtime_dependency "colorize", "0.8.1"
   s.add_runtime_dependency "faraday", "1.0.1"
