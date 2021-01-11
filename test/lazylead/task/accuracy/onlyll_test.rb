@@ -122,5 +122,17 @@ module Lazylead
                      Opts.new("grid" => "10%,20%,30%,40%", "author" => "ll")
                    ).violators.first
     end
+
+    test "violators should consider already existing LL grid labels" do
+      assert_equal "Aron set 40%",
+                   Labels.new(
+                     Struct.new(:key) do
+                       def history
+                         [{ "author" => { "name" => "ap", "key" => "ap", "displayName" => "Aron" }, "items" => [{ "field" => "labels", "fromString" => "0%", "toString" => "0% abc 40%" }] }]
+                       end
+                     end.new("XD-3725"),
+                     Opts.new("grid" => "10%,20%,30%,40%", "author" => "ll")
+                   ).violators.first
+    end
   end
 end
