@@ -106,6 +106,7 @@ module Lazylead
     # Detect links mentioned in ticket comments
     # @todo #/DEV Refactor this method in order to make it more human-readable and remove the
     #  suppresion below
+    #
     # rubocop:disable Metrics/CyclomaticComplexity
     # rubocop:disable Metrics/PerceivedComplexity
     def mentioned_links(ticket)
