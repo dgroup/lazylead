@@ -104,11 +104,11 @@ module Lazylead
     # Assert that email sent using 'mail' gem in test mode
     #  has expected subject and words
     def assert_email(subject, words)
-      assert_words words,
-                   Mail::TestMailer.deliveries
-                                   .filter { |m| m.subject.eql? subject }
-                                   .first
-                                   .body.parts.first.body.raw_source
+      email = Mail::TestMailer.deliveries
+                              .filter { |m| m.subject.eql? subject }
+                              .first
+      refute_nil email, "No email found with subject: #{subject}"
+      assert_words words, email.body.parts.first.body.raw_source
     end
 
     # Assert that email sent using 'mail' gem in test mode
@@ -117,6 +117,7 @@ module Lazylead
     #  symbol '\n' to each line for email during unit testing.
     def assert_email_line(subject, words)
       words = [words] unless words.respond_to? :each
+      assert_email subject, words
       mail = Mail::TestMailer.deliveries
                              .filter { |m| m.subject.eql? subject }
                              .first
