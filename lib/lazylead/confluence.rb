@@ -115,7 +115,7 @@ module Lazylead
             .select { |cmnt| @confl.any? { |c| cmnt.include? c.url } }
             .flat_map(&:split)
             .select { |cmnt| @confl.any? { |c| cmnt.start_with? c.url } }
-            .map(&method(:to_page_id))
+            .map { |url| to_page_id(url) }
             .reject(&:blank?)
             .uniq
     end

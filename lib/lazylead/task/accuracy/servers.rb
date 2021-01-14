@@ -42,8 +42,8 @@ module Lazylead
                                                      .reject(&:blank?)
                                                      .map(&:strip)
                                                      .flat_map { |l| l.split.map(&:strip) }
-                                                     .select(&method(:url?))
-                                                     .any?(&method(:match?))
+                                                     .select { |u| url?(u) }
+                                                     .any? { |u| match?(u) }
     end
 
     # Ensure that particular text contains web url

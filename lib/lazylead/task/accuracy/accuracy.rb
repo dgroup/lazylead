@@ -70,10 +70,8 @@ module Lazylead
     # Estimate the ticket score and accuracy.
     # Accuracy is a percentage between current score and maximum possible value.
     def evaluate(digits = 2)
-      @total = @rules.map(&:score).sum
-      @score = @rules.select { |r| r.passed(@issue) }
-                     .map(&:score)
-                     .sum
+      @total = @rules.sum(&:score)
+      @score = @rules.select { |r| r.passed(@issue) }.sum(&:score)
       @accuracy = (score / @total * 100).round(digits)
     end
 

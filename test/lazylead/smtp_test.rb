@@ -38,10 +38,7 @@ module Lazylead
         subject "The fake!"
         body "Fake body"
       end
-      assert_equal 1,
-                   Mail::TestMailer.deliveries
-                                   .filter { |m| m.subject.eql? "The fake!" }
-                                   .length
+      assert_equal(1, Mail::TestMailer.deliveries.count { |m| m.subject.eql? "The fake!" })
     end
 
     # @todo #43/DEV email-related properties should be exported to the CI env

@@ -34,7 +34,7 @@ module Lazylead
         super "", 0, ""
       end
 
-      def matching(attach)
+      def matches?(attach)
         "ConfigServerLogWithException.txt".eql? attach.attrs["filename"]
       end
     end

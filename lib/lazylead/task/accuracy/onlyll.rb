@@ -81,9 +81,8 @@ module Lazylead
       to_l(
         @issue.history
               .select { |h| h["author"]["key"].eql? @opts["author"] }
-              .select { |h| to_l(h) }
               .reverse
-              .first
+              .find { |h| to_l(h) }
       ).fetch("toString", "").split.find { |l| grid.any? { |g| l.eql? g } }
     end
 

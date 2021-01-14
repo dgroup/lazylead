@@ -105,8 +105,7 @@ module Lazylead
     #  has expected subject and words
     def assert_email(subject, words)
       email = Mail::TestMailer.deliveries
-                              .filter { |m| m.subject.eql? subject }
-                              .first
+                              .find { |m| m.subject.eql? subject }
       refute_nil email, "No email found with subject: #{subject}"
       assert_words words, email.body.parts.first.body.raw_source
     end
@@ -119,8 +118,7 @@ module Lazylead
       words = [words] unless words.respond_to? :each
       assert_email subject, words
       mail = Mail::TestMailer.deliveries
-                             .filter { |m| m.subject.eql? subject }
-                             .first
+                             .find { |m| m.subject.eql? subject }
                              .body.parts.first.body.raw_source
                              .split("\n")
                              .reject(&:blank?)

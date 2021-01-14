@@ -50,7 +50,7 @@ module Lazylead
         def touch(files, opts)
           xpath = files.map { |f| "contains(text(),\"#{f}\")" }.join(" or ")
           svn_log(opts).xpath("//logentry[paths/path[#{xpath}]]")
-                       .map(&method(:to_entry))
+                       .map { |xml| to_entry(xml) }
                        .each do |e|
             e.paths.path.delete_if { |p| files.none? { |f| p.include? f } } if e.paths.path.respond_to? :delete_if
           end

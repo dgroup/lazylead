@@ -46,8 +46,8 @@ module Lazylead
       )
       assert_equal 'text/markdown; filename="readme.md"',
                    Mail::TestMailer.deliveries
-                                   .filter { |m| m.subject.eql? "[LL] Configuration backup" }
-                                   .first.attachments.first.header.fields[0]
+                                   .find { |m| m.subject.eql? "[LL] Configuration backup" }
+                                   .attachments.first.header.fields[0]
                                    .unparsed_value
     end
   end

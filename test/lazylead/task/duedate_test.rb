@@ -48,10 +48,7 @@ module Lazylead
           "template" => "lib/messages/due_date_expired.erb"
         )
       )
-      assert_equal 2,
-                   Mail::TestMailer.deliveries
-                                   .filter { |m| m.subject.eql? "[DD] PDTN!" }
-                                   .length
+      assert_equal(2, Mail::TestMailer.deliveries.count { |m| m.subject.eql? "[DD] PDTN!" })
     end
 
     test "configuration properties merged successfully" do
@@ -123,8 +120,7 @@ module Lazylead
       )
       assert_equal %w[another.boss@example.com mom@home.com],
                    Mail::TestMailer.deliveries
-                                   .filter { |m| m.subject.eql? "CC: Watching" }
-                                   .first.cc
+                                   .find { |m| m.subject.eql? "CC: Watching" }.cc
     end
 
     test "reporter got alert about his/her tickets with expired DD" do
@@ -139,10 +135,7 @@ module Lazylead
           "template" => "lib/messages/due_date_expired.erb"
         )
       )
-      assert_equal 2,
-                   Mail::TestMailer.deliveries
-                                   .filter { |m| m.subject.eql? "DD Expired!" }
-                                   .length
+      assert_equal(2, Mail::TestMailer.deliveries.count { |m| m.subject.eql? "DD Expired!" })
     end
   end
 end

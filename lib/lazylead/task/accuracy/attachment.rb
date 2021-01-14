@@ -28,12 +28,12 @@ module Lazylead
   # Check that ticket has an attachment.
   class Attachment < Lazylead::Requirement
     def passed(issue)
-      issue.attachments.any?(&method(:matching))
+      issue.attachments.any? { |a| matches?(a) }
     end
 
     # Check a single attachment from ticket.
     # Potential extension point for custom verification logic.
-    def matching(attachment)
+    def matches?(attachment)
       !attachment.nil?
     end
   end
