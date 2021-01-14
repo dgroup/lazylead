@@ -85,7 +85,7 @@ module Lazylead
     end
 
     def rev
-      header.first
+      header.first[1..]
     end
 
     def author
