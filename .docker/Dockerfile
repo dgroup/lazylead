@@ -1,15 +1,25 @@
 FROM ruby:2.6.5-alpine
 
-ARG release_tags
 ARG version
+ARG BUILD_DATE
+ARG VCS_REF
 
-LABEL about="https://github.com/dgroup/lazylead" \
-      ci.contact="yurii.dubinka@gmail.com" \
-      ci.release.tag="${release_tags}" \
-      ll.docker.issues="https://github.com/dgroup/lazylead/issues?utf8=✓&q=label%3Adocker"
+LABEL ll.docker.issues="https://github.com/dgroup/lazylead/issues?utf8=✓&q=label%3Adocker" \
+      org.label-schema.build-date=${BUILD_DATE} \
+      org.label-schema.name="lazylead" \
+      org.label-schema.description="Eliminate the annoying work within ticketing systems (Jira, GitHub, Trello). Allows automating (without admin access) daily actions like tickets fields verification, email notifications by JQL/GQL, meeting requests to your (or teammates) calendar." \
+      org.label-schema.url="https://lazylead.org/" \
+      org.label-schema.vcs-ref=${VCS_REF} \
+      org.label-schema.vcs-url="https://github.com/dgroup/lazylead" \
+      org.label-schema.vendor="Yurii Dubinka" \
+      org.label-schema.version=${version} \
+      org.label-schema.schema-version="1.0"
 
 ENV APP_HOME=/lazylead
 ENV VERSION=${version}
+ENV VCS_REF=${VCS_REF}
+ENV COMMIT_URL="https://github.com/dgroup/lazylead/commit/${VCS_REF}"
+ENV BUILD_DATE=${BUILD_DATE}
 
 WORKDIR $APP_HOME
 

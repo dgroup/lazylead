@@ -22,7 +22,9 @@ jobs:
             set -e
             COMMIT_URL="https://github.com/dgroup/lazylead/commit/${CIRCLE_SHA1}"
             sed -i "s/0\.0\.0/${DOCKER_RELEASE_TAGS}/g" lib/lazylead/version.rb
-            docker build --build-arg release_tags="${CIRCLE_SHA1}, ${CIRCLE_BRANCH}, ${COMMIT_URL}" --build-arg version="${DOCKER_RELEASE_TAGS:7}" \
+            docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+              --build-arg VCS_REF=`git rev-parse --short HEAD` \
+              --build-arg version=${DOCKER_RELEASE_TAGS} \
               -t dgroup/lazylead:$CIRCLE_BRANCH . \
               -f .docker/Dockerfile
             echo "Available LL images:"
@@ -42,7 +44,10 @@ jobs:
           command: |
             sed -i "s/0\.0\.0/${DOCKER_RELEASE_TAGS}/g" .docker/vcs.dockerfile
             sed -i "s/0\.0\.0/${DOCKER_RELEASE_TAGS}/g" lib/lazylead/version.rb
-            docker build -t dgroup/lazylead:${DOCKER_RELEASE_TAGS}-vcs . -f .docker/vcs.dockerfile
+            docker build -t dgroup/lazylead:${DOCKER_RELEASE_TAGS}-vcs . -f .docker/vcs.dockerfile \
+              --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+              --build-arg VCS_REF=`git rev-parse --short HEAD` \
+              --build-arg version=${DOCKER_RELEASE_TAGS}
             docker push dgroup/lazylead:${DOCKER_RELEASE_TAGS}-vcs
       - run:
           name: "Reset tag to master"
