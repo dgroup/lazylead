@@ -66,7 +66,7 @@ module Lazylead
     def detect_tc(line, index)
       return unless @tc.negative?
       @tc = index if eql? line,
-                          %w[testcase: tc: teststeps: teststeps steps: tcsteps:]
+                          %w[testcase: tc: teststeps: teststeps steps: tcsteps: tc testcases]
     end
 
     # Detect index of line with actual result
