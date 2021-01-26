@@ -38,7 +38,7 @@ module Lazylead
       return false if issue.description.nil?
       @tc = @ar = @er = -1
       issue.description.split("\n").reject(&:blank?).each_with_index do |l, i|
-        line = escape l.downcase.gsub(/(\s+|\*)/, "")
+        line = escape l.downcase.gsub(/(\s+|\*|\+)/, "")
         detect_tc line, i
         detect_ar line, i
         detect_er line, i
@@ -66,7 +66,7 @@ module Lazylead
     def detect_tc(line, index)
       return unless @tc.negative?
       @tc = index if eql? line,
-                          %w[testcase: tc: teststeps: teststeps steps: tcsteps: tc testcases]
+                          %w[testcase: tc: teststeps: teststeps steps: tcsteps: tc testcases steps]
     end
 
     # Detect index of line with actual result

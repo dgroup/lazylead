@@ -264,6 +264,15 @@ module Lazylead
                         *{color:#DE10AA}[AR]{color}* = YYYY"
     end
 
+    test "TC with underline" do
+      assert testcase? "{color:#0747a6}+*Test Steps:*+{color}
+                         # Step 1
+                         # Step ..
+                         # Step N
+                        *{color:#00673A}[ER]{color}* = XXXX
+                        *{color:#DE10AA}[AR]{color}* = YYYY"
+    end
+
     # ensure that issue description has a test case, AR and ER
     def testcase?(desc)
       Testcase.new.passed(OpenStruct.new(description: desc))
