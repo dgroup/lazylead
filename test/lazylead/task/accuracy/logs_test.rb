@@ -134,5 +134,17 @@ module Lazylead
         )
       )
     end
+
+    test "filename contain word logs" do
+      assert Logs.new.passed(
+        OpenStruct.new(
+          attachments: [
+            OpenStruct.new(
+              attrs: { "size" => 10_241, "filename" => "the some logs]here.gz" }
+            )
+          ]
+        )
+      )
+    end
   end
 end

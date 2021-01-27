@@ -38,7 +38,10 @@ module Lazylead
       name = attachment.attrs["filename"].downcase
       return false unless attachment.attrs["size"].to_i > 5120
       return true if File.extname(name).start_with? ".log", ".txt", ".out"
-      @files.any? { |l| name.end_with? l }
+      return true if @files.any? { |l| name.end_with? l }
+      %w[.zip .7z .gz tar.gz].any? do |l|
+        name.end_with?(l) && name.split(/(?:[^a-zA-Z0-9](?<![^\x00-\x7F]))+/).include?("logs")
+      end
     end
   end
 end
