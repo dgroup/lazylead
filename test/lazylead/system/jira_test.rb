@@ -185,5 +185,14 @@ module Lazylead
                        .issues("key>DATAJDBC-500")
                        .size >= 118
     end
+
+    test "connected based on string properties" do
+      refute_empty Jira.new(
+        "username" => nil,
+        "password" => nil,
+        "site" => "https://jira.spring.io",
+        "context_path" => ""
+      ).issues("key=DATAJDBC-480")
+    end
   end
 end

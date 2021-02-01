@@ -30,6 +30,10 @@ require_relative "../opts"
 module Lazylead
   # Jira system for manipulation with issues.
   #
+  # Jira official documentation:
+  #  - https://docs.atlassian.com/jira-software/REST/7.3.1/#agile/1.0/issue-getIssue
+  #  - https://developer.atlassian.com/server/jira/platform/rest-apis/
+  #
   # Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
@@ -82,22 +86,7 @@ module Lazylead
       @opts[:auth_type] = :basic if @opts[:auth_type].nil?
       @opts["username"] = @salt.decrypt(@opts["username"]) if @salt.specified?
       @opts["password"] = @salt.decrypt(@opts["password"]) if @salt.specified?
-      cp("site", :site)
-      cp("username", :username)
-      cp("password", :password)
-      cp("context_path", :context_path)
-      @client = JIRA::Client.new(@opts)
-    end
-
-    # Copy the required/mandatory parameter(s) for Jira client which can't
-    #  be specified/defined at database level.
-    #
-    # @todo #/DEV Jira.cp - find a way how to avoid this method.
-    #  Potentially, hash with indifferent access might be used.
-    #  http://jocellyn.cz/2014/05/03/hash-with-indifferent-access.html
-    #  key.kind_of?(Symbol) ? key.to_s : key
-    def cp(act, exp)
-      @opts[exp] = @opts[act] if @opts.key? act
+      @client = JIRA::Client.new(@opts.symbolize_keys)
     end
   end
 
