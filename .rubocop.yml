@@ -85,11 +85,19 @@ Style/HashTransformValues:
 Style/FormatStringToken:
   Exclude:
     - "lib/lazylead/task/accuracy/accuracy.rb"
-
+Style/IfWithBooleanLiteralBranches: # (new in 1.9)
+  Enabled: true
 Lint/RaiseException:
   Enabled: true
-
 Lint/StructNewOverride:
+  Enabled: true
+Lint/NumberedParameterAssignment: # (new in 1.9)
+  Enabled: true
+Lint/OrAssignmentToConstant: # (new in 1.9)
+  Enabled: true
+Lint/SymbolConversion: # (new in 1.9)
+  Enabled: true
+Lint/TripleQuotes: # (new in 1.9)
   Enabled: true
 
 # @todo #/DEV Add violation regarding methods without documentation using RDoc
