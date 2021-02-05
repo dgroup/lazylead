@@ -39,7 +39,7 @@ module Lazylead
         "100": "100"
       }.each do |k, v|
         assert_equal v.to_f,
-                     Lazylead::Score.new({}, {}, {}).grade(k.to_s.to_f)
+                     Lazylead::Score.new({}, {}).grade(k.to_s.to_f)
       end
     end
   end
