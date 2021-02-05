@@ -43,15 +43,19 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
+        detect_rules
+        opts[:rules] = opts.slice("rules", ",").map(&:constantize).map(&:new)
+        opts[:total] = opts[:rules].sum(&:score)
+        opts[:tickets] = sys.issues(opts["jql"], opts.jira_defaults)
+                            .map { |i| Score.new(i, opts) }
+                            .each(&:evaluate)
+                            .each(&:post)
+        postman.send(opts) unless opts[:tickets].empty?
+      end
+
+      # Detect accuracy rules for tickets verification
+      def detect_rules
         Dir[File.join(__dir__, "*.rb")].sort.each { |f| require f }
-        rules = opts.slice("rules", ",")
-                    .map(&:constantize)
-                    .map(&:new)
-        raised = sys.issues(opts["jql"], opts.jira_defaults)
-                    .map { |i| Score.new(i, opts, rules) }
-                    .each(&:evaluate)
-                    .each(&:post)
-        postman.send opts.merge(tickets: raised) unless raised.empty?
       end
     end
   end
@@ -60,19 +64,16 @@ module Lazylead
   class Score
     attr_reader :issue, :total, :score, :accuracy
 
-    def initialize(issue, opts, rules)
+    def initialize(issue, opts)
       @issue = issue
-      @link = opts["docs"]
       @opts = opts
-      @rules = rules
     end
 
     # Estimate the ticket score and accuracy.
     # Accuracy is a percentage between current score and maximum possible value.
     def evaluate(digits = 2)
-      @total = @rules.sum(&:score)
-      @score = @rules.select { |r| r.passed(@issue) }.sum(&:score)
-      @accuracy = (score / @total * 100).round(digits)
+      @score = @opts[:rules].select { |r| r.passed(@issue) }.sum(&:score)
+      @accuracy = (score / @opts[:total] * 100).round(digits)
     end
 
     # Post the comment with score and accuracy to the ticket.
@@ -103,11 +104,11 @@ module Lazylead
 
     # Link to ticket formatting rules
     def docs_link
-      if @link.nil? || @link.blank?
+      if @opts["docs"].nil? || @opts["docs"].blank?
         ""
       else
         "The requirements/examples of ticket formatting rules you may find " \
-          "[here|#{@link}]."
+          "[here|#{@opts['docs']}]."
       end
     end
 
