@@ -27,6 +27,7 @@ require_relative "../../opts"
 require_relative "../../email"
 require_relative "../../version"
 require_relative "../../postman"
+require_relative "../../requires"
 
 module Lazylead
   module Task
@@ -43,19 +44,14 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        detect_rules
-        opts[:rules] = opts.slice("rules", ",").map(&:constantize).map(&:new)
+        Requires.new(__dir__).load
+        opts[:rules] = opts.construct("rules")
         opts[:total] = opts[:rules].sum(&:score)
         opts[:tickets] = sys.issues(opts["jql"], opts.jira_defaults)
                             .map { |i| Score.new(i, opts) }
                             .each(&:evaluate)
                             .each(&:post)
         postman.send(opts) unless opts[:tickets].empty?
-      end
-
-      # Detect accuracy rules for tickets verification
-      def detect_rules
-        Dir[File.join(__dir__, "*.rb")].sort.each { |f| require f }
       end
     end
   end

@@ -22,31 +22,26 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "lazylead/allocated"
-require_relative "lazylead/confluence"
-require_relative "lazylead/email"
-require_relative "lazylead/exchange"
-require_relative "lazylead/log"
-require_relative "lazylead/model"
-require_relative "lazylead/postman"
-require_relative "lazylead/salt"
-require_relative "lazylead/schedule"
-require_relative "lazylead/smtp"
-require_relative "lazylead/cli/app"
-require_relative "lazylead/system/jira"
-require_relative "lazylead/system/empty"
-require_relative "lazylead/system/fake"
-require_relative "lazylead/system/synced"
-require_relative "lazylead/task/alert/alert"
-require_relative "lazylead/task/confluence_ref"
-require_relative "lazylead/task/echo"
-require_relative "lazylead/task/fix_version"
-require_relative "lazylead/task/missing_comment"
-require_relative "lazylead/version"
+require_relative "../../../test"
+require_relative "../../../../lib/lazylead/log"
+require_relative "../../../../lib/lazylead/smtp"
+require_relative "../../../../lib/lazylead/postman"
+require_relative "../../../../lib/lazylead/schedule"
+require_relative "../../../../lib/lazylead/model"
+require_relative "../../../../lib/lazylead/cli/app"
+require_relative "../../../../lib/lazylead/system/jira"
+require_relative "../../../../lib/lazylead/task/alert/alert"
 
-# Lazylead main module.
-# Author:: Yurii Dubinka (yurii.dubinka@gmail.com)
-# Copyright:: Copyright (c) 2020 Yurii Dubinka
-# License:: MIT
 module Lazylead
+  class AssigneeAlertTest < Lazylead::Test
+    test "issue #154 undefined method to_hash for nil object" do
+      CLI::App.new(Log.new, NoSchedule.new).run(
+        home: ".",
+        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
+        vcs4sql: "upgrades/sqlite",
+        testdata: true
+      )
+      assert_equal "lead@fake.com", ORM::Task.find(154).props["cc"]
+    end
+  end
 end

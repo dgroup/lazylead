@@ -32,9 +32,9 @@ Join our telegram group [lazylead.org](https://t.me/lazyleads) for discussions.
 
 | Daily annoying task                                                                 | Jira  | Github | Trello |
 | :---------------------------------------------------------------------------------- | :---: | :----: | :----: |
-| [Notify ticket's assignee](lib/lazylead/task/alert.rb)                              | ✅ | ⌛ | ⌛ |
-| [Notify ticket's reporter](lib/lazylead/task/alert.rb)                              | ✅ | ⌛ | ⌛ |
-| [Notify ticket's manager](lib/lazylead/task/alert.rb)                               | ✅ | ⌛ | ⌛ |
+| [Notify ticket's assignee](lib/lazylead/task/alert/alert.rb)                        | ✅ | ⌛ | ⌛ |
+| [Notify ticket's reporter](lib/lazylead/task/alert/alert.rb)                        | ✅ | ⌛ | ⌛ |
+| [Notify ticket's manager](lib/lazylead/task/alert/alert.rb)                         | ✅ | ⌛ | ⌛ |
 | [Notify about illegal "Fix Version" modification](lib/lazylead/task/fix_version.rb) | ✅ | ❌ | ❌ | 
 | [Expected comment in ticket is missing](lib/lazylead/task/missing_comment.rb)       | ✅ | ⌛ | ⌛ |
 | [Propagate some fields from parent ticket into sub-tasks](.docs/propagate_down.md)  | ✅ | ❌ | ❌ |  

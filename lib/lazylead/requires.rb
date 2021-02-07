@@ -22,26 +22,17 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "../../test"
-require_relative "../../../lib/lazylead/log"
-require_relative "../../../lib/lazylead/smtp"
-require_relative "../../../lib/lazylead/postman"
-require_relative "../../../lib/lazylead/schedule"
-require_relative "../../../lib/lazylead/model"
-require_relative "../../../lib/lazylead/cli/app"
-require_relative "../../../lib/lazylead/system/jira"
-require_relative "../../../lib/lazylead/task/alert"
-
 module Lazylead
-  class AssigneeAlertTest < Lazylead::Test
-    test "issue #154 undefined method to_hash for nil object" do
-      CLI::App.new(Log.new, NoSchedule.new).run(
-        home: ".",
-        sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
-        vcs4sql: "upgrades/sqlite",
-        testdata: true
-      )
-      assert_equal "lead@fake.com", ORM::Task.find(154).props["cc"]
+  #
+  # Allows to load all ruby files within particular dir.
+  #
+  class Requires
+    def initialize(dir)
+      @dir = dir
+    end
+
+    def load
+      Dir[File.join(@dir, "*.rb")].sort.each { |f| require f }
     end
   end
 end

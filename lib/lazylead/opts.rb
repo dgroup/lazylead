@@ -138,5 +138,9 @@ module Lazylead
     def numeric?(key)
       to_h[key].to_i.positive?
     end
+
+    def construct(field, delim: ",")
+      slice(field, delim).map(&:constantize).map(&:new)
+    end
   end
 end

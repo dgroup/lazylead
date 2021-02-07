@@ -89,4 +89,4 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
 #### Where is the code?
 | Logic | Tests | Email Template |
 | :-----: | :------: | :-----: |
-| AssigneeAlert in [alert.rb](../lib/lazylead/task/alert.rb)| [duedate_test.rb](../test/lazylead/task/duedate_test.rb) | [due_date_expired.erb](../lib/messages/due_date_expired.erb) |
+| AssigneeAlert in [alert.rb](../lib/lazylead/task/alert/alert.rb)| [duedate_test.rb](../test/lazylead/task/duedate_test.rb) | [due_date_expired.erb](../lib/messages/due_date_expired.erb) |

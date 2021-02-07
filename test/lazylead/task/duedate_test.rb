@@ -30,7 +30,7 @@ require_relative "../../../lib/lazylead/schedule"
 require_relative "../../../lib/lazylead/model"
 require_relative "../../../lib/lazylead/cli/app"
 require_relative "../../../lib/lazylead/system/jira"
-require_relative "../../../lib/lazylead/task/alert"
+require_relative "../../../lib/lazylead/task/alert/alert"
 
 module Lazylead
   class DuedateTest < Lazylead::Test
