@@ -17,10 +17,10 @@
   table tr td, table tr th {
     overflow: hidden;
     padding: 5.4px 3.6px;
-    line-height: 14px;
+    line-height: 20px;
   }
 
-  #summary {
+  #summary, #labels {
     text-align: left;
   }
 
@@ -52,7 +52,6 @@
     font-stretch: normal;
     font-style: normal;
     font-weight: 400;
-    line-height: 29.7px
   }
 
   html, body {
@@ -69,45 +68,38 @@
     padding: 36px
   }
   </style>
-  <title>Accuracy</title>
+  <title>Created recently</title>
 </head>
 <body>
 <p>Hi,</p>
-<p>The triage score and accuracy posted to the following tickets:</p>
-<table summary="table with tickets triage score">
+<p>The followed tickets created recently:</p>
+<table summary="recent tickets">
   <tr>
     <th id="key">Key</th>
     <th id="duedate">Due date</th>
     <th id="priority">Priority</th>
-    <th id="score">Score</th>
-    <th id="accuracy">Accuracy</th>
     <th id="reporter">Reporter</th>
     <th id="summary">Summary</th>
+    <th id="labels">Labels</th>
   </tr>
-  <% tickets.sort_by { |s| s.issue.fields["priority"]["id"].to_i }
-            .each do |score| %>
+  <% tickets.sort_by { |s| s.fields["priority"]["id"].to_i }.each do |t| %>
     <tr>
       <td>
         <div class="auto">
-          <a href="<%= score.issue.url %>"><%= score.issue.key %></a>
+          <a href="<%= t.url %>"><%= t.key %></a>
         </div>
       </td>
       <td>
-        <div class="auto"><%= score.issue.duedate %></div>
+        <div class="auto"><%= t.duedate %></div>
       </td>
-      <td><%= score.issue.priority %></td>
-      <td>
-        <span style="color: <%= score.color %>"><%= score.score %></span>
-      </td>
-      <td>
-        <span style="color: <%= score.color %>"><%= score.accuracy %>%</span>
-      </td>
+      <td><%= t.priority %></td>
       <td>
         <div class="auto">
-          <%= score.issue.reporter.name %>
+          <%= t.reporter.name %>
         </div>
       </td>
-      <td><%= score.issue.summary %></td>
+      <td><%= t.summary %></td>
+      <td><%= t.labels.join ", " %></td>
     </tr>
   <% end %>
 </table>
