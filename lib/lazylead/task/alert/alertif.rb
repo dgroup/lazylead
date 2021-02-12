@@ -38,10 +38,11 @@ module Lazylead
     #  - evaluate set of rules for each ticket
     #  - send an email
     class AlertIf
+      # @todo #319/DEV Email template for alerts are not defined yet
       def run(sys, postman, opts)
         Requires.new(__dir__).load
         opts[:rules] = opts.construct("rules")
-        sys.issues(opts["jql"], opts.jira_defaults)
+        sys.issues(opts["jql"], opts.jira_defaults.merge(expand: "changelog"))
            .map { |i| When.new(i, opts) }
            .select(&:matches)
            .group_by(&:assignee)
@@ -58,9 +59,9 @@ module Lazylead
         @opts = opts
       end
 
-      # @todo #319/DEV Verify that ticket matches expected conditions and set alert if matched.
       def matches
-        !@issue.nil?
+        return false if @opts[:rules].nil?
+        @opts[:rules].all? { |r| r.passed(@issue, @opts) }
       end
 
       def assignee
