@@ -33,17 +33,22 @@ require_relative "../../../../lib/lazylead/task/alert/changed_to"
 
 module Lazylead
   class AlertIfTest < Lazylead::Test
-    # @todo #319/DEV Implementation of unit testing required considering a new email template.
     test "last change to Done" do
-      skip "Not implemented yet"
       Smtp.new.enable
-      Lazylead::AlertIf.new.run(
+      Lazylead::Task::AlertIf.new.run(
         NoAuthJira.new("https://jira.spring.io"),
         Postman.new,
         Opts.new(
-          "to_status" => "Done"
+          "to_status" => "Done",
+          "to" => "lead@company.com",
+          "from" => "ll@company.com",
+          "rules" => "Lazylead::ToStatus",
+          "jql" => "key=XD-3064",
+          "subject" => "[LL] alert if",
+          "template" => "lib/messages/alertif.erb"
         )
       )
+      assert_email "[LL] alert if", %w[XD-3064 Critical	Done Glenn Risberg HdfsMongoDB]
     end
   end
 end

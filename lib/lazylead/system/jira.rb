@@ -302,7 +302,19 @@ module Lazylead
 
     # Check that comment has expected text
     def include?(text)
-      @comment.attrs["body"].include? text
+      to_s.include? text
+    end
+
+    def to_s
+      @comment.attrs["body"]
+    end
+
+    def lines
+      to_s.split("\n").reject(&:blank?)
+    end
+
+    def author
+      @comment.attrs["author"]["displayName"]
     end
   end
 

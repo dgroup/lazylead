@@ -38,7 +38,6 @@ module Lazylead
     #  - evaluate set of rules for each ticket
     #  - send an email
     class AlertIf
-      # @todo #319/DEV Email template for alerts are not defined yet
       def run(sys, postman, opts)
         Requires.new(__dir__).load
         opts[:rules] = opts.construct("rules")
@@ -52,7 +51,9 @@ module Lazylead
 
     # The conditions for the issue inspection.
     class When
-      attr_reader :issue
+      extend Forwardable
+      def_delegators :@issue, :key, :url, :fields, :status, :duedate, :priority, :reporter,
+                     :assignee, :summary, :comments
 
       def initialize(issue, opts)
         @issue = issue
@@ -64,8 +65,9 @@ module Lazylead
         @opts[:rules].all? { |r| r.passed(@issue, @opts) }
       end
 
-      def assignee
-        @issue.assignee
+      # The last comment in ticket
+      def last
+        @last ||= @issue.comments.last
       end
     end
   end

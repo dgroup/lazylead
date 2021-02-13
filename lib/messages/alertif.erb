@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style> /* CSS styles taken from https://github.com/yegor256/tacit */
+  th {
+    font-weight: 600
+  }
+
+  table tr {
+    border-bottom-width: 2.16px
+  }
+
+  table tr th {
+    border-bottom-width: 2.16px
+  }
+
+  table tr td, table tr th {
+    overflow: hidden;
+    padding: 5.4px 3.6px;
+    line-height: 20px;
+  }
+
+  #summary, #labels {
+    text-align: left;
+  }
+
+  .auto {
+    min-width: auto;
+    white-space: nowrap;
+  }
+
+  a {
+    color: #275a90;
+    text-decoration: none
+  }
+
+  a:hover {
+    text-decoration: underline
+  }
+
+  * {
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-sizing: border-box;
+    margin: 0;
+    max-width: 100%;
+    padding: 0;
+    vertical-align: baseline;
+    font-family: system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  html, body {
+    width: 100%
+  }
+
+  html {
+    height: 100%
+  }
+
+  body {
+    background: #fff;
+    color: #1a1919;
+    padding: 36px
+  }
+
+  code {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 12px;
+    border: 0;
+    background: #f2f2d9;
+    border-radius: 3.6px;
+    display: inline-block;
+    line-height: 18px;
+    padding: 3.6px 6.3px 2.7px
+  }
+  </style>
+  <title>Alert If</title>
+</head>
+<body>
+<table summary="tickets">
+  <tr>
+    <th id="key">Key</th>
+    <th id="priority">Priority</th>
+    <th id="status">Last status</th>
+    <th id="duedate">Due date</th>
+    <th id="reporter">Reporter</th>
+    <th id="assignee">Assignee</th>
+    <th id="summary">Summary</th>
+    <th id="comment">Last Comment</th>
+  </tr>
+  <% tickets.sort_by { |t| t.fields["priority"]["id"].to_i }.each do |t| %>
+    <tr>
+      <td>
+        <div class="auto">
+          <a href="<%= t.url %>"><%= t.key %></a>
+        </div>
+      </td>
+      <td><%= t.priority %></td>
+      <td><%= t.status %></td>
+      <td>
+        <div class="auto"><%= t.duedate %></div>
+      </td>
+      <td>
+        <div class="auto">
+          <%= t.reporter.name %>
+        </div>
+      </td>
+      <td>
+        <div class="auto">
+          <%= t.assignee.name %>
+        </div>
+      </td>
+      <td><%= t.summary %></td>
+      <td>
+        <div>
+          By <span style="font-weight: bold"><%= t.last.author %></span>:<br/>
+          <code>
+            <%= t.last.lines.size == 1 ? t.last.lines.first : t.last.lines.map { |l| l.gsub("<", "&lt;") }.join("<br>") %>
+          </code>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<p>Posted by
+  <a href="https://github.com/dgroup/lazylead">lazylead v<%= version %></a>.
+</p>
+</body>
+</html>
