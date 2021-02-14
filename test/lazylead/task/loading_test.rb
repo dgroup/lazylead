@@ -48,8 +48,7 @@ module Lazylead
           "template" => "lib/messages/loading.erb"
         )
       )
-      assert_email "[LL] Team loading",
-                   %w[DATAJDBC-480 01-Apr-2020 Minor Mark\ Paluch tom,mike,bob EntityInstantiators]
+      assert_email "[LL] Team loading", %w[mclaren Tom McLaren 0]
     end
   end
 end
