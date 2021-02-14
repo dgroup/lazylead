@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style> /* CSS styles taken from https://github.com/yegor256/tacit */
+  th {
+    font-weight: 600
+  }
+
+  table tr {
+    border-bottom-width: 2.16px
+  }
+
+  table tr th {
+    border-bottom-width: 2.16px
+  }
+
+  table tr td, table tr th {
+    overflow: hidden;
+    padding: 5.4px 3.6px;
+    line-height: 20px;
+  }
+
+  .auto {
+    min-width: auto;
+    white-space: nowrap;
+  }
+
+  a {
+    color: #275a90;
+    text-decoration: none
+  }
+
+  a:hover {
+    text-decoration: underline
+  }
+
+  * {
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-sizing: border-box;
+    margin: 0;
+    max-width: 100%;
+    padding: 0;
+    vertical-align: baseline;
+    font-family: system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  html, body {
+    width: 100%
+  }
+
+  html {
+    height: 100%
+  }
+
+  body {
+    background: #fff;
+    color: #1a1919;
+    padding: 36px
+  }
+  </style>
+  <title>Loading</title>
+</head>
+<body>
+<table summary="tickets">
+  <tr>
+    <th id="uid">ID</th>
+    <th id="name">User</th>
+    <th id="total">
+      <a href="https://jira.spring.io/issues/?jql=<%= CGI.escape(jql) %>">Assigned From</a>
+    </th>
+    <th id="duedate">Next Due date</th>
+  </tr>
+  <% assignments.each do |teammate, assignment| %>
+    <% if assignment.free? %>
+      <tr style="background: #FCEC88">
+    <% else %>
+      <tr>
+    <% end %>
+    <td>
+      <div class="auto"><a href="<%= user_link %>"><%= teammate %></a></div>
+    </td>
+    <td>
+      <div class="auto"><%= assignment.name %></div>
+    </td>
+    <td>
+      <div class="auto">
+        <% if assignment.free? %>
+          <span style="color: red">0</span>
+        <% else %>
+          <a href="https://jira.spring.io/issues/?jql=<%= CGI.escape("#{jql} and assignee=#{teammate}") %>"><%= assignment.size %></a>
+        <% end %>
+      </div>
+    </td>
+    <td>
+      <div class="auto">
+        <% if assignment.next.kind_of?(Date) && Date.current.after?(assignment.next) %>
+          <span style="color: red"><%= assignment.next %></span>
+        <% else %>
+          <%= assignment.next %>
+        <% end %>
+      </div>
+    </td>
+    </tr>
+  <% end %>
+</table>
+<br/>
+<p>Posted by
+  <a href="https://github.com/dgroup/lazylead">lazylead v<%= version %></a>.
+</p>
+</body>
+</html>

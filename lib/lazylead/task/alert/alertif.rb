@@ -37,6 +37,7 @@ module Lazylead
     #  - fetch issues from remote ticketing system by query
     #  - evaluate set of rules for each ticket
     #  - send an email
+    # @todo #334:DEV AlertIf should support rules for bulk issues. For now each rule works per issue
     class AlertIf
       def run(sys, postman, opts)
         Requires.new(__dir__).load
