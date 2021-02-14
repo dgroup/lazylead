@@ -38,7 +38,7 @@ module Lazylead
       def run(sys, postman, opts)
         assignments = sys.issues(opts["jql"])
                          .group_by(&:assignee)
-                         .map { |user, tasks| [user.id, Assignment.new(user, tasks)] }
+                         .map { |user, tasks| [user.id, Teammate.new(user, tasks)] }
                          .to_h
         opts.slice("team", ",")
             .map { |m| m.split(":") }
@@ -49,7 +49,7 @@ module Lazylead
     end
 
     # The teammate's tickets.
-    class Assignment
+    class Teammate
       extend Forwardable
       def_delegators :@user, :id, :name
       def_delegators :@tasks, :size
