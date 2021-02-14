@@ -194,14 +194,5 @@ module Lazylead
         "context_path" => ""
       ).issues("key=DATAJDBC-480")
     end
-
-    test "users from particular group found" do
-      refute_empty Jira.new(
-        "username" => ENV["JIRA_USER"],
-        "password" => ENV["JIRA_PASS"],
-        "site" => "https://jira.spring.io",
-        "context_path" => ""
-      ).users("jira-administrators")
-    end
   end
 end
