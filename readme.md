@@ -30,23 +30,31 @@ I think you remember how [static code analysis](https://en.wikipedia.org/wiki/St
  
 Join our telegram group [lazylead.org](https://t.me/lazyleads) for discussions.
 
-| Daily annoying task                                                                 | Jira  | Github | Trello |
-| :---------------------------------------------------------------------------------- | :---: | :----: | :----: |
-| [Notify ticket's assignee](lib/lazylead/task/alert/alert.rb)                        | ✅ | ⌛ | ⌛ |
-| [Notify ticket's reporter](lib/lazylead/task/alert/alert.rb)                        | ✅ | ⌛ | ⌛ |
-| [Notify ticket's manager](lib/lazylead/task/alert/alert.rb)                         | ✅ | ⌛ | ⌛ |
-| [Notify about illegal "Fix Version" modification](lib/lazylead/task/fix_version.rb) | ✅ | ❌ | ❌ | 
-| [Expected comment in ticket is missing](lib/lazylead/task/missing_comment.rb)       | ✅ | ⌛ | ⌛ |
-| [Propagate some fields from parent ticket into sub-tasks](.docs/propagate_down.md)  | ✅ | ❌ | ❌ |  
-| [Evaluate the ticket formatting accuracy](.docs/accuracy.md)                        | ✅ | ⌛ | ⌛ |  
-| Print the current capacity of team into newly created tasks                         | ⌛ | ⌛ | ⌛ |  
-| Create/retrofit the defect automatically into latest release                        | ⌛ | ⌛ | ❌ |  
-| [Notify about expired(ing) due dates](.docs/duedate_expired.md)                     | ✅ | ❌ | ⌛ |
-| Notify about absent original estimations                                            | ⌛ | ⌛ | ⌛ |
-| Notify about 'Hot potato' tickets                                                   | ⌛ | ⌛ | ⌛ |
-| Notify about long live tickets (aging)                                              | ⌛ | ⌛ | ⌛ |
-| Notify about tickets with invalid format (missing url/stacktrace, etc)              | ⌛ | ⌛ | ⌛ |
-| Create a meeting(s) automatically in case some tickets appeared (group by assignee/reporters/component/ticket type/etc) | ⌛ | ⌛ | ⌛ |
+| Daily annoying task                                                                 | Jira  | Github | Trello | SVN |
+| :---------------------------------------------------------------------------------- | :---: | :----: | :----: | :----: |
+| [Notify ticket's assignee](lib/lazylead/task/alert/alert.rb)                        | ✅ | ⌛ | ⌛ | ❌ |  
+| [Notify ticket's reporter](lib/lazylead/task/alert/alert.rb)                        | ✅ | ⌛ | ⌛ | ❌ | 
+| [Notify ticket's manager](lib/lazylead/task/alert/alert.rb)                         | ✅ | ⌛ | ⌛ | ❌ | 
+| [Notify about illegal "Fix Version" modification](lib/lazylead/task/fix_version.rb) | ✅ | ❌ | ❌ | ❌ | 
+| [Expected comment in ticket is missing](lib/lazylead/task/missing_comment.rb)       | ✅ | ⌛ | ⌛ | ❌ | 
+| [Propagate some fields from parent ticket into sub-tasks](.docs/propagate_down.md)  | ✅ | ❌ | ❌ | ❌ |   
+| [Evaluate the ticket formatting accuracy](.docs/accuracy.md)                        | ✅ | ⌛ | ⌛ | ❌ |   
+| Print the current capacity of team into newly created tasks                         | ⌛ | ⌛ | ⌛ | ❌ |   
+| Create/retrofit the defect automatically into latest release                        | ⌛ | ⌛ | ❌ | ❌ |   
+| [Notify about expired(ing) due dates](.docs/duedate_expired.md)                     | ✅ | ❌ | ⌛ | ❌ | 
+| Notify about absent original estimations                                            | ⌛ | ⌛ | ⌛ | ❌ | 
+| Notify about 'Hot potato' tickets                                                   | ⌛ | ⌛ | ⌛ | ❌ | 
+| Notify about long live tickets (aging)                                              | ⌛ | ⌛ | ⌛ | ❌ | 
+| Create a meeting(s) automatically in case some tickets appeared (group by assignee/reporters/component/ticket type/etc) | ⌛ | ⌛ | ⌛ | ❌ | 
+| Propogate fields from parent tickets to sub-tasks | ✅ | ⌛ | ⌛ | ❌ | 
+| Notify about tickets without comments with expected text | ✅ | ⌛ | ⌛ | ❌ | 
+| Notify about team loading (no tasks on teammates) | ✅ | ⌛ | ⌛ | ❌ | 
+| Notify about tickets matches predefined multiple conditions | ✅ | ⌛ | ⌛ | ❌ | 
+| Link automatically the ticket and Confluence page if link found in ticket's comments/description | ✅ | ⌛ | ⌛ | ❌ | 
+| Notify about tickets assigned to your team members not by effective managers| ✅ | ⌛ | ⌛ | ❌ | 
+| Notify about modifications of important files in SVN | ❌ | ❌ | ❌ | ✅ | 
+| Notify about diff changes for past X period in SVN | ❌ | ❌ | ❌ | ✅ | 
+| Notify about changes with some text for past X period in SVN | ❌ | ❌ | ❌ | ✅ | 
 
 | Integration                                           | Type          | Status |
 | :---------------------------------------------------- | :-----------: | :----: |
