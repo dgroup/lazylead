@@ -87,9 +87,9 @@ module Lazylead
       # Fill pre-defined fields for sub-tasks from parent ticket
       #  and post comment to ticket with clarification.
       def propagate
-        expected = Hash[@fields.collect { |f| [f, @issue.fields[f]] }]
+        expected = @fields.collect { |f| [f, @issue.fields[f]] }.to_h
         @subtasks.each do |subtask|
-          actual = Hash[@fields.collect { |f| [f, subtask.fields[f]] }]
+          actual = @fields.collect { |f| [f, subtask.fields[f]] }.to_h
           diff = diff(expected, actual)
           next if diff.empty?
           subtask.save(fields: diff)

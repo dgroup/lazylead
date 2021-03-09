@@ -55,7 +55,7 @@ tasks instead of solving technical problems."
   s.test_files = s.files.grep(%r{^(test|features)/})
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[readme.md license.txt]
-  s.add_runtime_dependency "activerecord", "6.1.1"
+  s.add_runtime_dependency "activerecord", "6.1.3"
   s.add_runtime_dependency "backtrace", "0.3"
   s.add_runtime_dependency "colorize", "0.8.1"
   s.add_runtime_dependency "faraday", "1.3.0"
@@ -67,7 +67,7 @@ tasks instead of solving technical problems."
   s.add_runtime_dependency "mail", "2.7.1"
   s.add_runtime_dependency "memory_profiler", "1.0.0"
   s.add_runtime_dependency "openssl", "2.1.2"
-  s.add_runtime_dependency "railties", "6.1.1"
+  s.add_runtime_dependency "railties", "6.1.3"
   s.add_runtime_dependency "require_all", "3.0.0"
   s.add_runtime_dependency "rufus-scheduler", "3.7.0"
   s.add_runtime_dependency "slop", "4.8.2"
