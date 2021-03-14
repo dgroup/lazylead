@@ -24,6 +24,7 @@
 
 require_relative "../../../test"
 require_relative "../../../../lib/lazylead/task/accuracy/accuracy"
+require_relative "../../../../lib/lazylead/task/accuracy/affected_build"
 
 module Lazylead
   class ScoreTest < Lazylead::Test
@@ -41,6 +42,32 @@ module Lazylead
         assert_equal v.to_f,
                      Lazylead::Score.new({}, {}).grade(k.to_s.to_f)
       end
+    end
+
+    test "comment has proper structure" do
+      assert_words %w[triage accuracy is 100.0%],
+                   Score.new(
+                     Struct.new(:key) do
+                       def reporter
+                         OpenStruct.new(id: "userid")
+                       end
+
+                       def fields
+                         { "versions" => ["0.1.0"] }
+                       end
+                     end.new("DATAJDBC-493"),
+                     Opts.new(
+                       rules: [Lazylead::AffectedBuild.new],
+                       total: 0.5,
+                       "colors" => {
+                         "0" => "#FF4F33",
+                         "35" => "#FF9F33",
+                         "57" => "#19DD1E",
+                         "90" => "#0FA81A"
+                       }.to_json.to_s,
+                       "docs" => "https://github.com/dgroup/lazylead/blob/master/.github/ISSUE_TEMPLATE/bug_report.md"
+                     )
+                   ).evaluate.comment
     end
   end
 end

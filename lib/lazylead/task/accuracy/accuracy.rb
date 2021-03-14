@@ -70,6 +70,7 @@ module Lazylead
     def evaluate(digits = 2)
       @score = @opts[:rules].select { |r| r.passed(@issue) }.sum(&:score)
       @accuracy = (score / @opts[:total] * 100).round(digits)
+      self
     end
 
     # Post the comment with score and accuracy to the ticket.
@@ -88,7 +89,7 @@ module Lazylead
           " (~{color:#{color}}#{@accuracy}%{color}), here are the reasons why:",
         "|| Ticket requirement || Status || Field ||"
       ]
-      @rules.each do |r|
+      @opts[:rules].each do |r|
         comment << "|#{r.desc}|#{r.passed(@issue) ? '(/)' : '(-)'}|#{r.field}|"
       end
       comment << docs_link
