@@ -67,7 +67,7 @@ module Lazylead
               File.delete(f)
             end
           rescue StandardError => e
-            @log.error "ll-010: Can't send an email for #{opts} due to " \
+            @log.error "ll-010: Can't send an email '#{opts['subject']}' to #{opts['to']} due to " \
                        "#{Backtrace.new(e)}'"
           end
         end
