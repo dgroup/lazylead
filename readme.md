@@ -52,9 +52,9 @@ Join our telegram group [lazylead.org](https://t.me/lazyleads) for discussions.
 | Notify about tickets matches predefined multiple conditions | ✅ | ⌛ | ⌛ | ❌ | 
 | Link automatically the ticket and Confluence page if link found in ticket's comments/description | ✅ | ⌛ | ⌛ | ❌ | 
 | Notify about tickets assigned to your team members not by effective managers| ✅ | ⌛ | ⌛ | ❌ | 
-| Notify about modifications of important files in SVN | ❌ | ❌ | ❌ | ✅ | 
-| Notify about diff changes for past X period in SVN | ❌ | ❌ | ❌ | ✅ | 
-| Notify about changes with some text for past X period in SVN | ❌ | ❌ | ❌ | ✅ | 
+| Notify about modifications of important files in VCS | ❌ | ⌛ | ❌ | ✅ | 
+| Notify about diff changes for past X period in VCS | ❌ | ⌛ | ❌ | ✅ | 
+| Notify about changes with some text for past X period in VCS | ❌ | ⌛ | ❌ | ✅ | 
 
 | Integration                                           | Type          | Status |
 | :---------------------------------------------------- | :-----------: | :----: |
