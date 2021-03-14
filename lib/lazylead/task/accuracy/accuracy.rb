@@ -58,7 +58,7 @@ module Lazylead
 
   # The ticket score based on fields content.
   class Score
-    attr_reader :issue, :total, :score, :accuracy
+    attr_reader :issue, :score, :accuracy
 
     def initialize(issue, opts)
       @issue = issue
