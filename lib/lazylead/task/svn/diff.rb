@@ -22,6 +22,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require "zip"
 require "tempfile"
 require "nokogiri"
 require "backtrace"
@@ -58,18 +59,39 @@ module Lazylead
         def send_email(postman, opts)
           Dir.mktmpdir do |dir|
             name = "svn-log-#{Date.today.strftime('%d-%b-%Y')}.html"
-            f = File.open(File.join(dir, name), "w")
             begin
-              f.write opts.msg_body("template-attachment")
-              f.close
-              postman.send opts.merge(attachments: [f.path])
+              to_f(File.join(dir, name), opts)
+              postman.send opts.merge(attachments: [File.join(dir, name)])
             ensure
-              File.delete(f)
+              FileUtils.rm_rf("#{dir}/*")
             end
           rescue StandardError => e
             @log.error "ll-010: Can't send an email '#{opts['subject']}' to #{opts['to']} due to " \
                        "#{Backtrace.new(e)}'"
           end
+        end
+
+        # Wrap attachment content to a *.zip file and archive.
+        #   to_f('my-content.html', opts)   => my-content.html.zip
+        #
+        # You may disable archiving option by passing option *no_archive*
+        #   to_f('my-content.html', "no_archive" => true)
+        def to_f(path, opts)
+          if opts.key? "no_archive"
+            f = File.open(path, "w")
+            body = opts.msg_body("template-attachment")
+          else
+            f = File.new("#{path}.zip", "wb")
+            bytes = Zip::OutputStream.write_buffer do |zio|
+              zio.put_next_entry(File.basename(path))
+              zio.write opts.msg_body("template-attachment")
+            end
+            bytes.rewind # reposition buffer pointer to the beginning
+            body = bytes.sysread
+          end
+          f.write body
+          f.close
+          f
         end
       end
     end

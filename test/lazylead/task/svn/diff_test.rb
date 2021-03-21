@@ -31,6 +31,10 @@ require_relative "../../../../lib/lazylead/task/svn/diff"
 
 module Lazylead
   class DiffTest < Lazylead::Test
+    # @todo #/DEV Right now its impossible to check that attachment is present in email as we
+    #  removing the directory with attachments once SVN::Diff is sent the email through the postman.
+    #  Think about how to test this case in automatically, because for now we are doing it manually
+    #  during the development.
     test "changes since revision" do
       skip "No svn credentials provided" unless env? "svn_log_user",
                                                      "svn_log_password"
@@ -53,8 +57,8 @@ module Lazylead
           "template-attachment" => "lib/messages/svn_diff_attachment.erb"
         )
       )
-      assert_email_line "[SVN] Changed since rev1",
-                        %w[r2 by dgroup at 2020-08-16]
+      assert_email_line "[SVN] Changed since rev1", %w[r2 by dgroup at 2020-08-16]
+      # assert_attachment "[SVN] Changed since rev1", /^.*svn-log-.*.html.zip$/
     end
 
     test "changes since revision with attachment" do
@@ -68,7 +72,7 @@ module Lazylead
                                                          "LL_SMTP_TO",
                                                          "LL_SMTP_FROM"
       Lazylead::Smtp.new(
-        Log.new,
+        Log.new.verbose,
         NoSalt.new,
         smtp_host: ENV["LL_SMTP_HOST"],
         smtp_port: ENV["LL_SMTP_PORT"],

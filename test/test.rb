@@ -126,6 +126,18 @@ module Lazylead
              "Words '#{words.join(',')}' wasn't found in '#{mail.join('\n')}'"
     end
 
+    def assert_attachment(subject, regexp)
+      parts = Mail::TestMailer.deliveries
+                              .find { |m| m.subject.eql? subject }
+                              .body.parts.parts
+                              .select do |p|
+        p.header.fields.any? { |f| f.value.start_with? "attachment" }
+      end
+      refute_empty parts, "No attachments found within the email"
+      assert parts.first.header.fields.any? { |f| f.value.match regexp },
+             "No attachments found matches to '#{regexp}' in #{subject}"
+    end
+
     # Ping remote host
     #  https://github.com/eitoball/net-ping
     #  https://stackoverflow.com/a/35508446/6916890
