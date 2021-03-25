@@ -135,13 +135,11 @@ module Lazylead
       end
 
       def props
-        @props ||= begin
-          if team.nil?
-            Opts.new(env(to_hash))
-          else
-            Opts.new(env(team.to_hash.merge(to_hash)))
-          end
-        end
+        @props ||= if team.nil?
+                     Opts.new(env(to_hash))
+                   else
+                     Opts.new(env(team.to_hash.merge(to_hash)))
+                   end
       end
 
       def postman

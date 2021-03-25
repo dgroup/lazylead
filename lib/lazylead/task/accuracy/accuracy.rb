@@ -118,13 +118,11 @@ module Lazylead
     end
 
     def colors
-      @colors ||= begin
-        JSON.parse(@opts["colors"])
-            .to_h
-            .to_a
-            .each { |e| e[0] = e[0].to_i }
-            .sort_by { |e| e[0] }
-      end
+      @colors ||= JSON.parse(@opts["colors"])
+                      .to_h
+                      .to_a
+                      .each { |e| e[0] = e[0].to_i }
+                      .sort_by { |e| e[0] }
     end
 
     # Calculate grade for accuracy

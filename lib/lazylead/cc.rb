@@ -80,13 +80,11 @@ module Lazylead
     end
 
     def cc
-      @cc ||= begin
-        if @text.include? ","
-          @text.split(",").map(&:strip).select { |e| e[@regxp] }
-        elsif @text[@regxp]
-          [@text.strip]
-        end
-      end
+      @cc ||= if @text.include? ","
+                @text.split(",").map(&:strip).select { |e| e[@regxp] }
+              elsif @text[@regxp]
+                [@text.strip]
+              end
     end
 
     def each(&block)
@@ -125,15 +123,13 @@ module Lazylead
     end
 
     def to_h
-      @to_h ||= begin
-        if @orig.is_a? Hash
-          @orig.each_with_object({}) do |i, o|
-            o[i.first] = Lazylead::PlainCC.new(i.last).cc
-          end
-        else
-          {}
-        end
-      end
+      @to_h ||= if @orig.is_a? Hash
+                  @orig.each_with_object({}) do |i, o|
+                    o[i.first] = Lazylead::PlainCC.new(i.last).cc
+                  end
+                else
+                  {}
+                end
     end
   end
 
@@ -151,12 +147,10 @@ module Lazylead
     end
 
     def to_h
-      @to_h ||= begin
-        components.each_with_object({}) do |c, h|
-          email = lead(c.attrs["id"])
-          next if email.nil? || email.blank?
-          h[c.attrs["name"]] = email
-        end
+      @to_h ||= components.each_with_object({}) do |c, h|
+        email = lead(c.attrs["id"])
+        next if email.nil? || email.blank?
+        h[c.attrs["name"]] = email
       end
     end
 

@@ -94,13 +94,11 @@ module Lazylead
 
     # Detect the percentage grid for tickets, by default its 0%, 10%, 20%, etc.
     def grid
-      @grid ||= begin
-        if @opts.key? "grid"
-          @opts.slice("grid", ",")
-        else
-          %w[0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%]
-        end
-      end
+      @grid ||= if @opts.key? "grid"
+                  @opts.slice("grid", ",")
+                else
+                  %w[0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%]
+                end
     end
 
     # Remove score labels from the ticket.
