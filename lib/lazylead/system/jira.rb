@@ -26,6 +26,7 @@ require "jira-ruby"
 require "forwardable"
 require_relative "../salt"
 require_relative "../opts"
+require_relative "../log"
 
 module Lazylead
   # Jira system for manipulation with issues.
