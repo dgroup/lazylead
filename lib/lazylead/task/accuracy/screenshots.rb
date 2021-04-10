@@ -29,11 +29,12 @@ module Lazylead
   # Check that ticket has screenshot(s).
   # The screenshots should
   #  1. present as attachments
-  #  2. mentioned in description with !<name>.<extension>|thumbnail! (read more https://bit.ly/3rusNgW)
+  #  2. has extension .jpg .jpeg .exif .tiff .tff .bmp .png .svg
+  #  3. mentioned in description with !<name>.<extension>|thumbnail! (read more https://bit.ly/3rusNgW)
   #
   class Screenshots < Lazylead::Requirement
     # @param minimum The number of expected screenshots
-    def initialize(minimum: 2, score: 2, ext: %w[.jpg .jpeg .exif .tiff .tff .bmp .png .svg])
+    def initialize(minimum: 1, score: 2, ext: %w[.jpg .jpeg .exif .tiff .tff .bmp .png .svg])
       super "Screenshots", score, "Description,Attachments"
       @minimum = minimum
       @ext = ext
@@ -41,11 +42,19 @@ module Lazylead
 
     def passed(issue)
       return false if issue.attachments.nil? || blank?(issue, "description")
-      regexps = issue.attachments
-                     .select { |a| @ext.include? File.extname(a.filename) }
-                     .map { |a| /!#{a.filename}\|thumbnail!/ }
-      return false if regexps.size < @minimum
-      regexps.all? { |r| issue.description.match? r }
+      references = issue.description
+                        .to_enum(:scan, /!.+!/)
+                        .map { Regexp.last_match }
+                        .map(&:to_s)
+      return false if references.size < @minimum
+      references.all? { |ref| pictures(issue).any? { |file| ref.include? file } }
+    end
+
+    # Detect all pictures in ticket attachments and returns an array with file names.
+    def pictures(issue)
+      @pictures ||= issue.attachments
+                         .select { |a| @ext.include? File.extname(a.filename).downcase }
+                         .map(&:filename)
     end
   end
 end

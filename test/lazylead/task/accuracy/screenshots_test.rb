@@ -51,13 +51,11 @@ module Lazylead
       )
     end
 
-    test "issue has only one .png file however minimum 2 are required" do
+    test "issue has no .png file however minimum 1 are required" do
       refute Screenshots.new.passed(
         OpenStruct.new(
-          description: "Hi,\n here are snapshots !img1.jpg|thumbnail!\n",
-          fields: {
-            "description" => "Hi,\n here are snapshots !img1.jpg|thumbnail!\n"
-          },
+          description: "Hi,\n here are snapshots !img1.zip!\n",
+          fields: { "description" => "Hi,\n here are snapshots !img1.zip!\n" },
           attachments: [
             OpenStruct.new("filename" => "img1.jpg"),
             OpenStruct.new("filename" => "img2.jpg")
@@ -76,6 +74,50 @@ module Lazylead
           attachments: [
             OpenStruct.new("filename" => "img1.JPG"),
             OpenStruct.new("filename" => "img2.jpg")
+          ]
+        )
+      )
+    end
+
+    test "issue has two .png file in description but three .png in attachments" do
+      assert Screenshots.new.passed(
+        OpenStruct.new(
+          description: "Hi,\n here are snapshots !img1.JPG|thumbnail!\n!img2.jpg|thumbnail!\n",
+          fields: {
+            "description" => "Hi,\n here are snapshots !img1.JPG|thumbnail!\n!img2.jpg|thumbnail!\n"
+          },
+          attachments: [
+            OpenStruct.new("filename" => "img1.JPG"),
+            OpenStruct.new("filename" => "img2.jpg"),
+            OpenStruct.new("filename" => "img3.jpg")
+          ]
+        )
+      )
+    end
+
+    test "issue has two .png files with reference in description without thumbnail" do
+      assert Screenshots.new.passed(
+        OpenStruct.new(
+          description: "Hi,\n here are snapshots !img1.jpg!\n!img2.jpg!\n",
+          fields: { "description" => "Hi,\n here are snapshots !img1.jpg!\n!img2.jpg!\n" },
+          attachments: [
+            OpenStruct.new("filename" => "img1.jpg"),
+            OpenStruct.new("filename" => "img2.jpg")
+          ]
+        )
+      )
+    end
+
+    test "issue has two .png files with reference in description but absent in attachments" do
+      refute Screenshots.new.passed(
+        OpenStruct.new(
+          description: "Hi,\n here are snapshots !img1.jpg!\n!img2.jpg!\n",
+          fields: {
+            "description" => "Hi,\n here are snapshots !img1.jpg!\n!img2.jpg!\n"
+          },
+          attachments: [
+            OpenStruct.new("filename" => "img3.jpg"),
+            OpenStruct.new("filename" => "img4.jpg")
           ]
         )
       )
