@@ -23,6 +23,7 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 require_relative "../../../test"
+require_relative "../../../../lib/lazylead/system/jira"
 require_relative "../../../../lib/lazylead/task/accuracy/accuracy"
 require_relative "../../../../lib/lazylead/task/accuracy/affected_build"
 
@@ -68,6 +69,16 @@ module Lazylead
                        "docs" => "https://github.com/dgroup/lazylead/blob/master/.github/ISSUE_TEMPLATE/bug_report.md"
                      )
                    ).evaluate.comment
+    end
+
+    test "detect non-system reporter" do
+      assert_equal "grussell",
+                   Score.new(
+                     NoAuthJira.new("https://jira.spring.io")
+                               .issues("key=INT-4116", expand: "changelog")
+                               .first,
+                     Opts.new("system-users" => "abilan")
+                   ).reporter
     end
   end
 end

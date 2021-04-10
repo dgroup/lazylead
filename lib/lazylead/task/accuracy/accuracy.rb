@@ -47,7 +47,7 @@ module Lazylead
         Requires.new(__dir__).load
         opts[:rules] = opts.construct("rules")
         opts[:total] = opts[:rules].sum(&:score)
-        opts[:tickets] = sys.issues(opts["jql"], opts.jira_defaults)
+        opts[:tickets] = sys.issues(opts["jql"], opts.jira_defaults.merge(expand: "changelog"))
                             .map { |i| Score.new(i, opts) }
                             .each(&:evaluate)
                             .each(&:post)
@@ -83,7 +83,7 @@ module Lazylead
     # The jira comment in markdown format
     def comment
       comment = [
-        "Hi [~#{@issue.reporter.id}],",
+        "Hi [~#{reporter}],",
         "",
         "The triage accuracy is '{color:#{color}}#{@score}{color}'" \
           " (~{color:#{color}}#{@accuracy}%{color}), here are the reasons why:",
@@ -132,6 +132,18 @@ module Lazylead
     #  grade(25.5)  => 20
     def grade(value)
       (value / 10).floor * 10
+    end
+
+    # Detect the ticket reporter.
+    #
+    # If ticket created by some automatic/admin user account then reporter is the first non-system
+    #  user account who modified the ticket.
+    def reporter
+      return @issue.reporter.id unless @opts.key? "system-users"
+      sys = @opts.slice("system-users", ",")
+      return @issue.reporter.id if sys.empty? || sys.none? { |susr| @issue.reporter.id.eql? susr }
+      @issue.history
+            .find { |h| sys.none? { |susr| susr.eql? h["author"]["key"] } }["author"]["key"]
     end
   end
 end
