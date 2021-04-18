@@ -257,7 +257,7 @@ module Lazylead
 
     # Update the labels for a particular issue
     def labels!(lbl)
-      save!("fields" => { "labels" => lbl.uniq }) unless lbl.nil? || lbl.empty?
+      save!("fields" => { "labels" => lbl.uniq }) unless lbl.empty?
     end
 
     def save!(opts)
