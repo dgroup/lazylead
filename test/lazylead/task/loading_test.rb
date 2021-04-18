@@ -43,6 +43,7 @@ module Lazylead
           "jql" => "key=STS-3599",
           "team" => "mclaren:Tom McLaren,milesparker:Mi Pa",
           "user_link" => "https://user.com?id=",
+          "search_link" => "https://jira.spring.io/issues/?jql=",
           "fields" => "description,assignee,component,priority,summary,duedate",
           "subject" => "[LL] Team loading",
           "template" => "lib/messages/loading.erb"
