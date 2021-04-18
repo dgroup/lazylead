@@ -36,7 +36,7 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        assignments = sys.issues(opts["jql"])
+        assignments = sys.issues(opts["jql"], opts.jira_defaults)
                          .group_by(&:assignee)
                          .map { |user, tasks| [user.id, Teammate.new(user, tasks)] }
                          .to_h
