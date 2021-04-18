@@ -40,11 +40,11 @@ module Lazylead
         Opts.new(
           "to" => "lead@company.com",
           "from" => "ll@company.com",
-          "jql" => "key=STS-3599",
+          "jql" => "key in (STS-3599, XD-3739, XD-3744)",
           "team" => "mclaren:Tom McLaren,milesparker:Mi Pa",
           "user_link" => "https://user.com?id=",
           "search_link" => "https://jira.spring.io/issues/?jql=",
-          "fields" => "description,assignee,component,priority,summary,duedate",
+          "fields" => "assignee,duedate,customfield_10480",
           "subject" => "[LL] Team loading",
           "template" => "lib/messages/loading.erb"
         )

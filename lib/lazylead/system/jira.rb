@@ -257,12 +257,19 @@ module Lazylead
 
     # Update the labels for a particular issue
     def labels!(lbl)
-      return if lbl.nil? || lbl.empty?
-      save!("fields" => { "labels" => lbl.uniq })
+      save!("fields" => { "labels" => lbl.uniq }) unless lbl.nil? || lbl.empty?
     end
 
     def save!(opts)
       @issue.save(opts)
+    end
+
+    def sprint(field = "customfield_10480")
+      @sprint ||= if fields[field].nil? || fields[field].empty?
+                    ""
+                  else
+                    fields[field].first.split(",").find { |text| text.starts_with? "name=" }[5..]
+                  end
     end
   end
 

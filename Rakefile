@@ -45,7 +45,7 @@ def version
   Gem::Specification.load(Dir["*.gemspec"].first).version
 end
 
-task default: %i[clean test rubocop sqlint xcop copyright docker]
+task default: %i[clean rubocop test sqlint xcop copyright docker]
 
 require "rake/testtask"
 desc "Run all unit tests"

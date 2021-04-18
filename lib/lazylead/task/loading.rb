@@ -71,6 +71,10 @@ module Lazylead
       def to_s
         "#{id} has #{total} tasks"
       end
+
+      def sprints
+        @tasks.group_by(&:sprint).sort
+      end
     end
 
     # The teammate without tasks.
