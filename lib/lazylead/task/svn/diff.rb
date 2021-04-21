@@ -50,6 +50,7 @@ module Lazylead
             "-r#{opts['since_rev']}:HEAD #{opts['svn_url']}"
           ]
           stdout = `#{cmd.join(" ")}`
+          stdout.scrub!
           send_email postman, opts.merge(stdout: stdout) unless stdout.blank?
         end
 
