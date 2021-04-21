@@ -139,11 +139,11 @@ module Lazylead
     # If ticket created by some automatic/admin user account then reporter is the first non-system
     #  user account who modified the ticket.
     def reporter
-      return @issue.reporter.id unless @opts.key? "system-users"
       sys = @opts.slice("system-users", ",")
-      return @issue.reporter.id if sys.empty? || sys.none? { |susr| @issue.reporter.id.eql? susr }
-      @issue.history
-            .find { |h| sys.none? { |susr| susr.eql? h["author"]["key"] } }["author"]["key"]
+      return @issue.reporter.id if sys.empty? || sys.none? { |susr| susr.eql? @issue.reporter.id }
+      first = @issue.history.find { |h| sys.none? { |susr| susr.eql? h["author"]["key"] } }
+      return @issue.reporter.id if first.nil?
+      first["author"]["key"]
     end
   end
 end
