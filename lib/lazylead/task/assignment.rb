@@ -67,10 +67,8 @@ module Lazylead
       # Gives true when last change of "Assignee" field was done
       #  by not authorized person.
       def illegal?
-        @allowed.none? do |a|
-          return false if last.nil?
-          a == last["author"]["name"]
-        end
+        return false if last.nil? || @issue.assignee.id.eql?(last["author"]["name"])
+        @allowed.none? { |a| a.eql? last["author"]["name"] }
       end
 
       # Detect details about last change of "Assignee" to non-null value
