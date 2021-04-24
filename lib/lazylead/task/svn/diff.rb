@@ -61,8 +61,7 @@ module Lazylead
           Dir.mktmpdir do |dir|
             name = "svn-log-#{Date.today.strftime('%d-%b-%Y')}.html"
             begin
-              to_f(File.join(dir, name), opts)
-              postman.send opts.merge(attachments: [File.join(dir, name)])
+              postman.send opts.merge(attachments: [to_f(File.join(dir, name), opts)])
             ensure
               FileUtils.rm_rf("#{dir}/*")
             end
@@ -92,7 +91,7 @@ module Lazylead
           end
           f.write body
           f.close
-          f
+          f.path
         end
       end
     end
