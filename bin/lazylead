@@ -70,6 +70,9 @@ Available options:"
   o.bool "--testdata",
          "Apply the database VCS migration with test data",
          default: false
+  o.string "--log-file", "The path to the log file"
+  o.string "--rolling-age", "The maximum age (in seconds) of a log file before it is rolled. The age can also be given as 'daily', 'weekly', or 'monthly'"
+  o.string "--rolling-files", "The number of rolled log files to keep."
   o.on "--verbose", "Enable extra logging information" do
     log.verbose
   end

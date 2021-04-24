@@ -74,6 +74,15 @@ module Lazylead
       )
     )
 
+    if ARGV.include? "--log-file"
+      name = ARGV[ARGV.find_index("--log-file") + 1]
+      age = "daily"
+      age = ARGV[ARGV.find_index("--rolling-age") + 1] if ARGV.include? "--rolling-age"
+      files = 7
+      files = ARGV[ARGV.find_index("--rolling-files") + 1] if ARGV.include? "--rolling-files"
+      FILE_APPENDER = Logging.appenders.rolling_file("file", filename: name, age: age, keep: files)
+    end
+
     # Nothing to log
     NOTHING = Logging.logger["nothing"]
     NOTHING.level = :off
@@ -83,12 +92,14 @@ module Lazylead
     DEBUG = Logging.logger["debug"]
     DEBUG.level = :debug
     DEBUG.add_appenders "stdout"
+    DEBUG.add_appenders(FILE_APPENDER) if ARGV.include? "--log-file"
     DEBUG.freeze
 
     # Alerts/errors
     ERRORS = Logging.logger["errors"]
     ERRORS.level = :error
     ERRORS.add_appenders "stdout"
+    ERRORS.add_appenders(FILE_APPENDER) if ARGV.include? "--log-file"
     ERRORS.freeze
   end
 end

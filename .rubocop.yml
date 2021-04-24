@@ -15,6 +15,7 @@ Layout/LineLength:
   Exclude:
     - "*.gemspec"
     - "test/**/*"
+    - "bin/lazylead"
 
 Metrics/AbcSize:
   Max: 21
