@@ -43,14 +43,12 @@ module Lazylead
       def run(sys, postman, opts)
         allowed = opts.slice "allowed", ","
         silent = opts.key? "silent"
-        issues = sys.issues opts["jql"],
-                            opts.jira_defaults.merge(expand: "changelog")
-        return if issues.empty?
-        postman.send opts.merge(
-          assignees: issues.map { |i| Assignee.new(i, allowed, silent) }
-                           .select(&:illegal?)
-                           .each(&:add_label)
-        )
+        assignees = sys.issues(opts["jql"], opts.jira_defaults.merge(expand: "changelog"))
+                       .map { |i| Assignee.new(i, allowed, silent) }
+                       .select(&:illegal?)
+                       .each(&:add_label)
+        return if assignees.empty?
+        postman.send opts.merge(assignees: assignees)
       end
     end
 
