@@ -122,5 +122,19 @@ module Lazylead
         )
       )
     end
+
+    test "two screenshots with docx attach" do
+      assert Screenshots.new.passed(
+        OpenStruct.new(
+          description: "Hi,\n here are snapshots !img1.jpg!\n!img2.jpg!\n[example.docx^!https://jira.com/images/icons/link_attachment_5.gif|width=7,height=7! ^|https://jira.com/secure/attachment/23/23_example.docx]",
+          fields: { "description" => "-" },
+          attachments: [
+            OpenStruct.new("filename" => "img1.jpg"),
+            OpenStruct.new("filename" => "img2.jpg"),
+            OpenStruct.new("filename" => "example.docx")
+          ]
+        )
+      )
+    end
   end
 end

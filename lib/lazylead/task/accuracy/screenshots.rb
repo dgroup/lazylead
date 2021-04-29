@@ -42,12 +42,17 @@ module Lazylead
 
     def passed(issue)
       return false if issue.attachments.nil? || blank?(issue, "description")
-      references = issue.description
-                        .to_enum(:scan, /!.+!/)
-                        .map { Regexp.last_match }
-                        .map(&:to_s)
-      return false if references.size < @minimum
-      references.all? { |ref| pictures(issue).any? { |file| ref.include? file } }
+      ref = references(issue)
+      ref.size < @minimum ? false : ref.all? { |r| pictures(issue).any? { |file| r.include? file } }
+    end
+
+    # Detect all references in ticket description to attachments (including web links).
+    def references(issue)
+      issue.description
+           .to_enum(:scan, /!.+!/)
+           .map { Regexp.last_match }
+           .map(&:to_s)
+           .reject { |r| r.match?(%r{(http|https)://.*/images/icons/link_attachment.*.gif}) }
     end
 
     # Detect all pictures in ticket attachments and returns an array with file names.
