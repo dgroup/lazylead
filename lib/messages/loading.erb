@@ -69,10 +69,9 @@
 <body>
 <table summary="tickets">
   <tr>
-    <th id="uid">ID</th>
     <th id="name">User</th>
     <th id="total">
-      <a href="https://jira.spring.io/issues/?jql=<%= CGI.escape(jql) %>">Assigned From</a>
+      <a href="<%= search_link %><%= CGI.escape(jql) %>">Assigned From</a>
     </th>
     <th id="duedate">Next Due date</th>
   </tr>
@@ -83,10 +82,7 @@
       <tr>
     <% end %>
     <td>
-      <div class="auto"><a href="<%= user_link %>"><%= teammate %></a></div>
-    </td>
-    <td>
-      <div class="auto"><%= assignment.name %></div>
+      <div class="auto"><a href="<%= user_link %><%= teammate %>"><%= assignment.name %></a></div>
     </td>
     <td>
       <div class="auto">
