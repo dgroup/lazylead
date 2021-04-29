@@ -85,7 +85,7 @@ module Lazylead
 
       # The name of current assignee for ticket
       def to
-        @issue.fields["assignee"]["name"]
+        @issue.fields["assignee"]["displayName"]
       end
     end
   end
