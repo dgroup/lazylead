@@ -65,20 +65,20 @@ module Lazylead
     # Detect index of line with test case
     def detect_tc(line, index)
       return unless @tc.negative?
-      @tc = index if eql? line,
-                          %w[testcase: tc: teststeps: teststeps steps: tcsteps: tc testcases steps]
+      @tc = index if eql? line, %w[testcase: tc: teststeps: teststeps steps: tcsteps: tc testcases
+                                   steps usecase]
     end
 
     # Detect index of line with actual result
     def detect_ar(line, index)
       return unless @ar.negative? && index > @tc
-      @ar = index if starts? line, %w[ar: actualresult: ar= [ar]]
+      @ar = index if starts? line, %w[ar: actualresult: ar= [ar] actualresult]
     end
 
     # Detect index of line with expected result
     def detect_er(line, index)
       return unless @er.negative? && index > @tc
-      @er = index if starts? line, %w[er: expectedresult: er= [er]]
+      @er = index if starts? line, %w[er: expectedresult: er= [er] expectedresult]
     end
 
     def starts?(line, text)
