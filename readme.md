@@ -48,13 +48,15 @@ Join our telegram group [lazylead.org](https://t.me/lazyleads) for discussions.
 | Create a meeting(s) automatically in case some tickets appeared (group by assignee/reporters/component/ticket type/etc) | ⌛ | ⌛ | ⌛ | ❌ | 
 | Propogate fields from parent tickets to sub-tasks | ✅ | ⌛ | ⌛ | ❌ | 
 | Notify about tickets without comments with expected text | ✅ | ⌛ | ⌛ | ❌ | 
-| Notify about team loading (no tasks on teammates) | ✅ | ⌛ | ⌛ | ❌ | 
+| [Notify about team loading (no tasks on teammates)](lib/lazylead/task/loading.rb) | ✅ | ⌛ | ⌛ | ❌ | 
 | Notify about tickets matches predefined multiple conditions | ✅ | ⌛ | ⌛ | ❌ | 
 | Link automatically the ticket and Confluence page if link found in ticket's comments/description | ✅ | ⌛ | ⌛ | ❌ | 
 | Notify about tickets assigned to your team members not by effective managers| ✅ | ⌛ | ⌛ | ❌ | 
 | Notify about modifications of important files in VCS | ❌ | ⌛ | ❌ | ✅ | 
 | Notify about diff changes for past X period in VCS | ❌ | ⌛ | ❌ | ✅ | 
 | Notify about changes with some text for past X period in VCS | ❌ | ⌛ | ❌ | ✅ | 
+| [Notify when someone outside of your team changed the due date on tickets for your team](lib/lazylead/task/micromanager.rb)| ✅ | ⌛ | ❌ | ❌ | 
+| [Notify when someone outside of your team assigned a ticket directly to the developer](lib/lazylead/task/assignment.rb)| ✅ | ⌛ | ❌ | ❌ | 
 
 | Integration                                           | Type          | Status |
 | :---------------------------------------------------- | :-----------: | :----: |
@@ -65,7 +67,7 @@ Join our telegram group [lazylead.org](https://t.me/lazyleads) for discussions.
 | calendar.google.com                                   | Calendar      | ⌛ |
 | slack.com                                             | Notifications | ⌛ |
 
-✅ - implemented, ⌛ - planned, 🌵 - implemented, but not tested, ❌ - not supported by ticketing system.
+✅ - implemented, ⌛ - planned, 🌵 - implemented, but not tested, ❌ - not supported/planned.
 
 New ideas, bugs, suggestions or questions are welcome [via GitHub issues](https://github.com/dgroup/lazylead/issues/new)!
 
