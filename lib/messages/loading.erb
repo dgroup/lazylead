@@ -89,7 +89,7 @@
         <% if assignment.free? %>
           <span style="color: red">0</span>
         <% else %>
-          <% assignment.sprints.each do |s| %>
+          <% assignment.sprints(defined?(sprint) ? sprint : "customfield_10480").each do |s| %>
             <a href="<%= search_link %><%= CGI.escape("#{jql} and assignee=#{teammate}") %>">
               <%= s.first.blank? ? "No sprint" : s.first %>: <%= s.last.size %>
             </a>

@@ -45,6 +45,7 @@ module Lazylead
           "user_link" => "https://user.com?id=",
           "search_link" => "https://jira.spring.io/issues/?jql=",
           "fields" => "assignee,duedate,customfield_10480",
+          "sprint" => "customfield_10480",
           "subject" => "[LL] Team loading",
           "template" => "lib/messages/loading.erb"
         )
