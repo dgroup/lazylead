@@ -95,8 +95,9 @@
     <th id="when">When</th>
     <th id="who">Who</th>
     <th id="to">To</th>
-    <th id="summary">Summary</th>
+    <th id="assignee">Assignee</th>
     <th id="reporter">Reporter</th>
+    <th id="summary">Summary</th>
   </tr>
   <% dues.each do |d| %>
     <tr>
@@ -105,8 +106,9 @@
       <td><%= d.when %></td>
       <td><span style='color: red'><%= d.last.name %></span> (<%= d.last.id %>)</td>
       <td><span style='color: red'><%= d.issue.duedate %></span></td>
-      <td><%= d.issue.summary %></td>
+      <td><%= d.issue.assignee.name %></td>
       <td><%= d.issue.reporter.name %></td>
+      <td><%= d.issue.summary %></td>
     </tr>
   <% end %>
 </table>
