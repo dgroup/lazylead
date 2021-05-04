@@ -43,10 +43,28 @@ module Lazylead
       def run(sys, postman, opts)
         allowed = opts.slice "allowed", ","
         dues = sys.issues(opts["jql"], opts.jira_defaults.merge(expand: "changelog"))
-                  .map { |i| Due.new(i, allowed) }
+                  .map { |i| Due.new(i, allowed, since(opts)) }
                   .select(&:illegal?)
+                  .reject(&:obsolete?)
         return if dues.empty?
         postman.send opts.merge(dues: dues)
+      end
+
+      # Detect history period where search should start.
+      #
+      # opts["period"] The default period for past is 1 day (86400 seconds).
+      #                So, if now 2017-04-06 15:50:58.674+0000
+      #                it returns 2017-04-05 15:50:58 +0000
+      #
+      # opts["now"]    The current time for unit tests.
+      #                If absent the "Time.now" is used.
+      #
+      def since(opts)
+        @since ||= if opts.key? "now"
+                     Time.parse(opts["now"])
+                   else
+                     Time.now - opts.fetch("period", "86400").to_i
+                   end
       end
     end
 
@@ -54,9 +72,10 @@ module Lazylead
     class Due
       attr_reader :issue, :when
 
-      def initialize(issue, allowed)
+      def initialize(issue, allowed, since)
         @issue = issue
         @allowed = allowed
+        @since = since
       end
 
       # Gives true when last change of "Due Date" field was done
@@ -64,6 +83,11 @@ module Lazylead
       def illegal?
         return false if @issue.assignee.id.eql?(last.id)
         @allowed.none? { |a| a.eql? last.id }
+      end
+
+      # Give true when "Due Date" changes happens in past and its alert already sent.
+      def obsolete?
+        @when < @since
       end
 
       # Detect details about last change of "Due Date" to non-null value
@@ -76,7 +100,7 @@ module Lazylead
             @when = @issue["created"]
             dd = @issue.reporter
           else
-            @when = dd["created"].to_date
+            @when = dd["created"]
             dd = Lazylead::User.new(dd["author"])
           end
           dd

@@ -43,12 +43,19 @@ module Lazylead
           "jql" => "key in ('STS-3599','SPR-6541') and duedate is not empty",
           "fields" => "assignee,duedate,priority,created,summary,reporter",
           "allowed" => "tom,mike,bob",
+          "period" => "86400",
+          "now" => "2009-12-10T00:04:00.000+0000",
           "subject" => "DD: How dare you?",
           "template" => "lib/messages/illegal_duedate_change.erb"
         )
       )
       assert_email "DD: How dare you?",
                    %w[SPR-6541	Major	(kdonald)	2009-12-10 Spring's\ Maven\ Central tom,mike,bob]
+    end
+
+    test "since for past 1 min" do
+      greater_or_eq Task::Micromanager.new.since("period" => 60).to_i,
+                    (Time.now - 60).to_i
     end
   end
 end

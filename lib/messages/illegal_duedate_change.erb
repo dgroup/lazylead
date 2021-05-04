@@ -103,7 +103,7 @@
     <tr>
       <td><a href='<%= d.issue.url %>'><%= d.issue.key %></a></td>
       <td><%= d.issue.priority %></td>
-      <td><%= d.when %></td>
+      <td><%= d.when.to_date %></td>
       <td><span style='color: red'><%= d.last.name %></span> (<%= d.last.id %>)</td>
       <td><span style='color: red'><%= d.issue.duedate %></span></td>
       <td><%= d.issue.assignee.name %></td>
