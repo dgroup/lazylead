@@ -65,12 +65,10 @@ module Lazylead
     end
 
     test "issue has two .png files with reference in description but with extension mismatch" do
-      refute Screenshots.new.passed(
+      refute Screenshots.new(minimum: 2).passed(
         OpenStruct.new(
           description: "Hi,\n here are snapshots !img1.jpg|thumbnail!\n!img2.jpg|thumbnail!\n",
-          fields: {
-            "description" => "Hi,\n here are snapshots !img1.jpg|thumbnail!\n!img2.jpg|thumbnail!\n"
-          },
+          fields: { "description" => "-" },
           attachments: [
             OpenStruct.new("filename" => "img1.JPG"),
             OpenStruct.new("filename" => "img2.jpg")

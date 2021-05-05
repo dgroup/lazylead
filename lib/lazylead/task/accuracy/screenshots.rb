@@ -42,8 +42,7 @@ module Lazylead
 
     def passed(issue)
       return false if issue.attachments.nil? || blank?(issue, "description")
-      ref = references(issue)
-      ref.size < @minimum ? false : ref.all? { |r| pictures(issue).any? { |file| r.include? file } }
+      references(issue).count { |r| pictures(issue).any? { |file| r.include? file } } >= @minimum
     end
 
     # Detect all references in ticket description to attachments (including web links).
