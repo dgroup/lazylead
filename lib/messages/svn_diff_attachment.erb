@@ -91,18 +91,16 @@
 <p>Commit(s) since <code><%= since_rev %></code> revision in <a href="<%= svn_url %>"><%= svn_url %></a>:</p>
 <div id="table-of-contents" class="table-of-contents">
   <ul>
-    <% stdout.split("------------------------------------------------------------------------").reject(&:blank?).reverse.each do |commit| %>
-      <% details = commit.split("\n").reject(&:blank?).first.split("|").map(&:strip).reject(&:blank?) %>
-      <li><a href="#<%= details[0] %>"><%= details[0] %></a> by <%= details[1] %> at <%= details[2] %></li>
+    <% commits.each do |commit| %>
+      <li><a href="#<%= commit.rev %>"><%= commit.rev %></a> by <%= commit.author %> at <%= commit.time %></li>
     <% end %>
   </ul>
 </div>
-<% stdout.split("------------------------------------------------------------------------").reject(&:blank?).reverse.each do |commit| %>
+<% commits.each do |commit| %>
   <div class="commit">
-    <% commit.split("\n").reject(&:blank?).each_with_index do |line, index| %>
+    <% commit.lines.each_with_index do |line, index| %>
       <% if index.zero? %>
-        <% details = line.split("|").map(&:strip).reject(&:blank?) %>
-        <p style="background: gainsboro;" id="<%= details[0] %>"><a href="<%= commit_url %><%= details[0][1..-1] %>"><%= details[0] %></a> by <a href="<%= user %><%= details[1] %>"><%= details[1] %></a> at <span style="color: #275a90;"><%= details[2] %></span>
+        <p style="background: gainsboro;" id="<%= commit.rev %>"><a href="<%= commit_url %><%= commit.rev %>"><%= commit.rev %></a> by <a href="<%= user %><%= commit.author %>"><%= commit.author %></a> at <span style="color: #275a90;"><%= commit.time %></span>
           <a href="#table-of-contents">&#8593;</a>
         </p>
       <% else %>

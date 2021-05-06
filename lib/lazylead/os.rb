@@ -30,14 +30,26 @@ module Lazylead
   # Copyright:: Copyright (c) 2019-2020 Yurii Dubinka
   # License:: MIT
   class OS
+    #
     # Run OS-oriented command
+    # @param cmd
+    #        The command could be a single string or array of strings.
+    #        Examples                 Final command to OS
+    #        run("ls")                "ls"                  => stdout
+    #        run("ls", "-lah")        "ls -lah"             => stdout
+    #        run()                    N/A                   => ""
+    #        run("ls", nil, "-lah")   N/A                   => ""
+    #        run("ls", "", "-lah")    "ls -lah"             => stdout
+    #
     # @return stdout
     #         Please note, that this is not a raw stdout.
     #         The output will be modified by String#scrub! in order to avoid invalid byte sequence
     #         in UTF-8 (https://stackoverflow.com/a/24037885/6916890).
-    def run(cmd)
-      return if cmd.nil? || !cmd.is_a?(String)
-      `#{cmd}`.scrub!
+    def run(*cmd)
+      return "" if cmd.empty? || cmd.any?(&:nil?)
+      todo = cmd
+      todo = [cmd.first] if cmd.size == 1
+      `#{todo.join(" ")}`.scrub!
     end
   end
 end

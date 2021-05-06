@@ -65,13 +65,10 @@ module Lazylead
                   DateTime.now
                 end
           start = (now.to_time - opts["period"].to_i).to_datetime
-          cmd = [
-            "svn log --no-auth-cache",
-            "--username #{opts.decrypt('svn_user', 'svn_salt')}",
-            "--password #{opts.decrypt('svn_password', 'svn_salt')}",
-            "--xml -v -r {#{start}}:{#{now}} #{opts['svn_url']}"
-          ]
-          raw = OS.new.run cmd.join(" ")
+          raw = OS.new.run "svn log --no-auth-cache",
+                           "--username #{opts.decrypt('svn_user', 'svn_salt')}",
+                           "--password #{opts.decrypt('svn_password', 'svn_salt')}",
+                           "--xml -v -r {#{start}}:{#{now}} #{opts['svn_url']}"
           Nokogiri.XML(raw, nil, "UTF-8")
         end
 

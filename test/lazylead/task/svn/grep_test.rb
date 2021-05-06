@@ -28,6 +28,7 @@ require_relative "../../../../lib/lazylead/smtp"
 require_relative "../../../../lib/lazylead/opts"
 require_relative "../../../../lib/lazylead/postman"
 require_relative "../../../../lib/lazylead/task/svn/grep"
+require_relative "../../../../lib/lazylead/task/svn/svn"
 
 module Lazylead
   class GrepTest < Lazylead::Test
@@ -96,7 +97,7 @@ module Lazylead
 
 
       MSG
-      assert_equal 15, Entry.new(diff).diff(%w[ping]).size,
+      assert_equal 15, Lazylead::Svn::Commit.new(diff).diff(%w[ping]).size,
                    "There is one commit with 'ping' word where diff has 14 lines"
     end
   end

@@ -30,6 +30,7 @@ require "active_support/core_ext/hash/conversions"
 require_relative "../../os"
 require_relative "../../salt"
 require_relative "../../opts"
+require_relative "svn"
 
 module Lazylead
   module Task
@@ -44,14 +45,13 @@ module Lazylead
         end
 
         def run(_, postman, opts)
-          cmd = [
-            "svn log --diff --no-auth-cache",
-            "--username #{opts.decrypt('svn_user', 'svn_salt')}",
-            "--password #{opts.decrypt('svn_password', 'svn_salt')}",
-            "-r#{opts['since_rev']}:HEAD #{opts['svn_url']}"
-          ]
-          stdout = OS.new.run cmd.join(" ")
-          send_email postman, opts.merge(stdout: stdout) unless stdout.blank?
+          stdout = OS.new.run "svn log --diff --no-auth-cache",
+                              "--username #{opts.decrypt('svn_user', 'svn_salt')}",
+                              "--password #{opts.decrypt('svn_password', 'svn_salt')}",
+                              "-r#{opts['since_rev']}:HEAD #{opts['svn_url']}"
+          return if stdout.blank?
+          commits = Lazylead::Svn::Commits.new(stdout)
+          send_email postman, opts.merge(commits: commits) unless commits.empty?
         end
 
         # Send email with svn log as an attachment.

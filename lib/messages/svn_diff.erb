@@ -86,15 +86,14 @@
 <p>Hi,</p>
 <p>The following file(s) changed since <code><%= since_rev %></code> rev in
   <a href="<%= svn_url %>"><%= svn_url %></a>:</p>
-<% stdout.split("------------------------------------------------------------------------").reject(&:blank?).reverse.each do |commit| %>
+<% commits.each do |commit| %>
   <div class="commit">
-    <% commit.split("\n").reject(&:blank?).each_with_index do |line, index| %>
+    <% commit.lines.each_with_index do |line, index| %>
       <p style="background: gainsboro;">
         <% if index.zero? %>
-          <% details = line.split("|").map(&:strip).reject(&:blank?) %>
-          <a href="<%= commit_url %><%= details[0][1..-1] %>"><%= details[0] %></a>
-          by <a href="<%= user %><%= details[1] %>"><%= details[1] %></a>
-          at <span style="color: #275a90;"><%= details[2] %></span>
+          <a href="<%= commit_url %><%= commit.rev %>"><%= commit.rev %></a>
+          by <a href="<%= user %><%= commit.author %>"><%= commit.author %></a>
+          at <span style="color: #275a90;"><%= commit.time %></span>
         <% end %>
         <% if index == 1 %>
           <span style="padding-left: 4px"><%= line %></span>
