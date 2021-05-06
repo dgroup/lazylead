@@ -27,6 +27,7 @@ require "tempfile"
 require "nokogiri"
 require "backtrace"
 require "active_support/core_ext/hash/conversions"
+require_relative "../../os"
 require_relative "../../salt"
 require_relative "../../opts"
 
@@ -49,8 +50,7 @@ module Lazylead
             "--password #{opts.decrypt('svn_password', 'svn_salt')}",
             "-r#{opts['since_rev']}:HEAD #{opts['svn_url']}"
           ]
-          stdout = `#{cmd.join(" ")}`
-          stdout.scrub!
+          stdout = OS.new.run cmd.join(" ")
           send_email postman, opts.merge(stdout: stdout) unless stdout.blank?
         end
 

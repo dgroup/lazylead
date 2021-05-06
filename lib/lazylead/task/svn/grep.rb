@@ -25,6 +25,7 @@
 require "tmpdir"
 require "nokogiri"
 require "active_support/core_ext/hash/conversions"
+require_relative "../../os"
 require_relative "../../salt"
 require_relative "../../opts"
 
@@ -53,7 +54,7 @@ module Lazylead
             "--password #{opts.decrypt('svn_password', 'svn_salt')}",
             "-r {#{from(opts)}}:{#{now(opts)}} #{opts['svn_url']}"
           ]
-          stdout = `#{cmd.join(" ")}`
+          stdout = OS.new.run cmd.join(" ")
           stdout.split("-" * 72).reject(&:blank?).reverse.map { |e| Entry.new(e) }
         end
 

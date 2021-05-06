@@ -25,6 +25,7 @@
 require "tmpdir"
 require "nokogiri"
 require "active_support/core_ext/hash/conversions"
+require_relative "../../os"
 require_relative "../../salt"
 require_relative "../../opts"
 
@@ -70,7 +71,7 @@ module Lazylead
             "--password #{opts.decrypt('svn_password', 'svn_salt')}",
             "--xml -v -r {#{start}}:{#{now}} #{opts['svn_url']}"
           ]
-          raw = `#{cmd.join(" ")}`
+          raw = OS.new.run cmd.join(" ")
           Nokogiri.XML(raw, nil, "UTF-8")
         end
 
