@@ -24,7 +24,6 @@
 
 require "tmpdir"
 require "nokogiri"
-require "forwardable"
 require "active_support/core_ext/hash/conversions"
 require_relative "../../os"
 require_relative "../../salt"
