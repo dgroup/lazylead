@@ -64,20 +64,13 @@
       padding: 36px
     }
 
-    .commit {
-      min-width: 100%;
-      border-radius: 3.5px;
-      overflow: hidden;
-      display: inline-block;
-      line-height: 15px;
-      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-      border: 1px solid #BCC6CC;
+    th, td {
+      padding-left: 3px;
+      padding-right: 3px;
     }
 
-    .commit * {
-      padding-left: 4px;
-      font-size: 8px;
-      line-height: 12px;
+    th {
+      font-weight: bold;
     }
   </style>
   <title>SVN log</title>
@@ -86,22 +79,30 @@
 <p>Hi,</p>
 <p>The following file(s) changed since <code><%= since_rev %></code> rev in
   <a href="<%= svn_url %>"><%= svn_url %></a>:</p>
-<% commits.each do |commit| %>
-  <div class="commit">
-    <% commit.lines.each_with_index do |line, index| %>
-      <p style="background: gainsboro;">
-        <% if index.zero? %>
+<table summary="diff">
+  <tr>
+    <th id="rev">rev</th>
+    <th id="author">Author</th>
+    <th id="time">When</th>
+    <th id="msg">Message</th>
+  </tr>
+  <% commits.each do |commit| %>
+    <tr>
+      <td>
+        <div class="auto">
           <a href="<%= commit_url %><%= commit.rev %>"><%= commit.rev %></a>
-          by <a href="<%= user %><%= commit.author %>"><%= commit.author %></a>
-          at <span style="color: #275a90;"><%= commit.time %></span>
-        <% end %>
-        <% if index == 1 %>
-          <span style="padding-left: 4px"><%= line %></span>
-        <% end %>
-      </p>
-    <% end %>
-  </div>
-<% end %>
+        </div>
+      </td>
+      <td>
+        <div class="auto">
+          <a href="<%= user %><%= commit.author %>"><%= commit.author %></a>
+        </div>
+      </td>
+      <td><%= DateTime.parse(commit.time).strftime("%d-%m-%Y %H:%M:%S") %></td>
+      <td><%= commit.lines[1] %></td>
+    </tr>
+  <% end %>
+</table>
 <p>Posted by
   <a href="https://github.com/dgroup/lazylead">lazylead v<%= version %></a>.
 </p>
