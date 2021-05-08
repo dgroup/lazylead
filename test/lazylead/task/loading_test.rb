@@ -41,7 +41,7 @@ module Lazylead
           "to" => "lead@company.com",
           "from" => "ll@company.com",
           "jql" => "key in (STS-3599, XD-3739, XD-3744)",
-          "team" => "mclaren:Tom McLaren,milesparker:Mi Pa",
+          "team" => "mclaren:Tom McLaren,milesparker:Mi Pa,grussell:Gary Ru",
           "user_link" => "https://user.com?id=",
           "search_link" => "https://jira.spring.io/issues/?jql=",
           "fields" => "assignee,duedate,customfield_10480",
@@ -50,7 +50,10 @@ module Lazylead
           "template" => "lib/messages/loading.erb"
         )
       )
-      assert_email "[LL] Team loading", %w[mclaren Tom McLaren 0]
+      assert_email "[LL] Team loading",
+                   "grussell", "Gary Ru", "Sprint 68", "1",
+                   "Miles Parker", "No sprint: 1", "2013-11-08",
+                   "Tom McLaren", "0"
     end
   end
 end

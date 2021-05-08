@@ -47,7 +47,8 @@ module Lazylead
           "template" => "lib/messages/created_recently.erb"
         )
       )
-      assert_email "[CR] 20min ago!", %w[XD-3766 SGF-726]
+      assert_email "[CR] 20min ago!",
+                   "XD-3766", "SGF-726"
     end
   end
 end

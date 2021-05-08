@@ -48,7 +48,8 @@ module Lazylead
         )
       )
       assert_email "FixVersion: How dare you?",
-                   %w[DATAJDBC-480 01-Apr-2020 Minor Mark\ Paluch tom,mike,bob EntityInstantiators]
+                   "DATAJDBC-480", "01-Apr-2020", "Minor", "Mark Paluch", "tom,mike,bob",
+                   "EntityInstantiators"
     end
   end
 end

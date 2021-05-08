@@ -194,5 +194,13 @@ module Lazylead
         "context_path" => ""
       ).issues("key=DATAJDBC-480")
     end
+
+    test "sprint is found" do
+      assert_equal "Sprint 68",
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key=XD-3744", fields: ["customfield_10480"])
+                             .first
+                             .sprint("customfield_10480")
+    end
   end
 end

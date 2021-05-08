@@ -69,7 +69,7 @@ module Lazylead
         )
       )
       assert_email "[LL] Only",
-                   %w[XD-3725 Blocker EmbeddedHeadersMessageConverter]
+                   "XD-3725", "Blocker", "EmbeddedHeadersMessageConverter"
     end
 
     test "detect score" do

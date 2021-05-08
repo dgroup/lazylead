@@ -79,9 +79,9 @@ module Lazylead
     end
 
     # Assert that text contains expected words
-    def assert_words(words, text)
+    def assert_words(*words, text)
       words = [words] unless words.respond_to? :each
-      words.each do |w|
+      words.first.each do |w|
         assert_includes text, w
       end
     end
@@ -103,7 +103,8 @@ module Lazylead
 
     # Assert that email sent using 'mail' gem in test mode
     #  has expected subject and words
-    def assert_email(subject, words)
+    def assert_email(subject, *words)
+      refute_empty words, "No words provided to match"
       email = Mail::TestMailer.deliveries
                               .find { |m| m.subject.eql? subject }
       refute_nil email, "No email found with subject: #{subject}"

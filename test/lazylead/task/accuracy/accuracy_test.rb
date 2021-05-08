@@ -56,7 +56,7 @@ module Lazylead
         )
       )
       assert_email "[LL] Raised tickets",
-                   %w[DATAJDBC-493 0.5 100% MyeongHyeonLee Deadlock\ occurs]
+                   "DATAJDBC-493", "0.5", "100%", "MyeongHyeonLee", "Deadlock occurs"
     end
 
     test "construct accuracy from orm" do

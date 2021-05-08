@@ -72,8 +72,8 @@ module Lazylead
         "#{id} has #{total} tasks"
       end
 
-      def sprints(*label)
-        return @tasks.group_by(&:sprint).sort if label.empty? || label.nil?
+      def sprints(label)
+        return @tasks.group_by(&:sprint).sort if label.nil? || label.blank?
         @tasks.group_by { |t| t.sprint(label) }.sort
       end
     end

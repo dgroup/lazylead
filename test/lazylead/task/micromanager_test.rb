@@ -50,7 +50,7 @@ module Lazylead
         )
       )
       assert_email "DD: How dare you?",
-                   %w[SPR-6541	Major	(kdonald)	2009-12-10 Spring's\ Maven\ Central tom,mike,bob]
+                   "SPR-6541", "Major", "(kdonald)", "2009-12-10", "Spring's Maven Central", "tom,mike,bob"
     end
 
     test "since for past 1 min" do

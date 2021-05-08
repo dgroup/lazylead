@@ -73,7 +73,7 @@
     <th id="total">
       <a href="<%= search_link %><%= CGI.escape(jql) %>">Assigned From</a>
     </th>
-    <th id="duedate">Next Due date</th>
+    <th id="duedate">Next due date</th>
   </tr>
   <% assignments.each do |teammate, assignment| %>
     <% if assignment.free? %>

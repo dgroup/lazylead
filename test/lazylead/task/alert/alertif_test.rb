@@ -48,7 +48,8 @@ module Lazylead
           "template" => "lib/messages/alertif.erb"
         )
       )
-      assert_email "[LL] alert if", %w[XD-3064 Critical	Done Glenn Risberg HdfsMongoDB]
+      assert_email "[LL] alert if",
+                   "XD-3064", "Critical", "Done", "Glenn Renfro", "Thomas Risberg", "HdfsMongoDB"
     end
   end
 end
