@@ -39,15 +39,12 @@ module Lazylead
       def run(sys, postman, opts)
         allowed = opts.slice("allowed", ",")
         silent = opts.key? "silent"
-        issues = sys.issues(
-          opts["jql"], opts.jira_defaults.merge(expand: "changelog")
-        )
+        issues = sys.issues(opts["jql"], opts.jira_defaults.merge(expand: "changelog"))
+                    .map { |i| Version.new(i, allowed, silent) }
+                    .select(&:changed?)
+                    .each(&:add_label)
         return if issues.empty?
-        postman.send opts.merge(
-          versions: issues.map { |i| Version.new(i, allowed, silent) }
-                          .select(&:changed?)
-                          .each(&:add_label)
-        )
+        postman.send opts.merge(versions: issues)
       end
     end
 
