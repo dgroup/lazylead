@@ -102,8 +102,7 @@
     <tr>
       <td><a href='<%= a.issue.url %>'><%= a.issue.key %></a></td>
       <td><%= a.issue.priority %></td>
-      <td><%= DateTime.parse(a.last["created"])
-                      .strftime('%d-%b-%Y %I:%M:%S %p') %></td>
+      <td><%= DateTime.parse(a.last["created"]).strftime('%d-%b') %></td>
       <td><span style='color: red'><%= a.last["author"]["displayName"] %></span>
         (<%= a.last["author"]["name"] %>)
       </td>
