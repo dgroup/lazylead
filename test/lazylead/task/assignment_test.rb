@@ -47,7 +47,7 @@ module Lazylead
         )
       )
       assert_email "Assignment: How dare you?",
-                   "DATAJDBC-480", "01-Apr-2020", "Minor", "Mark Paluch", "tom,mike,bob",
+                   "DATAJDBC-480", "01-Apr", "Minor", "Mark Paluch", "tom,mike,bob",
                    "EntityInstantiators"
     end
   end
