@@ -291,6 +291,15 @@ module Lazylead
                         *{color:#DE10AA}Actual Result:{color}* = YYYY"
     end
 
+    test "TC with prerequisites" do
+      assert testcase? "{color:#0747a6}+*Pre-requisites and Steps:*+{color}
+                         # Step 1
+                         # Step ..
+                         # Step N
+                        *{color:#00673A}Expected result:{color}* = XXXX
+                        *{color:#DE10AA}Actual Result:{color}* = YYYY"
+    end
+
     # ensure that issue description has a test case, AR and ER
     def testcase?(desc)
       Testcase.new.passed(OpenStruct.new(description: desc))
