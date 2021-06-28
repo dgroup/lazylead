@@ -47,7 +47,7 @@ module Lazylead
       end
 
       def time
-        header[2]
+        DateTime.parse(header[2]).strftime("%d-%m-%Y %H:%M:%S")
       end
 
       def msg

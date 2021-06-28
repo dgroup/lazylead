@@ -64,14 +64,8 @@
       padding: 36px
     }
 
-    .commit {
-      min-width: 100%;
-      border-radius: 3.5px;
-      overflow: hidden;
-      display: inline-block;
-      line-height: 15px;
-      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-      border: 1px solid #BCC6CC;
+    td {
+      padding: 2px;
     }
 
     .commit * {
@@ -86,29 +80,37 @@
 <p>Hi,</p>
 <p>The following file(s) contain text <code><%= text %></code> in
   <a href="<%= svn_url %>"><%= svn_url %></a>:</p>
-<% entries.each do |commit| %>
-  <div class="commit">
-    <p style="background: gainsboro;">
-      <a href="<%= commit_url %><%= commit.rev %>"><%= commit.msg %></a>
-      by <a href="<%= user %><%= commit.author %>"><%= commit.author %></a>
-      at <span style="color: #275a90;"><%= commit.time %></span>
-    </p>
-    <% commit.diff(text.split(",")).each do |line| %>
-      <% if line.start_with?("+++") || line.start_with?("---") %>
-        <p style="background: gainsboro;"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
-      <% elsif text.split(",").any? { |t| line.include? t } %>
-        <p style="background: #F9F103;"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
-      <% elsif line.start_with?("+") %>
-        <p style="<%= "background: darkseagreen;" %>"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
-      <% elsif line.start_with?("-") %>
-        <p style="<%= "background: lightsalmon;" %>"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
-      <% else %>
-        <p style="background: gainsboro;"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
-      <% end %>
-    <% end %>
-  </div>
-<% end %>
-<p>Posted by<a href="https://github.com/dgroup/lazylead">lazylead
-  v<%= version %></a>.</p>
+<table summary="table with svn commits">
+  <tr>
+    <th id="rev">rev</th>
+    <th id="when">when</th>
+    <th id="author">author</th>
+    <th id="commit_msg" style="text-align: left">commit</th>
+  </tr>
+  <% entries.each do |commit| %>
+    <tr>
+      <td><a href="<%= commit_url %><%= commit.rev %>"><%= commit.rev %></a></td>
+      <td><%= commit.time %></td>
+      <td><a href="<%= user %><%= commit.author %>"><%= commit.author %></a></td>
+      <td>
+        <b><p><%= commit.msg %></p></b>
+        <% commit.diff(text.split(",")).each do |line| %>
+          <% if line.start_with?("+++") || line.start_with?("---") %>
+            <p style="background: gainsboro;"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
+          <% elsif text.split(",").any? { |t| line.include? t } %>
+            <p style="background: #F9F103;"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
+          <% elsif line.start_with?("+") %>
+            <p style="<%= "background: darkseagreen;" %>"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
+          <% elsif line.start_with?("-") %>
+            <p style="<%= "background: lightsalmon;" %>"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
+          <% else %>
+            <p style="background: gainsboro;"><%= line.gsub(/[<>]/, '<' => '&lt;', '>' => '&gt;') %></p>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<p>Posted by<a href="https://github.com/dgroup/lazylead">lazylead v<%= version %></a>.</p>
 </body>
 </html>
