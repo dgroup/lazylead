@@ -114,8 +114,7 @@ task :sqlint do
   if total.positive?
     abort "#{total.colorize(:red)} SQL violations found."
   else
-    puts "#{src.size} files inspected, #{'no offenses'.colorize(:green)} " \
-          "detected"
+    puts "#{src.size} files inspected, #{'no offenses'.colorize(:green)} detected"
   end
 end
 

@@ -76,8 +76,7 @@ module Lazylead
       return "" if resp.blank?
       pages = JSON.parse(resp)
       return "" if pages["results"].empty?
-      "#{@conf.url}/pages/viewpage.action?"\
-          "pageId=#{pages['results'].first['id']}"
+      "#{@conf.url}/pages/viewpage.action?pageId=#{pages['results'].first['id']}"
     end
   end
 

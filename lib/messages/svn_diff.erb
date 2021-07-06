@@ -98,7 +98,7 @@
           <a href="<%= user %><%= commit.author %>"><%= commit.author %></a>
         </div>
       </td>
-      <td><%= DateTime.parse(commit.time).strftime("%d-%m-%Y %H:%M:%S") %></td>
+      <td><%= commit.time %></td>
       <td><%= commit.lines[1] %></td>
     </tr>
   <% end %>
