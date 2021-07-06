@@ -22,20 +22,31 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "requirement"
+require_relative "logs"
+require_relative "attachment"
 
 module Lazylead
-  # Check that ticket has an attachment.
-  class Attachment < Lazylead::Requirement
-    def passed(issue)
-      return false if issue.nil? || issue.attachments.nil?
-      issue.attachments.any? { |a| matches?(a) }
+  # Check that ticket has link/reference to log record(s) in another system like ELK, GrayLog, etc.
+  #  or attachment with plain log file
+  class LogsLink < Lazylead::Logs
+    def initialize(link)
+      super
+      @link = link
     end
 
-    # Check a single attachment from ticket.
-    # Potential extension point for custom verification logic.
-    def matches?(attachment)
-      !attachment.nil?
+    def passed(issue)
+      super(issue) || link?(issue)
+    end
+
+    # Ensure that ticket has a link to external logs system like ELK, GrayLog, etc.
+    def link?(issue)
+      return false if issue.description.nil?
+      issue.description
+           .split("\n")
+           .reject(&:blank?)
+           .flat_map(&:split)
+           .reject(&:blank?)
+           .any? { |word| word.start_with? @link }
     end
   end
 end

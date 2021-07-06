@@ -22,20 +22,29 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "requirement"
+require_relative "../../../test"
+require_relative "../../../../lib/lazylead/task/accuracy/logs_link"
 
 module Lazylead
-  # Check that ticket has an attachment.
-  class Attachment < Lazylead::Requirement
-    def passed(issue)
-      return false if issue.nil? || issue.attachments.nil?
-      issue.attachments.any? { |a| matches?(a) }
+  class LogsLinkTest < Lazylead::Test
+    test "log file is present" do
+      assert LogsLink.new("https://mygraylog.com/log#5").passed(
+        OpenStruct.new(
+          attachments: [OpenStruct.new(attrs: { "size" => 10_241, "filename" => "catalina.log" })]
+        )
+      )
     end
 
-    # Check a single attachment from ticket.
-    # Potential extension point for custom verification logic.
-    def matches?(attachment)
-      !attachment.nil?
+    test "log file is absent but description has log reference" do
+      assert LogsLink.new("https://mygraylog.com").passed(
+        OpenStruct.new(description: "Here is the log for current ticket https://mygraylog.com/log#5")
+      )
+    end
+
+    test "log file is absent and link is absent" do
+      refute LogsLink.new("https://mygraylog.com").passed(
+        OpenStruct.new(attachments: [])
+      )
     end
   end
 end
