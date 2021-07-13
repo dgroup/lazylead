@@ -300,6 +300,13 @@ module Lazylead
                         *{color:#DE10AA}Actual Result:{color}* = YYYY"
     end
 
+    test "TC with h3" do
+      assert testcase? "h3. Steps: Start updating
+                        h3. ER: updating failed
+                        h3. AR: updating should be passed
+                        h3. Screenshots:   !r37.png|thumbnail!"
+    end
+
     # ensure that issue description has a test case, AR and ER
     def testcase?(desc)
       Testcase.new.passed(OpenStruct.new(description: desc))

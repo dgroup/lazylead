@@ -28,7 +28,7 @@ module Lazylead
   # Check that ticket has video record(s) with reproducing results.
   class Records < Lazylead::Attachment
     def initialize(ext = [])
-      super("Recorded internal reproducing results", 5, "Attachments")
+      super("Internal reproducing results (video)", 5, "Attachments")
       @ext = ext
       return unless @ext.empty?
       @ext = %w[.webm .mkv .flv .flv .vob .ogv .ogg .drc .gif .gifv .mng .avi

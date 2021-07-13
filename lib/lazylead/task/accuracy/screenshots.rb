@@ -35,7 +35,7 @@ module Lazylead
   class Screenshots < Lazylead::Requirement
     # @param minimum The number of expected screenshots
     def initialize(minimum: 1, score: 2, ext: %w[.jpg .jpeg .exif .tiff .tff .bmp .png .svg])
-      super "Screenshots", score, "Description,Attachments"
+      super "Internal reproducing results (screenshots)", score, "Description,Attachments"
       @minimum = minimum
       @ext = ext
     end

@@ -37,11 +37,11 @@ module Lazylead
     def passed(issue)
       return false if issue.description.nil?
       @tc = @ar = @er = -1
-      issue.description.split("\n").reject(&:blank?).each_with_index do |l, i|
-        line = escape l.downcase.gsub(/(\s+|\*|\+)/, "")
-        detect_tc line, i
-        detect_ar line, i
-        detect_er line, i
+      issue.description.split("\n").reject(&:blank?).map(&:downcase).each_with_index do |l, i|
+        line = escape l.gsub(/(\s+|\*|\+)/, "")
+        detect_tc i, l, line
+        detect_ar i, l, line
+        detect_er i, l, line
         break if with_tc_ar_er?
       end
       with_tc_ar_er?
@@ -63,30 +63,37 @@ module Lazylead
     end
 
     # Detect index of line with test case
-    def detect_tc(line, index)
+    # @param index The line number in description
+    # @param src The whole line in lower case from description
+    # @param strip The escaped line in lower case from description without special symbol(s)
+    def detect_tc(index, src, strip)
       return unless @tc.negative?
-      @tc = index if eql? line, %w[testcase: tc: teststeps: teststeps steps: tcsteps: tc testcases
-                                   steps usecase pre-requisitesandsteps:]
+      keywords = %w[testcase: tc: teststeps: teststeps steps: tcsteps: tc testcases steps usecase
+                    pre-requisitesandsteps:]
+      @tc = index if keywords.any? { |k| strip.eql? k }
+      @tc = index if keywords.any? { |k| src.include? k }
     end
 
     # Detect index of line with actual result
-    def detect_ar(line, index)
+    # @param index The line number in description
+    # @param src The whole line in lower case from description
+    # @param strip The escaped line in lower case from description without special symbol(s)
+    def detect_ar(index, src, strip)
       return unless @ar.negative? && index > @tc
-      @ar = index if starts? line, %w[ar: actualresult: ar= [ar] actualresult]
+      keywords = %w[ar: actualresult: ar= [ar] actualresult]
+      @ar = index if keywords.any? { |k| strip.start_with? k }
+      @ar = index if keywords.any? { |k| src.include? k }
     end
 
     # Detect index of line with expected result
-    def detect_er(line, index)
+    # @param index The line number in description
+    # @param src The whole line in lower case from description
+    # @param strip The escaped line in lower case from description without special symbol(s)
+    def detect_er(index, src, strip)
       return unless @er.negative? && index > @tc
-      @er = index if starts? line, %w[er: expectedresult: er= [er] expectedresult]
-    end
-
-    def starts?(line, text)
-      text.any? { |t| line.start_with? t }
-    end
-
-    def eql?(line, text)
-      text.any? { |t| t.eql? line }
+      keywords = %w[er: expectedresult: er= [er] expectedresult]
+      @er = index if keywords.any? { |k| strip.start_with? k }
+      @er = index if keywords.any? { |k| src.include? k }
     end
   end
 end
