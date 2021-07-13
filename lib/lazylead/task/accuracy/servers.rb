@@ -32,18 +32,18 @@ module Lazylead
     # @param envs regexp expressions to match servers in description.
     #
     def initialize(score: 2, envs: [], desc: "Internal reproducing results")
-      super desc, score, "Description/Environment"
+      super desc, score, "Description"
       @envs = envs
     end
 
     def passed(issue)
       return true if @envs.empty?
-      "#{issue['environment']}\n#{issue.description}".split("\n")
-                                                     .reject(&:blank?)
-                                                     .map(&:strip)
-                                                     .flat_map { |l| l.split.map(&:strip) }
-                                                     .select { |u| url?(u) }
-                                                     .any? { |u| match?(u) }
+      issue.description.split("\n")
+           .reject(&:blank?)
+           .map(&:strip)
+           .flat_map { |l| l.split.map(&:strip) }
+           .select { |u| url?(u) }
+           .any? { |u| match?(u) }
     end
 
     # Ensure that particular text contains web url
