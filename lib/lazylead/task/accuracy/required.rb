@@ -22,13 +22,22 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative "required"
+require_relative "requirement"
 
 module Lazylead
-  # A requirement that Jira field "Environment" provided by the reporter.
-  class Environment < Lazylead::Required
-    def initialize(score = 0.5)
-      super "Environment details (URL, patches)", score, "Environment", "environment"
+  #
+  # Check that ticket has mandatory non-blank field(s).
+  #
+  class Required < Lazylead::Requirement
+    def initialize(desc, score, msg, *fields)
+      super desc, score, msg
+      @fields = fields
+    end
+
+    def passed(issue)
+      return false if @fields.nil? || @fields.empty?
+      return true if @fields.all? { |f| non_blank?(issue, f) }
+      false
     end
   end
 end

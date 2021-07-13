@@ -42,7 +42,7 @@ Metrics/MethodLength:
     - "test/**/*"
 
 Metrics/ParameterLists:
-  Max: 3
+  Max: 4
 
 Layout/HashAlignment:
   EnforcedColonStyle:
