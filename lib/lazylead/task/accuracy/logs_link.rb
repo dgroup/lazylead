@@ -35,6 +35,7 @@ module Lazylead
     end
 
     def passed(issue)
+      return false if @link.nil? || (@link.is_a?(Array) && @link.empty?)
       super(issue) || link?(issue)
     end
 
@@ -46,7 +47,9 @@ module Lazylead
            .reject(&:blank?)
            .flat_map(&:split)
            .reject(&:blank?)
-           .any? { |word| word.start_with? @link }
+           .any? do |word|
+        @link.is_a?(Array) ? @link.any? { |l| word.start_with? l } : word.start_with?(@link)
+      end
     end
   end
 end

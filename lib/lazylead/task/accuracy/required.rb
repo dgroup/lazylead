@@ -36,8 +36,7 @@ module Lazylead
 
     def passed(issue)
       return false if @fields.nil? || @fields.empty?
-      return true if @fields.all? { |f| non_blank?(issue, f) }
-      false
+      @fields.all? { |f| non_blank?(issue, f) }
     end
   end
 end
