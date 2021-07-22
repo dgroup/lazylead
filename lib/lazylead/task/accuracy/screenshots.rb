@@ -56,9 +56,9 @@ module Lazylead
 
     # Detect all pictures in ticket attachments and returns an array with file names.
     def pictures(issue)
-      @pictures ||= issue.attachments
-                         .select { |a| @ext.include? File.extname(a.filename).downcase }
-                         .map(&:filename)
+      issue.attachments
+           .select { |a| @ext.include? File.extname(a.filename).downcase }
+           .map(&:filename)
     end
   end
 end
