@@ -30,7 +30,7 @@ module Lazylead
   #  or attachment with plain log file
   class LogsLink < Lazylead::Logs
     def initialize(link)
-      super
+      super()
       @link = link
     end
 
@@ -48,7 +48,7 @@ module Lazylead
            .flat_map(&:split)
            .reject(&:blank?)
            .any? do |word|
-        @link.is_a?(Array) ? @link.any? { |l| word.start_with? l } : word.start_with?(@link)
+        @link.is_a?(Array) ? @link.any? { |l| word.include? l } : word.include?(@link)
       end
     end
   end
