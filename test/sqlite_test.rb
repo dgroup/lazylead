@@ -46,7 +46,7 @@ module Lazylead
         tbl = t.first.to_s
         cols = t.values_at(1).sort.join(",")
         raise "No columns found for table #{tbl} in #{tables}" if cols.empty?
-        refute schema[tbl].nil?, "Table '#{tbl}' not found in #{schema}"
+        refute_nil schema[tbl], "Table '#{tbl}' not found in #{schema}"
         assert_equal cols, schema[tbl], "Columns mismatch for '#{tbl}'"
       end
     end
