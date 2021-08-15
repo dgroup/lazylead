@@ -30,8 +30,8 @@ module Lazylead
     #
     # @param label which should be present in ticket.
     #
-    def initialize(label, score: 0.5)
-      super("Has label", score, "Labels")
+    def initialize(label, desc: "Has label", score: 0.5)
+      super(desc, score, "Labels")
       @label = label
     end
 
