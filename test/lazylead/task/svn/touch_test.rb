@@ -55,7 +55,7 @@ module Lazylead
         )
       )
       assert_email "[SVN] Important files have been changed!",
-                   %w[3 dgroup /189.md Add\ description\ for\ 189\ issue]
+                   ["3", "dgroup", "/189.md", "Add description for 189 issue"]
     end
   end
 end

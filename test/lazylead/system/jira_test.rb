@@ -143,7 +143,7 @@ module Lazylead
     end
 
     test "description is correct" do
-      assert_words %w[DATACMNS-1639\ moved\ entity\ instantiators],
+      assert_words ["DATACMNS-1639 moved entity instantiators"],
                    NoAuthJira.new("https://jira.spring.io")
                              .issues("key=DATAJDBC-480")
                              .first
@@ -151,7 +151,7 @@ module Lazylead
     end
 
     test "component is correct" do
-      assert_equal %w[Stream\ Module],
+      assert_equal ["Stream Module"],
                    NoAuthJira.new("https://jira.spring.io")
                              .issues("key=XD-3766")
                              .first
