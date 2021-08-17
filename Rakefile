@@ -45,7 +45,13 @@ def version
   Gem::Specification.load(Dir["*.gemspec"].first).version
 end
 
-task default: %i[clean rubocop test sqlint xcop copyright docker]
+task default: %i[init_hooks clean rubocop test sqlint xcop copyright docker]
+
+task :init_hooks do
+  next if File.file?(".git/hooks/commit-msg")
+  sh "cp .githooks/commit-msg .git/hooks/commit-msg"
+  sh "chmod +x .git/hooks/commit-msg"
+end
 
 require "rake/testtask"
 desc "Run all unit tests"
