@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+def check_message_format
+  regex = /^#\d+:\s\w+/
+  message_file = ARGV[0]
+  message = File.read(message_file)
+  unless regex.match(message)
+    puts "Your message is not formatted correctly"
+    puts "Message should have following format: '#issue_id: Commit message'"
+    exit 1
+  end
+end
+check_message_format
