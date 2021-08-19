@@ -39,7 +39,9 @@ module Lazylead
 
     # Ensure that ticket has an attachment with video-file extension
     def matches?(attach)
-      @ext.any? { |e| e.eql? File.extname(attach.attrs["filename"]).downcase }
+      return true if @ext.any? { |e| e.eql? File.extname(attach.attrs["filename"]).downcase }
+      return false if attach.attrs["mimeType"].nil?
+      @ext.any? { |e| attach.attrs["mimeType"].include? e[1..] }
     end
   end
 end

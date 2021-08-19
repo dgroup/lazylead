@@ -24,6 +24,7 @@
 
 require_relative "../../../test"
 require_relative "../../../../lib/lazylead/task/accuracy/records"
+require_relative "../../../../lib/lazylead/system/jira"
 
 module Lazylead
   class RecordsTest < Lazylead::Test
@@ -52,6 +53,21 @@ module Lazylead
         OpenStruct.new(
           attachments: [
             OpenStruct.new(attrs: { "filename" => "failed case 2.txt" })
+          ]
+        )
+      )
+    end
+
+    test "mime type has .gif despite on ext" do
+      assert Records.new.passed(
+        OpenStruct.new(
+          attachments: [
+            OpenStruct.new(
+              attrs: {
+                "filename" => "snapshot.png",
+                "mimeType" => "image/gif"
+              }
+            )
           ]
         )
       )
