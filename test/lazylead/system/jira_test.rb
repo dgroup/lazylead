@@ -180,6 +180,9 @@ module Lazylead
                       "Spring"
     end
 
+    # @todo #/DEV The test took too much time and should be limited by 3 tickets per transaction.
+    #  Use option :max_results to limit each iteration.
+    #  The JQL query should be like "key>DATAJDBC-500 and key<DATAJDBC-510"
     test "bulk search in few iterations" do
       assert NoAuthJira.new("https://jira.spring.io")
                        .issues("key>DATAJDBC-500")

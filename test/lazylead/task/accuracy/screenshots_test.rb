@@ -27,6 +27,8 @@ require_relative "../../../../lib/lazylead/task/accuracy/screenshots"
 require_relative "../../../../lib/lazylead/system/jira"
 
 module Lazylead
+  # @todo #/DEV Rename the tests name as some of them are too huge.
+  #  The maximum name size should be 56 symbols as it gives fancy format for test output in terminal
   class ScreenshotsTest < Lazylead::Test
     test "issue has two .png files with reference in description" do
       assert Screenshots.new.passed(

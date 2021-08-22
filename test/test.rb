@@ -147,5 +147,43 @@ module Lazylead
       require "net/ping"
       Net::Ping::External.new(host).ping?
     end
+
+    # Ensure that actual array contain at least expected array.
+    # @param exp
+    #        The array with expected values
+    # @param act
+    #        The array with actual values
+    def assert_array(exp, act)
+      assert_equal exp.size, act.size, "Size mismatch between arrays"
+      assert array?(exp, act), "No match between '#{exp}' and '#{act}'"
+    end
+
+    # Compare that actual array contain(not equal!) at least expected array.
+    # @return true
+    #         If array <exp> contain array <act>
+    # rubocop:disable Metrics/PerceivedComplexity
+    # rubocop:disable Metrics/CyclomaticComplexity
+    def array?(exp, act)
+      rows = []
+      exp.each do |row|
+        rows << if row.respond_to? :each
+                  act.any? do |arow|
+                    next unless arow.respond_to? :[]
+                    row.each_with_index.map { |c, i| c.eql? arow[i] }.all? { |c| c }
+                  end
+                else
+                  act.any? { |arow| row.eql? arow }
+                end
+      end
+      rows.all? { |r| r }
+    end
+    # rubocop:enable Metrics/PerceivedComplexity
+    # rubocop:enable Metrics/CyclomaticComplexity
+
+    # Ensure that text is blank.
+    def assert_blank(text)
+      assert_respond_to text, :blank?, "Text has no method :blank?"
+      assert text.blank?, "Text isn't blank"
+    end
   end
 end

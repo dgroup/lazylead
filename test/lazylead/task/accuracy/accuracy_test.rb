@@ -48,6 +48,11 @@ module Lazylead
             "57" => "#19DD1E",
             "90" => "#0FA81A"
           }.to_json.to_s,
+          "memes" => {
+            "0-9.9" => "https://meme.com?id=awful1.gif,https://meme.com?id=awful2.gif",
+            "70-89.9" => "https://meme.com?id=nice.gif",
+            "90-100" => "https://meme.com?id=wow.gif"
+          }.to_json.to_s,
           "docs" => "https://github.com/dgroup/lazylead/blob/master/.github/ISSUE_TEMPLATE/bug_report.md",
           "jql" => "key in (DATAJDBC-490, DATAJDBC-492, DATAJDBC-493)",
           "max_results" => 200,

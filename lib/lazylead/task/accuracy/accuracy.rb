@@ -22,6 +22,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require_relative "memes"
 require_relative "../../log"
 require_relative "../../opts"
 require_relative "../../email"
@@ -44,14 +45,20 @@ module Lazylead
       end
 
       def run(sys, postman, opts)
-        Requires.new(__dir__).load
-        opts[:rules] = opts.construct("rules")
-        opts[:total] = opts[:rules].sum(&:score)
+        init_rules(opts)
         opts[:tickets] = sys.issues(opts["jql"], opts.jira_defaults.merge(expand: "changelog"))
                             .map { |i| Score.new(i, opts) }
                             .each(&:evaluate)
                             .each(&:post)
         postman.send(opts) unless opts[:tickets].empty?
+      end
+
+      # Initialize accuracy rules and configuration for tickets verification.
+      def init_rules(opts)
+        Requires.new(__dir__).load
+        opts[:rules] = opts.construct("rules")
+        opts[:total] = opts[:rules].sum(&:score)
+        opts[:memes] = Memes.new(opts["memes"])
       end
     end
   end
@@ -93,7 +100,7 @@ module Lazylead
         comment << "|#{r.desc}|#{r.passed(@issue) ? '(/)' : '(-)'}|#{r.field}|"
       end
       comment << docs_link
-      comment << ""
+      comment << reaction
       comment << "Posted by [lazylead v#{Lazylead::VERSION}|https://bit.ly/2NjdndS]."
       comment.join("\r\n")
     end
@@ -143,6 +150,27 @@ module Lazylead
       first = @issue.history.find { |h| sys.none? { |susr| susr.eql? h["author"]["key"] } }
       return @issue.reporter.id if first.nil?
       first["author"]["key"]
+    end
+
+    # Add reaction meme to the ticket comment based on score.
+    # The meme details are represented as array, where each element is a separate line in future
+    #  comment in jira.
+    #
+    # @todo #339/DEV Seems jira doesn't support the rendering of external images by url, thus so far
+    #  we might have several options:
+    #  - attach meme to ticket and make rendering using [^attach.jpg!thumbnail] option
+    #  - have a link to meme (like it implemented now)
+    #  The 1st option with attachment might generate multiple events in jira and spam ticket
+    #  watchers, thus, some research & UX testing needed how to make it better.
+    def reaction
+      return [] if @opts[:memes].nil? && !@opts[:memes].enabled?
+      url = @opts[:memes].find(@accuracy)
+      return [] if url.blank?
+      [
+        "",
+        "Our reaction when we got the ticket with triage accuracy #{@accuracy}% is [here|#{url}].",
+        ""
+      ]
     end
   end
 end
