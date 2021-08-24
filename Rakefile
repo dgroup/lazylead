@@ -28,6 +28,7 @@ require "date"
 require "rdoc"
 require "colorize"
 require "rake/clean"
+require "concurrent"
 
 # @todo #/DEV Investigate the possibility of using migrations from active_record
 #  - Rake tasks https://gist.github.com/schickling/6762581
@@ -56,6 +57,7 @@ end
 require "rake/testtask"
 desc "Run all unit tests"
 Rake::TestTask.new(:test) do |t|
+  ENV["MT_CPU"] = Concurrent.processor_count.to_s
   t.libs << "test"
   t.libs << "lib"
   t.test_files = FileList["test/**/*_test.rb"]

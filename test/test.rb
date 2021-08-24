@@ -51,6 +51,15 @@ module Lazylead
     include Minitest::Hooks
 
     make_my_diffs_pretty!
+    parallelize(workers: ENV["MT_CPU"].to_i)
+
+    parallelize_setup do |worker|
+      SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
+    end
+
+    parallelize_teardown do |_worker|
+      SimpleCov.result
+    end
 
     def around
       Timeout.timeout(
