@@ -70,7 +70,7 @@ module Lazylead
         ActiveRecord::Base.establish_connection(
           adapter: "sqlite3",
           database: @db,
-          pool: opts[:max_connections]
+          pool: opts[:max_connections] || ENV["MT_CPU"]
         )
         @log.debug "Database connection established"
       end
