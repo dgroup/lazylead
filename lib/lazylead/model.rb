@@ -170,10 +170,9 @@ module Lazylead
 
     # A task with extended logging
     # @see Lazylead::ORM::Task
-    class VerboseTask
+    class Verbose
       extend Forwardable
-      def_delegators :@orig, :id, :name, :team, :to_s, :inspect, :props, :type,
-                     :unit
+      def_delegators :@orig, :id, :name, :team, :to_s, :inspect, :props, :type, :unit
 
       def initialize(orig, log = Log.new)
         @orig = orig
@@ -201,6 +200,28 @@ module Lazylead
         Logging.mdc["tid"] = ""
       end
       # rubocop:enable Metrics/AbcSize
+    end
+
+    # A task which support retry in case of failure.
+    # @see Lazylead::ORM::Task
+    class Retry
+      extend Forwardable
+      def_delegators :@orig, :id, :name, :team, :to_s, :inspect, :props, :type, :unit
+
+      def initialize(orig, log = Log.new)
+        @orig = orig
+        @log = log
+      end
+
+      def exec
+        retries ||= 0
+        @orig.exec
+        @orig
+      rescue StandardError
+        sleep(props.fetch("attempt_wait", 0).to_f) if props.key? "attempt_wait"
+        retry if (retries += 1) < props.fetch("attempt", 0).to_i
+        @orig
+      end
     end
 
     # Ticketing systems to monitor.

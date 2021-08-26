@@ -48,9 +48,12 @@ module Lazylead
       @trigger.method(task.type).call(task.unit) do
         ActiveRecord::Base.connection_pool.with_connection do
           if task.props.key? "no_logs"
-            task.exec
+            ORM::Retry.new(task, @log).exec
           else
-            ORM::VerboseTask.new(task, @log).exec
+            ORM::Verbose.new(
+              ORM::Retry.new(task, @log),
+              @log
+            ).exec
           end
         end
       end
