@@ -113,5 +113,21 @@ module Lazylead
     test "nil is not a numeric" do
       refute Opts.new("key" => nil).numeric? "key"
     end
+
+    test "find by text key" do
+      assert_equal "val", Opts.new("key" => "val").find("key")
+    end
+
+    test "find by symbol key" do
+      assert_equal "val", Opts.new(key: "val").find(:key)
+    end
+
+    test "find by symbol key but with text key" do
+      assert_equal "val", Opts.new("key" => "val").find(:key)
+    end
+
+    test "find default" do
+      assert_equal "val", Opts.new.find(:key, "val")
+    end
   end
 end

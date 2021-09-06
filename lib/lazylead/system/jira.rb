@@ -57,6 +57,7 @@ module Lazylead
     #   :max_results => maximum number of tickets per one iteration.
     #   :fields      => ticket fields to be fetched like assignee, summary, etc.
     def issues(jql, opts = { max_results: 50, fields: nil, expand: nil })
+      opts = Opts.new(opts)
       raw do |jira|
         start = 0
         tickets = []
@@ -66,8 +67,8 @@ module Lazylead
           tickets.concat(jira.Issue.jql(jql, opts.merge(start_at: start))
                              .map { |i| Lazylead::Issue.new(i, jira) })
           @log.debug "Fetched #{tickets.size}"
-          start += opts.fetch(:max_results, 50).to_i
-          break if start > total
+          start += opts.find(:max_results, 50)
+          break if (start > total) || (start >= opts.find(:limit, total))
         end
         tickets
       end
@@ -326,7 +327,7 @@ module Lazylead
   #  or dashboards.
   class NoAuthJira
     extend Forwardable
-    def_delegators :@jira, :issues, :raw
+    def_delegators :@jira, :issues, :raw, :max_results, :limit
 
     def initialize(url, path = "", log = Log.new)
       @jira = Jira.new(

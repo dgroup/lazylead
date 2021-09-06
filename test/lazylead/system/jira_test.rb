@@ -203,5 +203,12 @@ module Lazylead
                              .first
                              .sprint("customfield_10480")
     end
+
+    test "bulk search in few iterations with limit" do
+      assert_equal 3,
+                   NoAuthJira.new("https://jira.spring.io")
+                             .issues("key > DATAJDBC-500", max_results: 1, "limit" => 3)
+                             .size
+    end
   end
 end

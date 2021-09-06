@@ -142,5 +142,16 @@ module Lazylead
     def construct(field, delim: ",")
       slice(field, delim).map(&:constantize).map(&:new)
     end
+
+    # Get the value by key
+    # @param key
+    #         The key to fetch value. The key might be a plain text or symbol
+    # @param default
+    #         The default/alternative value if key not found
+    # @return The value by key or alternative/default value.
+    def find(key, default = nil)
+      return default if key.nil?
+      to_h[key.to_s] || to_h[key.to_sym] || default
+    end
   end
 end
