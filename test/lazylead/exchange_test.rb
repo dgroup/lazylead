@@ -26,6 +26,7 @@ require_relative "../test"
 require_relative "../../lib/lazylead/log"
 require_relative "../../lib/lazylead/salt"
 require_relative "../../lib/lazylead/home"
+require_relative "../../lib/lazylead/opts"
 require_relative "../../lib/lazylead/exchange"
 require_relative "../../lib/lazylead/system/jira"
 
@@ -37,11 +38,13 @@ module Lazylead
                                                              "exchange_password",
                                                              "exchange_to"
       Exchange.new(Log.new, NoSalt.new).send(
-        to: ENV["exchange_to"],
-        tickets: NoAuthJira.new("https://jira.spring.io")
-                           .issues("key = DATAJDBC-480"),
-        "subject" => "[DD] PDTN!",
-        "template" => "lib/messages/due_date_expired.erb"
+        Opts.new(
+          to: ENV["exchange_to"],
+          tickets: NoAuthJira.new("https://jira.spring.io")
+                             .issues("key = DATAJDBC-480"),
+          "subject" => "[DD] PDTN!",
+          "template" => "lib/messages/due_date_expired.erb"
+        )
       )
     end
 
@@ -58,11 +61,13 @@ module Lazylead
         "exchange_user" => ENV["enc_exchange_usr"],
         "exchange_password" => ENV["enc_exchange_psw"]
       ).send(
-        to: ENV["exchange_to"],
-        tickets: NoAuthJira.new("https://jira.spring.io")
-                           .issues("key = DATAJDBC-480"),
-        "subject" => "[DD] Enc PDTN!",
-        "template" => "lib/messages/due_date_expired.erb"
+        Opts.new(
+          to: ENV["exchange_to"],
+          tickets: NoAuthJira.new("https://jira.spring.io")
+                             .issues("key = DATAJDBC-480"),
+          "subject" => "[DD] Enc PDTN!",
+          "template" => "lib/messages/due_date_expired.erb"
+        )
       )
     end
 
@@ -78,10 +83,12 @@ module Lazylead
         "exchange_user" => ENV["enc_exchange_usr"],
         "exchange_password" => ENV["enc_exchange_psw"]
       ).send(
-        to: ENV["exchange_to"],
-        "attachments" => "readme.md",
-        "subject" => "[LL] Attachments",
-        "template" => "lib/messages/savepoint.erb"
+        Opts.new(
+          to: ENV["exchange_to"],
+          "attachments" => "readme.md",
+          "subject" => "[LL] Attachments",
+          "template" => "lib/messages/savepoint.erb"
+        )
       )
     end
   end

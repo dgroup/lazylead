@@ -33,8 +33,7 @@ require_relative "../../../../lib/lazylead/task/svn/svn"
 module Lazylead
   class GrepTest < Lazylead::Test
     test "changes with text" do
-      skip "No svn credentials provided" unless env? "svn_log_user",
-                                                     "svn_log_password"
+      skip "No svn credentials provided" unless env? "svn_log_user", "svn_log_password"
       skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
       Lazylead::Smtp.new.enable
       Task::Svn::Grep.new.run(
