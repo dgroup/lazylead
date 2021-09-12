@@ -50,5 +50,9 @@ module Lazylead
         )
       )
     end
+
+    test "wiki score" do
+      greater_then WikiUrl.new("https://wiki.com/page=").score, 0
+    end
   end
 end

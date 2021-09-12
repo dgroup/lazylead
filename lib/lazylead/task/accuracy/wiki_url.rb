@@ -28,7 +28,7 @@ module Lazylead
   # Check that ticket has a web link to external system with design.
   class WikiUrl < Lazylead::Wiki
     def initialize(url)
-      super
+      super()
       @url = url
     end
 
