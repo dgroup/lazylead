@@ -98,5 +98,5 @@ tasks instead of solving technical problems."
   s.add_development_dependency "rubocop-rspec", "2.4.0"
   s.add_development_dependency "sqlint", "0.2.0"
   s.add_development_dependency "tempfile", "0.1.1"
-  s.add_development_dependency "xcop", "0.6.2"
+  s.add_development_dependency "xcop", "0.6.3"
 end
