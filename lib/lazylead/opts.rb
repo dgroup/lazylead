@@ -64,7 +64,8 @@ module Lazylead
     def jira_defaults
       {
         max_results: fetch("max_results", 50),
-        fields: jira_fields
+        fields: jira_fields,
+        limit: to_h["limit"]
       }
     end
 

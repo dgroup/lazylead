@@ -51,6 +51,7 @@ module Lazylead
                             .each(&:evaluate)
                             .each(&:post)
         postman.send(opts) unless opts[:tickets].empty?
+        opts
       end
 
       # Initialize accuracy rules and configuration for tickets verification.

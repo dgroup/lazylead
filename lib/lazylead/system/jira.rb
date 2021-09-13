@@ -64,11 +64,11 @@ module Lazylead
         total = jira.Issue.jql(jql, max_results: 0)
         @log.debug "Found #{total} ticket(s) in '#{jql}'"
         loop do
-          tickets.concat(jira.Issue.jql(jql, opts.merge(start_at: start))
+          tickets.concat(jira.Issue.jql(jql, range(start, opts))
                              .map { |i| Lazylead::Issue.new(i, jira) })
           @log.debug "Fetched #{tickets.size}"
-          start += opts.find(:max_results, 50)
-          break if (start > total) || (start >= opts.find(:limit, total))
+          start += opts.find(:max_results, 50).to_i
+          break if (start > total) || (start >= opts.find(:limit, total).to_i)
         end
         tickets
       end
@@ -82,6 +82,26 @@ module Lazylead
     end
 
     private
+
+    # Detect tickets range in remote search result.
+    #
+    # In jira you may navigate through the search result using following parameters:
+    # https://docs.atlassian.com/jira-software/REST/7.3.1/#agile/1.0/epic-getIssuesForEpic
+    #  :start_at
+    #     The starting index of the returned issues. Base index: 0. See the 'Pagination' section at
+    #     the top of this page for more details.
+    #  :max_results
+    #     The maximum number of issues to return per page. Default: 50. See the 'Pagination' section
+    #     at the top of this page for more details. Note, the total number of issues returned is
+    #     limited by the property 'jira.search.views.default.max' in your JIRA instance. If you
+    #     exceed this limit, your results will be truncated.
+    def range(start, opts)
+      limit = opts.find(:limit, 0).to_i
+      max_results = opts.find(:max_results, 50).to_i
+      opts[:start_at] = start
+      opts[:max_results] = [limit, max_results].min if limit.positive?
+      opts
+    end
 
     def client
       return @client if defined? @client

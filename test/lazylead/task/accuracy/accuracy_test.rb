@@ -74,5 +74,28 @@ module Lazylead
       assert_kind_of Lazylead::Task::Accuracy,
                      ORM::Task.find(195).action.constantize.new
     end
+
+    test "one ticket found" do
+      Lazylead::Smtp.new.enable
+      assert_equal 1,
+                   Task::Accuracy.new.run(
+                     NoAuthJira.new("https://jira.spring.io"),
+                     Postman.new,
+                     Opts.new(
+                       "from" => "ll@fake.com",
+                       "to" => "lead@fake.com",
+                       "rules" => "Lazylead::AffectedBuild",
+                       "silent" => "true",
+                       "colors" => {
+                         "0" => "#FF4F33",
+                         "57" => "#19DD1E"
+                       }.to_json.to_s,
+                       "jql" => "key > DATAJDBC-490",
+                       "limit" => "1",
+                       "subject" => "[LL] Raised tickets",
+                       "template" => "lib/messages/accuracy.erb"
+                     )
+                   )[:tickets].size
+    end
   end
 end
