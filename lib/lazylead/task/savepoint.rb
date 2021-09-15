@@ -51,7 +51,7 @@ module Lazylead
       private
 
       def less_mb(path, megabytes)
-        (File.size(path).to_f / 2**20).round(2) < megabytes.to_i
+        (File.size(path).to_f / (2**20)).round(2) < megabytes.to_i
       end
     end
   end
