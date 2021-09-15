@@ -72,5 +72,20 @@ module Lazylead
         )
       )
     end
+
+    test "mime type is xlsx" do
+      refute Records.new.passed(
+        OpenStruct.new(
+          attachments: [
+            OpenStruct.new(
+              attrs: {
+                "filename" => "snapshot.xlsx",
+                "mimeType" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              }
+            )
+          ]
+        )
+      )
+    end
   end
 end

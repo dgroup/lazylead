@@ -34,14 +34,14 @@ module Lazylead
       @ext = %w[.webm .mkv .flv .flv .vob .ogv .ogg .drc .gif .gifv .mng .avi
                 .mts .m2ts .ts .mov .qt .wmv .yuv .rm .rmvb .viv .asf .amv .mp4
                 .m4p .m4v .mpg .mp2 .mpeg .mpe .mpv .mpg .mpeg .m2v .m4v .svi
-                .3gp .3g2 .mxf .roq .nsv .flv .f4v .f4p .f4a .f4b .gif]
+                .3gp .3g2 .mxf .roq .nsv .flv .f4v .f4p .f4a .f4b]
     end
 
     # Ensure that ticket has an attachment with video-file extension
     def matches?(attach)
       return true if @ext.any? { |e| e.eql? File.extname(attach.attrs["filename"]).downcase }
       return false if attach.attrs["mimeType"].nil?
-      @ext.any? { |e| attach.attrs["mimeType"].include? e[1..] }
+      @ext.any? { |e| attach.attrs["mimeType"].end_with? "/#{e[1..]}" }
     end
   end
 end
