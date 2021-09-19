@@ -50,8 +50,8 @@ module Lazylead
           if task.props.key? "no_logs"
             ORM::Retry.new(task, @log).exec
           else
-            ORM::Verbose.new(
-              ORM::Retry.new(task, @log),
+            ORM::Retry.new(
+              ORM::Verbose.new(task, @log),
               @log
             ).exec
           end
