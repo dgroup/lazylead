@@ -46,11 +46,16 @@ module Lazylead
 
       def run(sys, postman, opts)
         init_rules(opts)
-        opts[:tickets] = sys.issues(opts["jql"], opts.jira_defaults.merge(expand: "changelog"))
-                            .map { |i| Score.new(i, opts) }
-                            .each(&:evaluate)
-                            .each(&:post)
-        postman.send(opts) unless opts[:tickets].empty?
+        tasks = sys.issues(opts["jql"], opts.jira_defaults.merge(expand: "changelog"))
+                   .map { |i| Score.new(i, opts) }
+                   .each do |s|
+          s.evaluate
+          s.post
+        end
+        unless tasks.empty? && tasks.size <= opts.fetch(:limit, 300).to_i
+          opts[:tickets] = tasks
+          postman.send(opts)
+        end
         opts
       end
 
