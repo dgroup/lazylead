@@ -26,7 +26,7 @@ The idea of automatic management is not new, for example [Zerocracy](https://www
 I like this idea, but large companies/projects are not ready yet for such a decisive breakthrough and need step-by-step solutions such as [lazylead](https://github.com/dgroup/lazylead). 
 I think you remember how [static code analysis](https://en.wikipedia.org/wiki/Static_program_analysis) treated at in the past; today we have a huge toolkit (pmd, checkstyle, qulice, rubocop, peon, etc) for each language that allows you to avoid routine issues and remove from the code reviewer the unnecessary load.
  
-Join our telegram group [lazylead](https://t.me/lazyleads) for discussions.
+Join our telegram chat [lazylead](https://t.me/lazyleads) for discussions.
 
 | Daily annoying task                                                                 | Jira  | Github | Trello | SVN | Git |
 | :---------------------------------------------------------------------------------- | :---: | :----: | :----: | :----: | :----: |
