@@ -181,6 +181,3 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
 rake -A
 ```
 Everyone interacting in this project’s codebases, issue trackers, chat rooms is expected to follow the [code of conduct](.github/CODE_OF_CONDUCT.md).
-
-Contributors:
- * [dgroup](https://github.com/dgroup) as Yurii Dubinka ([yurii.dubinka@gmail.com](mailto:yurii.dubinka@gmail.com))
