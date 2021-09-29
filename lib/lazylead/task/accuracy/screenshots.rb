@@ -51,7 +51,7 @@ module Lazylead
            .to_enum(:scan, /!.+!/)
            .map { Regexp.last_match }
            .map(&:to_s)
-           .reject { |r| r.match?(%r{(http|https)://.*/images/icons/link_attachment.*.gif}) }
+           .grep_v(%r{(http|https)://.*/images/icons/link_attachment.*.gif})
     end
 
     # Detect all pictures in ticket attachments and returns an array with file names.
