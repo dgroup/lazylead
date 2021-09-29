@@ -1,4 +1,5 @@
 ## Enable profiler
+https://ruby-prof.github.io
 ```ruby
 require 'ruby-prof'
 alloc = RubyProf.profile(:track_allocations => true) do
