@@ -76,4 +76,24 @@ module Lazylead
       mail
     end
   end
+
+  #
+  # A postman that sends emails to the std out.
+  #
+  class StdoutPostman
+    def initialize(log = Log.new)
+      @log = log
+    end
+
+    # Send an email.
+    # :opts   :: the mail configuration like to, from, cc, subject, template.
+    def send(opts)
+      if opts.msg_to.empty?
+        p "Email can't be sent as 'to' is empty, more: '#{opts}'"
+      else
+        p "to=#{opts.msg_to}, from=#{opts.msg_from}, cc=#{opts.msg_cc}, " \
+          "subject=#{opts['subject']}, attachments=#{opts.msg_attachments}, body=#{opts.msg_body}"
+      end
+    end
+  end
 end

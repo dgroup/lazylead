@@ -57,4 +57,20 @@ module Lazylead
       )
     end
   end
+
+  class StdoutPostmanTest < Lazylead::Test
+    # @todo #495/DEV Find way to capture the STDOUT in order to test the email sending.
+    #  Right now its just visual verification.
+    test "send email to stdout" do
+      StdoutPostman.new.send(
+        Opts.new(
+          "to" => "to@email.com",
+          "from" => "from@email.com",
+          "attachments" => ["readme.md"],
+          "subject" => "[LL] Attachments",
+          "template" => "lib/messages/savepoint.erb"
+        )
+      )
+    end
+  end
 end
