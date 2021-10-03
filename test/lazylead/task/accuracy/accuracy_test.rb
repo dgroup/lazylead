@@ -97,5 +97,30 @@ module Lazylead
                      )
                    )[:tickets].size
     end
+
+    test "score is correct" do
+      Lazylead::Smtp.new.enable
+      Task::Accuracy.new.run(
+        NoAuthJira.new("https://jira.spring.io"),
+        Postman.new,
+        Opts.new(
+          "from" => "ll@fake.com",
+          "to" => "lead@fake.com",
+          "rules" => "Lazylead::Stacktrace,Lazylead::Testcase",
+          "fields" => "attachment,description,reporter,priority,duedate,summary",
+          "colors" => {
+            "0" => "#FF4F33",
+            "30" => "#FEC15E",
+            "50" => "#19DD1E"
+          }.to_json.to_s,
+          "jql" => "key=DATAMONGO-1532",
+          "silent" => "true",
+          "subject" => "[LL] Check DATAMONGO-1532",
+          "template" => "lib/messages/accuracy.erb"
+        )
+      )
+      assert_email "[LL] Check DATAMONGO-1532",
+                   "DATAMONGO-1532", "3", "42.86%"
+    end
   end
 end

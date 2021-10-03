@@ -82,7 +82,7 @@ module Lazylead
     # Accuracy is a percentage between current score and maximum possible value.
     def evaluate(digits = 2)
       @score = @opts[:rules].select { |r| r.passed(@issue) }.sum(&:score)
-      @accuracy = (score / @opts[:total] * 100).round(digits)
+      @accuracy = (@score.to_f / @opts[:total] * 100).round(digits)
       self
     end
 
