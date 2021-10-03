@@ -349,7 +349,7 @@ module Lazylead
     extend Forwardable
     def_delegators :@jira, :issues, :raw, :max_results, :limit
 
-    def initialize(url, path = "", log = Log.new)
+    def initialize(url, salt = NoSalt.new, path = "", log = Log.new)
       @jira = Jira.new(
         {
           username: nil,
@@ -357,7 +357,7 @@ module Lazylead
           site: url,
           context_path: path
         },
-        NoSalt.new,
+        salt,
         log
       )
     end

@@ -22,6 +22,8 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
+require "zaru"
+require "colorize"
 require_relative "log"
 require_relative "email"
 require_relative "version"
@@ -94,6 +96,44 @@ module Lazylead
         p "to=#{opts.msg_to}, from=#{opts.msg_from}, cc=#{opts.msg_cc}, " \
           "subject=#{opts['subject']}, attachments=#{opts.msg_attachments}, body=#{opts.msg_body}"
       end
+    end
+  end
+
+  #
+  # A postman that sends emails to the html file.
+  # Use ENV['file_postman_dir'] to set a root directory.
+  # By default
+  #  ENV['file_postman_dir'] = "."
+  #
+  class FilePostman
+    def initialize(log = Log.new, env = ENV.to_h)
+      @log = log
+      @env = env
+    end
+
+    # Send an email.
+    # :opts   :: the mail configuration like to, from, cc, subject, template.
+    def send(opts)
+      if opts.msg_to.empty?
+        @log.warn "ll-015: Email can't be sent as 'to' is empty, more: '#{opts}'"
+      else
+        file = filename(opts)
+        File.open(file, "w") do |f|
+          f.write "<!-- to=#{opts.msg_to}, from=#{opts.msg_from}, cc=#{opts.msg_cc}, " \
+                  "subject=#{opts['subject']}, attachments=#{opts.msg_attachments} -->"
+          f.write opts.msg_body
+        end
+        @log.debug "Mail '#{opts['subject']}' for #{opts.msg_to} sent to " \
+                   "'#{file.to_s.colorize(:light_blue)}'"
+      end
+    end
+
+    # Assemble file name where email to be print
+    def filename(opts)
+      File.join(
+        @env.fetch("file_postman_dir", "."),
+        Zaru.sanitize!("#{Time.now.nsec}-#{opts['subject']}.html")
+      )
     end
   end
 end

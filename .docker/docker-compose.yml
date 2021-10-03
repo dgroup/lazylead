@@ -5,19 +5,18 @@ services:
 
   lazylead:
     image: dgroup/lazylead:latest
-    container_name: lazylead
+    container_name: ll
     mem_limit: 128m
     build:
       context: ../
       dockerfile: .docker/Dockerfile
       args:
-        release_tags: "latest 0.1.0"
-        version: "0.1.0"
-    ports:
-      - 82:8080
-      - 1082:1082 # remote debug
-      - 1282:1282 # JMX connection for jvisualvm debug
+        release_tags: "latest 0.1.x"
+        version: "0.1.x"
+    environment:
+      jira_url: https://jira.spring.io
+      file_postman_dir: "logs"
     volumes:
-      - .local/dumps:/lazylead/dumps
-      - .local/logs:/lazylead/logs
-    entrypoint: bin/lazylead --trace --verbose --log-file /lazylead/logs/ll{{.%Y-%m-%dT%H:%M:%S}}.log
+      - .local:/lazylead/db
+      - .local:/lazylead/logs
+    entrypoint: bin/lazylead --trace --verbose --log-file /lazylead/logs/ll{{.%Y-%m-%dT%H:%M:%S}}.log --sqlite db/ll.db
