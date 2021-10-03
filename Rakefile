@@ -94,7 +94,7 @@ desc "Validate all XML/XSL/XSD/HTML files for formatting"
 Xcop::RakeTask.new :xcop do |task|
   task.license = "license.txt"
   task.includes = %w[**/*.xml **/*.xsl **/*.xsd **/*.html]
-  task.excludes = %w[target/**/* coverage/**/* wp/**/*]
+  task.excludes = %w[target/**/* coverage/**/* wp/**/* test/resources/*]
 end
 
 # @todo #/DEV Enable rule "Checks SQL against the ANSI syntax" fully.
