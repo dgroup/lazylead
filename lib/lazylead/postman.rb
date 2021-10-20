@@ -116,6 +116,7 @@ module Lazylead
     def send(opts)
       if opts.msg_to.empty?
         @log.warn "ll-015: Email can't be sent as 'to' is empty, more: '#{opts}'"
+        ""
       else
         file = filename(opts)
         File.open(file, "w") do |f|
@@ -125,6 +126,7 @@ module Lazylead
         end
         @log.debug "Mail '#{opts['subject']}' for #{opts.msg_to} sent to " \
                    "'#{file.to_s.colorize(:light_blue)}'"
+        file
       end
     end
 

@@ -75,18 +75,17 @@ module Lazylead
   end
 
   class FilePostmanTest < Lazylead::Test
-    # @todo #/DEV add new assert method which consume the file name and check existence on the disk
     test "send email to html file" do
-      FilePostman.new(Log.new, "file_postman_dir" => "test/resources")
-                 .send(
-                   Opts.new(
-                     "to" => "to@email.com",
-                     "from" => "from@email.com",
-                     "attachments" => ["readme.md"],
-                     "subject" => "[LL] Attachments",
-                     "template" => "lib/messages/savepoint.erb"
-                   )
-                 )
+      assert_path_exists FilePostman.new(Log.new, "file_postman_dir" => "test/resources")
+                                    .send(
+                                      Opts.new(
+                                        "to" => "to@email.com",
+                                        "from" => "from@email.com",
+                                        "attachments" => ["readme.md"],
+                                        "subject" => "[LL] Attachments",
+                                        "template" => "lib/messages/savepoint.erb"
+                                      )
+                                    )
     end
   end
 end
