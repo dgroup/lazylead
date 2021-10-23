@@ -27,9 +27,15 @@ require_relative "attachment"
 module Lazylead
   # Check that ticket has video record(s) with reproducing results.
   class Records < Lazylead::Attachment
-    def initialize(ext = [])
+    # @param ext
+    #        The list of video records file extensions.
+    # @param size
+    #        The minimum size of video records in bytes.
+    #        Default value is 5KB.
+    def initialize(ext = [], size = 5 * 1024)
       super("Internal reproducing results (video)", 5, "Attachments")
       @ext = ext
+      @size = size
       return unless @ext.empty?
       @ext = %w[.webm .mkv .flv .flv .vob .ogv .ogg .drc .gif .gifv .mng .avi
                 .mts .m2ts .ts .mov .qt .wmv .yuv .rm .rmvb .viv .asf .amv .mp4
@@ -39,6 +45,7 @@ module Lazylead
 
     # Ensure that ticket has an attachment with video-file extension
     def matches?(attach)
+      return false if attach.attrs["size"].to_i < @size
       return true if @ext.any? { |e| e.eql? File.extname(attach.attrs["filename"]).downcase }
       return false if attach.attrs["mimeType"].nil?
       @ext.any? { |e| attach.attrs["mimeType"].end_with? "/#{e[1..]}" }

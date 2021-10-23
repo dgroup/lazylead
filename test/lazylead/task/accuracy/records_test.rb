@@ -32,7 +32,10 @@ module Lazylead
       assert Records.new.passed(
         OpenStruct.new(
           attachments: [
-            OpenStruct.new(attrs: { "filename" => "failed case 1.mp4" })
+            OpenStruct.new(attrs: {
+                             "filename" => "failed case 1.mp4",
+                             "size"     => 6 * 1024
+                           })
           ]
         )
       )
@@ -42,7 +45,10 @@ module Lazylead
       assert Records.new.passed(
         OpenStruct.new(
           attachments: [
-            OpenStruct.new(attrs: { "filename" => "failed case 2.avi" })
+            OpenStruct.new(attrs: {
+                             "filename" => "failed case 2.avi",
+                             "size"     => 6 * 1024
+                           })
           ]
         )
       )
@@ -52,7 +58,10 @@ module Lazylead
       refute Records.new.passed(
         OpenStruct.new(
           attachments: [
-            OpenStruct.new(attrs: { "filename" => "failed case 2.txt" })
+            OpenStruct.new(attrs: {
+                             "filename" => "failed case 2.txt",
+                             "size"     => 6 * 1024
+                           })
           ]
         )
       )
@@ -62,12 +71,11 @@ module Lazylead
       assert Records.new.passed(
         OpenStruct.new(
           attachments: [
-            OpenStruct.new(
-              attrs: {
-                "filename" => "snapshot.png",
-                "mimeType" => "image/gif"
-              }
-            )
+            OpenStruct.new(attrs: {
+                             "filename" => "snapshot.png",
+                             "mimeType" => "image/gif",
+                             "size"     => 6 * 1024
+                           })
           ]
         )
       )
@@ -77,10 +85,25 @@ module Lazylead
       refute Records.new.passed(
         OpenStruct.new(
           attachments: [
+            OpenStruct.new(attrs: {
+                             "filename" => "snapshot.xlsx",
+                             "mimeType" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                             "size"     => 6 * 1024
+                           })
+          ]
+        )
+      )
+    end
+
+    test "empty gif" do
+      refute Records.new.passed(
+        OpenStruct.new(
+          attachments: [
             OpenStruct.new(
               attrs: {
-                "filename" => "snapshot.xlsx",
-                "mimeType" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                "filename" => "steps.gif",
+                "mimeType" => "image/gif",
+                "size"     => "0"
               }
             )
           ]
