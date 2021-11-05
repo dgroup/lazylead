@@ -217,9 +217,10 @@ module Lazylead
         retries ||= 0
         @orig.exec
         @orig
-      rescue StandardError
+      rescue StandardError => e
         sleep(props.fetch("attempt_wait", 0).to_f) if props.key? "attempt_wait"
         retry if (retries += 1) < props.fetch("attempt", 0).to_i
+        raise e if props.key? "rethrow"
         @orig
       end
     end

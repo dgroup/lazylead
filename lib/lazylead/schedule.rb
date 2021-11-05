@@ -47,14 +47,10 @@ module Lazylead
       raise "ll-002: task can't be a null" if task.nil?
       @trigger.method(task.type).call(task.unit) do
         ActiveRecord::Base.connection_pool.with_connection do
-          if task.props.key? "no_logs"
-            ORM::Retry.new(task, @log).exec
-          else
-            ORM::Retry.new(
-              ORM::Verbose.new(task, @log),
-              @log
-            ).exec
-          end
+          t = task
+          t = ORM::Verbose.new(t, @log) unless t.props.key? "no_logs"
+          t = ORM::Retry.new(t, @log)
+          t.exec
         end
       end
       @log.debug "Task scheduled: #{task}"

@@ -81,5 +81,16 @@ module Lazylead
                      )
                    ).exec.attempts
     end
+
+    test "throw error" do
+      assert_raises(RuntimeError, "network issue") do
+        ORM::Retry.new(
+          FakeTask.new(
+            proc { raise "network issue" },
+            { "rethrow" => "true" }
+          )
+        ).exec
+      end
+    end
   end
 end
