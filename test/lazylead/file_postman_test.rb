@@ -30,31 +30,18 @@ require_relative "../../lib/lazylead/smtp"
 require_relative "../../lib/lazylead/postman"
 
 module Lazylead
-  class PostmanTest < Lazylead::Test
-    test "email with attachment" do
-      skip "No postman credentials provided" unless env? "LL_SMTP_HOST",
-                                                         "LL_SMTP_PORT",
-                                                         "LL_SMTP_USER",
-                                                         "LL_SMTP_PASS",
-                                                         "LL_SMTP_TO",
-                                                         "LL_SMTP_FROM"
-      Smtp.new(
-        Log.new,
-        NoSalt.new,
-        smtp_host: ENV["LL_SMTP_HOST"],
-        smtp_port: ENV["LL_SMTP_PORT"],
-        smtp_user: ENV["LL_SMTP_USER"],
-        smtp_pass: ENV["LL_SMTP_PASS"]
-      ).enable
-      Postman.new.send(
-        Opts.new(
-          "to" => ENV["LL_SMTP_TO"],
-          "from" => ENV["LL_SMTP_FROM"],
-          "attachments" => ["readme.md"],
-          "subject" => "[LL] Attachments",
-          "template" => "lib/messages/savepoint.erb"
-        )
-      )
+  class FilePostmanTest < Lazylead::Test
+    test "send email to html file" do
+      assert_path_exists FilePostman.new(Log.new, "file_postman_dir" => "test/resources")
+                                    .send(
+                                      Opts.new(
+                                        "to" => "to@email.com",
+                                        "from" => "from@email.com",
+                                        "attachments" => ["readme.md"],
+                                        "subject" => "[LL] FilePostmanTest attachment",
+                                        "template" => "lib/messages/savepoint.erb"
+                                      )
+                                    )
     end
   end
 end

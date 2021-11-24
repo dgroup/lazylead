@@ -30,26 +30,14 @@ require_relative "../../lib/lazylead/smtp"
 require_relative "../../lib/lazylead/postman"
 
 module Lazylead
-  class PostmanTest < Lazylead::Test
-    test "email with attachment" do
-      skip "No postman credentials provided" unless env? "LL_SMTP_HOST",
-                                                         "LL_SMTP_PORT",
-                                                         "LL_SMTP_USER",
-                                                         "LL_SMTP_PASS",
-                                                         "LL_SMTP_TO",
-                                                         "LL_SMTP_FROM"
-      Smtp.new(
-        Log.new,
-        NoSalt.new,
-        smtp_host: ENV["LL_SMTP_HOST"],
-        smtp_port: ENV["LL_SMTP_PORT"],
-        smtp_user: ENV["LL_SMTP_USER"],
-        smtp_pass: ENV["LL_SMTP_PASS"]
-      ).enable
-      Postman.new.send(
+  class StdoutPostmanTest < Lazylead::Test
+    # @todo #495/DEV Find way to capture the STDOUT in order to test the email sending.
+    #  Right now its just visual verification.
+    test "send email to stdout" do
+      StdoutPostman.new.send(
         Opts.new(
-          "to" => ENV["LL_SMTP_TO"],
-          "from" => ENV["LL_SMTP_FROM"],
+          "to" => "to@email.com",
+          "from" => "from@email.com",
           "attachments" => ["readme.md"],
           "subject" => "[LL] Attachments",
           "template" => "lib/messages/savepoint.erb"
