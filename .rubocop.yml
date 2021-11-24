@@ -89,6 +89,9 @@ Style/FormatStringToken:
     - "lib/lazylead/task/accuracy/accuracy.rb"
 Style/IfWithBooleanLiteralBranches: # (new in 1.9)
   Enabled: true
+#  @todo #/DEV Enable Style/OpenStructUse rule, for now its disabled due to rubocop upgrade
+Style/OpenStructUse:
+  Enabled: false
 Lint/RaiseException:
   Enabled: true
 Lint/StructNewOverride:

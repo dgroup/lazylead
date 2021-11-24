@@ -101,4 +101,7 @@ tasks instead of solving technical problems."
   s.add_development_dependency "sqlint", "0.2.0"
   s.add_development_dependency "tempfile", "0.1.2"
   s.add_development_dependency "xcop", "0.6.3"
+  s.metadata = {
+    "rubygems_mfa_required" => "true"
+  }
 end
