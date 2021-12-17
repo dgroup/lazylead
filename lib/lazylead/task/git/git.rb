@@ -43,33 +43,33 @@ module Lazylead
         "#{id} #{msg}"
       end
 
-      # @todo @/DEV Git Commit#id implementation is required
+      # @todo #/DEV Git Commit#id implementation is required
       def id; end
 
-      # @todo @/DEV Git Commit#author implementation is required
+      # @todo #/DEV Git Commit#author implementation is required
       def author; end
 
-      # @todo @/DEV Git Commit#time implementation is required
+      # @todo #/DEV Git Commit#time implementation is required
       def time; end
 
-      # @todo @/DEV Git Commit#msg implementation is required
+      # @todo #/DEV Git Commit#msg implementation is required
       def msg; end
 
-      # @todo @/DEV Git Commit#lines implementation is required
+      # @todo #/DEV Git Commit#lines implementation is required
       def lines; end
 
-      # @todo @/DEV Git Commit#header implementation is required
+      # @todo #/DEV Git Commit#header implementation is required
       def header; end
 
       # The modified lines contains expected text
-      # @todo @/DEV Git Commit#includes? implementation is required
+      # @todo #/DEV Git Commit#includes? implementation is required
       def includes?(text); end
     end
 
     #
     # Git commits built from command-line stdout (OS#run).
     #
-    # @todo @/DEV Git Commits implementation is required
+    # @todo #/DEV Git Commits implementation is required
     class Commits
       extend Forwardable
       def_delegators :@all, :each, :map, :select, :empty?
