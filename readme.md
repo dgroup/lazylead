@@ -64,6 +64,9 @@ Join our telegram chat [lazylead](https://t.me/lazyleads) for discussions.
 | [mail.google.com](lib/lazylead/postman.rb)            | Emails        | 🌵 |
 | calendar.google.com                                   | Calendar      | ⌛ |
 | slack.com                                             | Notifications | ⌛ |
+| GitHub                                                | VCS + CI/CD   | ⌛ |
+| GitLab                                                | VCS + CI/CD   | ⌛ |
+| BitBucket                                             | VCS + CI/CD   | ⌛ |
 
 🚴🏽 - in-progress, ⌛ - planned, ✅ - implemented, 🌵 - implemented, but not tested, ❌ - not supported/planned.
 
