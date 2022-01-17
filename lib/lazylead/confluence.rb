@@ -34,8 +34,9 @@ module Lazylead
   class Confluence
     def initialize(conf)
       @conf = conf
-      @http = Faraday.new(url: @conf.url)
-      @http.basic_auth(@conf.user, @conf.pass)
+      @http = Faraday.new(url: @conf.url) do |conn|
+        conn.request :authorization, :basic, @conf.user, @conf.pass
+      end
     end
 
     # Confluence instance url like
