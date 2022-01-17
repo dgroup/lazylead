@@ -38,8 +38,7 @@ module Lazylead
       def run(sys, postman, opts)
         assignments = sys.issues(opts["jql"], opts.jira_defaults)
                          .group_by(&:assignee)
-                         .map { |user, tasks| [user.id, Teammate.new(user, tasks)] }
-                         .to_h
+                         .to_h { |user, tasks| [user.id, Teammate.new(user, tasks)] }
         opts.slice("team", ",")
             .map { |m| m.split(":") }
             .each { |id, name| assignments[id] = Free.new(id, name) unless assignments.key? id }

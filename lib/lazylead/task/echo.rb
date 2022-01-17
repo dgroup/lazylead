@@ -53,7 +53,7 @@ module Lazylead
       end
 
       def run(_, _, _)
-        File.open(@path, "w") { |f| f.write Time.now }
+        File.write(@path, Time.now)
       end
     end
   end
