@@ -6,7 +6,6 @@ assets:
 install: |
   export GEM_HOME=~/.ruby
   export GEM_PATH=$GEM_HOME:$GEM_PATH
-  gem install rubocop
 docker:
   image: ruby:2.6.5
 release:
@@ -17,6 +16,7 @@ release:
     sed -i "s/0\.0\.0/${tag}/g" lib/lazylead/version.rb
     sed -i "s/0\.0\.0/${tag}/g" lazylead.gemspec
     bundle install --no-color
+    gem install rubocop
     rubocop -A
     bundle exec rake --trace test rubocop sqlint xcop
     git add lib/lazylead/version.rb lazylead.gemspec
@@ -30,5 +30,6 @@ merge:
   squash: true
   script: |-
     bundle install
+    gem install rubocop
     rubocop -A
     bundle exec rake test rubocop sqlint xcop
