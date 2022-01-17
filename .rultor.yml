@@ -16,8 +16,6 @@ release:
     sed -i "s/0\.0\.0/${tag}/g" lib/lazylead/version.rb
     sed -i "s/0\.0\.0/${tag}/g" lazylead.gemspec
     bundle install --no-color
-    gem install rubocop
-    rubocop -A
     bundle exec rake --trace test rubocop sqlint xcop
     git add lib/lazylead/version.rb lazylead.gemspec
     git commit -m "version set to ${tag}"
@@ -30,6 +28,4 @@ merge:
   squash: true
   script: |-
     bundle install
-    gem install rubocop
-    rubocop -A
     bundle exec rake test rubocop sqlint xcop
