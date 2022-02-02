@@ -57,5 +57,18 @@ module Lazylead
       assert_email "[SVN] Important files have been changed!",
                    ["3", "dgroup", "/189.md", "Add description for 189 issue"]
     end
+
+    test "file location detected in all branches" do
+      skip "No svn credentials provided" unless env? "svn_touch_user",
+                                                     "svn_touch_password"
+      skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
+      assert_array %w[branches/0.13.x/readme.md trunk/readme.md],
+                   Task::Svn::Touch.new.locations(
+                     Opts.new("svn_url" => "https://svn.riouxsvn.com/touch4ll",
+                              "svn_user" => ENV["svn_touch_user"],
+                              "svn_password" => ENV["svn_touch_password"],
+                              "files" => "readme.md")
+                   )
+    end
   end
 end
