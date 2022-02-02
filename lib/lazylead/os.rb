@@ -45,6 +45,7 @@ module Lazylead
     #         Please note, that this is not a raw stdout.
     #         The output will be modified by String#scrub! in order to avoid invalid byte sequence
     #         in UTF-8 (https://stackoverflow.com/a/24037885/6916890).
+    # @todo #/DEV Add support of multiline string literals, not just array of commands
     def run(*cmd)
       return "" if cmd.empty? || cmd.any?(&:nil?)
       todo = cmd
