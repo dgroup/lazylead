@@ -61,6 +61,7 @@ module Lazylead
       SimpleCov.result
     end
 
+    # @todo #/DEV Test timeout should fail the build instead of skipping
     def around
       Timeout.timeout(
         ENV["TEST_TIMEOUT"].nil? ? 10 : ENV["TEST_TIMEOUT"].to_i

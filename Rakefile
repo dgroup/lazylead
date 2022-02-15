@@ -81,6 +81,7 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << "rubocop-rspec"
 end
 
+# @todo #/DEV Update copyright to 2022 in all files within the project (including license.txt)
 task :copyright do
   sh "grep -q -r \"2019-#{Date.today.strftime('%Y')}\" \
     --include \"*.rb\" \

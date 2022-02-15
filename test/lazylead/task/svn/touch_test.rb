@@ -70,5 +70,20 @@ module Lazylead
                               "files" => "readme.md")
                    )
     end
+
+    test "svn log with entries from all branches" do
+      skip "No svn credentials provided" unless env? "svn_touch_user",
+                                                     "svn_touch_password"
+      skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
+      assert_equal 6,
+                   Task::Svn::Touch.new.svn_log(
+                     Opts.new("svn_url" => "https://svn.riouxsvn.com/touch4ll",
+                              "svn_user" => ENV["svn_touch_user"],
+                              "svn_password" => ENV["svn_touch_password"],
+                              "files" => "readme.md",
+                              "now" => "2020-08-17T00:00:00+01:00",
+                              "period" => "864000")
+                   ).size
+    end
   end
 end

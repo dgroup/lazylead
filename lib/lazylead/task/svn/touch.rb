@@ -50,18 +50,14 @@ module Lazylead
 
         # Return all svn commits for a particular date range, which are touching
         #  somehow the critical files within the svn repo.
-        #
-        # @todo #567:DEV Add support for search over multiple branches (.locations)
+        # @todo #567:DEV Add more tests to ensure that changes in particular branch are visible
         def touch(files, opts)
-          xpath = files.map { |f| "contains(text(),\"#{f}\")" }.join(" or ")
-          svn_log(opts).xpath("//logentry[paths/path[#{xpath}]]")
-                       .map { |xml| to_entry(xml) }
-                       .each do |e|
+          svn_log(opts).uniq.each do |e|
             e.paths.path.delete_if { |p| files.none? { |f| p.include? f } } if e.paths.path.respond_to? :delete_if
           end
         end
 
-        # Return all svn commits for particular date range in repo
+        # Return svn commits history for file(s) within particular date range in repo
         def svn_log(opts)
           now = if opts.key? "now"
                   DateTime.parse(opts["now"])
@@ -69,11 +65,15 @@ module Lazylead
                   DateTime.now
                 end
           start = (now.to_time - opts["period"].to_i).to_datetime
-          raw = OS.new.run "svn log --no-auth-cache",
-                           "--username #{opts.decrypt('svn_user', 'svn_salt')}",
-                           "--password #{opts.decrypt('svn_password', 'svn_salt')}",
-                           "--xml -v -r {#{start}}:{#{now}} #{opts['svn_url']}"
-          Nokogiri.XML(raw, nil, "UTF-8")
+          locations(opts).flat_map do |file|
+            raw = OS.new.run "svn log --no-auth-cache",
+                             "--username #{opts.decrypt('svn_user', 'svn_salt')}",
+                             "--password #{opts.decrypt('svn_password', 'svn_salt')}",
+                             "--xml -v -r {#{start}}:{#{now}} #{opts['svn_url']}/#{file}"
+            Nokogiri.XML(raw, nil, "UTF-8")
+                    .xpath("//logentry[paths/path]")
+                    .map { |xml| to_entry(xml) }
+          end
         end
 
         # Convert single revision(XML text) to entry object.
