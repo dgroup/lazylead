@@ -50,7 +50,6 @@ module Lazylead
 
         # Return all svn commits for a particular date range, which are touching
         #  somehow the critical files within the svn repo.
-        # @todo #567:DEV Add more tests to ensure that changes in particular branch are visible
         def touch(files, opts)
           svn_log(opts).uniq.each do |e|
             e.paths.path.delete_if { |p| files.none? { |f| p.include? f } } if e.paths.path.respond_to? :delete_if

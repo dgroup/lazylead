@@ -88,6 +88,12 @@ module Lazylead
       end
     end
 
+    # Assert that array has 1 hash entry with necessary content
+    def assert_single_entry(exp, act)
+      assert_equal 1, act.size
+      assert_entries exp, act.first
+    end
+
     # Assert that text contains expected words
     def assert_words(*words, text)
       words = [words] unless words.respond_to? :each

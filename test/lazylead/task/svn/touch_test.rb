@@ -85,5 +85,27 @@ module Lazylead
                               "period" => "864000")
                    ).size
     end
+
+    test "svn log has one entry from non specified branch" do
+      skip "No svn credentials provided" unless env? "svn_touch_user",
+                                                     "svn_touch_password"
+      skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
+      assert_single_entry(
+        {
+          "revision" => "9",
+          "author" => "dgroup",
+          "paths" => OpenStruct.new("path" => "/branches/0.13.x/readme.md"),
+          "msg" => "#567: few more empty lines"
+        },
+        Task::Svn::Touch.new.svn_log(
+          Opts.new("svn_url" => "https://svn.riouxsvn.com/touch4ll",
+                   "svn_user" => ENV["svn_touch_user"],
+                   "svn_password" => ENV["svn_touch_password"],
+                   "files" => "readme.md",
+                   "now" => "2022-02-17T00:00:00+01:00",
+                   "period" => "8640")
+        )
+      )
+    end
   end
 end
