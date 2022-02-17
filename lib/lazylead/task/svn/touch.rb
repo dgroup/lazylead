@@ -43,15 +43,18 @@ module Lazylead
         # @todo #567:DEV Add flag with branch prefixes that could be used for future filtration
         #  Right now method .locations returns all branches, potentially that won't be needed.
         def run(_, postman, opts)
-          files = opts.slice("files", ",")
-          commits = touch(files, opts)
+          commits = touch(opts)
           postman.send(opts.merge(entries: commits)) unless commits.empty?
         end
 
         # Return all svn commits for a particular date range, which are touching
         #  somehow the critical files within the svn repo.
-        def touch(files, opts)
-          svn_log(opts).uniq.each do |e|
+        def touch(opts)
+          files = opts.slice("files", ",")
+          branches = opts.slice("branches", ",")
+          svn_log(opts)
+            .select { |e| branches.empty? || branches.any? { |b| e.paths.path.start_with? b } }
+            .each do |e|
             e.paths.path.delete_if { |p| files.none? { |f| p.include? f } } if e.paths.path.respond_to? :delete_if
           end
         end

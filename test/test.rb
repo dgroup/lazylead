@@ -88,7 +88,7 @@ module Lazylead
       end
     end
 
-    # Assert that array has 1 hash entry with necessary content
+    # Assert that array has 1 hash object with necessary content
     def assert_single_entry(exp, act)
       assert_equal 1, act.size
       assert_entries exp, act.first

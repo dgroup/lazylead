@@ -32,8 +32,7 @@ require_relative "../../../../lib/lazylead/task/svn/touch"
 module Lazylead
   class TouchTest < Lazylead::Test
     test "important files changed in svn repo" do
-      skip "No svn credentials provided" unless env? "svn_touch_user",
-                                                     "svn_touch_password"
+      skip "No svn credentials provided" unless env? "svn_touch_user", "svn_touch_password"
       skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
       Lazylead::Smtp.new.enable
       Task::Svn::Touch.new.run(
@@ -55,12 +54,11 @@ module Lazylead
         )
       )
       assert_email "[SVN] Important files have been changed!",
-                   ["3", "dgroup", "/189.md", "Add description for 189 issue"]
+                   "3", "dgroup", "/189.md", "Add description for 189 issue"
     end
 
     test "file location detected in all branches" do
-      skip "No svn credentials provided" unless env? "svn_touch_user",
-                                                     "svn_touch_password"
+      skip "No svn credentials provided" unless env? "svn_touch_user", "svn_touch_password"
       skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
       assert_array %w[branches/0.13.x/readme.md trunk/readme.md],
                    Task::Svn::Touch.new.locations(
@@ -72,8 +70,7 @@ module Lazylead
     end
 
     test "svn log with entries from all branches" do
-      skip "No svn credentials provided" unless env? "svn_touch_user",
-                                                     "svn_touch_password"
+      skip "No svn credentials provided" unless env? "svn_touch_user", "svn_touch_password"
       skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
       assert_equal 6,
                    Task::Svn::Touch.new.svn_log(
@@ -87,8 +84,7 @@ module Lazylead
     end
 
     test "svn log has one entry from non specified branch" do
-      skip "No svn credentials provided" unless env? "svn_touch_user",
-                                                     "svn_touch_password"
+      skip "No svn credentials provided" unless env? "svn_touch_user", "svn_touch_password"
       skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
       assert_single_entry(
         {
@@ -97,13 +93,35 @@ module Lazylead
           "paths" => OpenStruct.new("path" => "/branches/0.13.x/readme.md"),
           "msg" => "#567: few more empty lines"
         },
-        Task::Svn::Touch.new.svn_log(
+        Task::Svn::Touch.new.touch(
           Opts.new("svn_url" => "https://svn.riouxsvn.com/touch4ll",
                    "svn_user" => ENV["svn_touch_user"],
                    "svn_password" => ENV["svn_touch_password"],
                    "files" => "readme.md",
                    "now" => "2022-02-17T00:00:00+01:00",
                    "period" => "8640")
+        )
+      )
+    end
+
+    test "svn log has one entry from specified branch" do
+      skip "No svn credentials provided" unless env? "svn_touch_user", "svn_touch_password"
+      skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
+      assert_single_entry(
+        {
+          "revision" => "9",
+          "author" => "dgroup",
+          "paths" => OpenStruct.new("path" => "/branches/0.13.x/readme.md"),
+          "msg" => "#567: few more empty lines"
+        },
+        Task::Svn::Touch.new.touch(
+          Opts.new("svn_url" => "https://svn.riouxsvn.com/touch4ll",
+                   "svn_user" => ENV["svn_touch_user"],
+                   "svn_password" => ENV["svn_touch_password"],
+                   "files" => "readme.md",
+                   "now" => "2022-02-17T00:00:00+01:00",
+                   "period" => "8640",
+                   "branches" => "/branches/0.13.x,  ,-,n/a")
         )
       )
     end

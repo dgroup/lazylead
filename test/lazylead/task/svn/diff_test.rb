@@ -30,14 +30,14 @@ require_relative "../../../../lib/lazylead/postman"
 require_relative "../../../../lib/lazylead/task/svn/diff"
 
 module Lazylead
+  # @todo #/DEV Add test to check engine structure without email sending
   class DiffTest < Lazylead::Test
     # @todo #/DEV Right now its impossible to check that attachment is present in email as we
     #  removing the directory with attachments once SVN::Diff is sent the email through the postman.
     #  Think about how to test this case in automatically, because for now we are doing it manually
     #  during the development.
     test "changes since revision" do
-      skip "No svn credentials provided" unless env? "svn_log_user",
-                                                     "svn_log_password"
+      skip "No svn credentials provided" unless env? "svn_log_user", "svn_log_password"
       skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
       Lazylead::Smtp.new.enable
       Task::Svn::Diff.new.run(
@@ -62,8 +62,7 @@ module Lazylead
     end
 
     test "changes since revision with attachment" do
-      skip "No svn credentials provided" unless env? "svn_log_user",
-                                                     "svn_log_password"
+      skip "No svn credentials provided" unless env? "svn_log_user", "svn_log_password"
       skip "No internet connection to riouxsvn.com" unless ping? "riouxsvn.com"
       skip "No postman credentials provided" unless env? "LL_SMTP_HOST",
                                                          "LL_SMTP_PORT",

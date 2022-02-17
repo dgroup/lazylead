@@ -31,6 +31,7 @@ require_relative "../../../../lib/lazylead/task/svn/grep"
 require_relative "../../../../lib/lazylead/task/svn/svn"
 
 module Lazylead
+  # @todo #/DEV Add test to check engine structure without email sending
   class GrepTest < Lazylead::Test
     test "changes with text" do
       skip "No svn credentials provided" unless env? "svn_log_user", "svn_log_password"
