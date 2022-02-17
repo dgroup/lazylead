@@ -30,7 +30,7 @@ require_relative "../../../../lib/lazylead/postman"
 require_relative "../../../../lib/lazylead/task/svn/diff"
 
 module Lazylead
-  # @todo #/DEV Add test to check engine structure without email sending
+  # @todo #/DEV Svn::Diff Add test to check engine structure without email sending
   class DiffTest < Lazylead::Test
     # @todo #/DEV Right now its impossible to check that attachment is present in email as we
     #  removing the directory with attachments once SVN::Diff is sent the email through the postman.
