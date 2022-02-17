@@ -40,8 +40,6 @@ module Lazylead
           @log = log
         end
 
-        # @todo #567:DEV Add flag with branch prefixes that could be used for future filtration
-        #  Right now method .locations returns all branches, potentially that won't be needed.
         def run(_, postman, opts)
           commits = touch(opts)
           postman.send(opts.merge(entries: commits)) unless commits.empty?
