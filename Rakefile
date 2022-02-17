@@ -2,7 +2,7 @@
 
 # The MIT License
 #
-# Copyright (c) 2019-2021 Yurii Dubinka
+# Copyright (c) 2019-2022 Yurii Dubinka
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"),
@@ -81,8 +81,9 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.requires << "rubocop-rspec"
 end
 
-# @todo #/DEV Update copyright to 2022 in all files within the project (including license.txt)
 task :copyright do
+  # @todo #/DEV Update copyright to 2022 for sql files as current changes of structure may lead
+  #  to manual actions during installation.
   sh "grep -q -r \"2019-#{Date.today.strftime('%Y')}\" \
     --include \"*.rb\" \
     --include \"*.txt\" \
