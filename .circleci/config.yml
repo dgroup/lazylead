@@ -3,16 +3,6 @@
 #  Without this integration the release history won't be clear.
 version: 2
 jobs:
-  test:
-    docker:
-      - image: ruby:2.6.5-alpine
-    steps:
-      - checkout
-      - run: |
-          apk add libc-dev gcc make git sqlite sqlite-dev sqlite-libs
-          bundler install
-      - run: rubocop -A
-      - run: bundle exec rake test rubocop sqlint
   deploy:
     machine: true
     steps:
@@ -58,11 +48,8 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - test
       - deploy:
           filters:
             branches:
               only:
                 - master
-          requires:
-            - test

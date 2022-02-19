@@ -7,7 +7,7 @@
 [![Hits-of-Code](https://hitsofcode.com/github/dgroup/lazylead)](https://hitsofcode.com/view/github/dgroup/lazylead)
 [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](./license.txt)
 
-[![Build status circleci](https://circleci.com/gh/dgroup/lazylead/tree/master.svg?style=shield)](https://circleci.com/gh/dgroup/lazylead/tree/master)
+[![CI](https://github.com/dgroup/lazylead/actions/workflows/build.yml/badge.svg)](https://github.com/dgroup/lazylead/actions/workflows/build.yml)
 [![0pdd](http://www.0pdd.com/svg?name=dgroup/lazylead)](http://www.0pdd.com/p?name=dgroup/lazylead)
 [![Dependency Status](https://requires.io/github/dgroup/lazylead/requirements.svg?branch=master)](https://requires.io/github/dgroup/lazylead/requirements/?branch=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dgroup_lazylead&metric=alert_status)](https://sonarcloud.io/dashboard?id=dgroup_lazylead)

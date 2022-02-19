@@ -3,6 +3,13 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
+# @todo #572/DEV Assemble docker image in GitHub actions in order to replace Circle CI
+
+# @todo #572/DEV Test docker image in GitHub actions in order to replace Circle CI
+
+# @todo #572/DEV Publish docker image in GitHub actions in order to replace Circle CI
+
+# @todo #572/DEV Integrate rultor with GitHub action and push docker image with particular tag
 name: CI
 on: push
 jobs:
