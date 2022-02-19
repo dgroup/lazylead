@@ -46,7 +46,7 @@ def version
   Gem::Specification.load(Dir["*.gemspec"].first).version
 end
 
-task default: %i[init_hooks clean rubocop test sqlint xcop copyright docker]
+task default: %i[init_hooks clean rubocop test sqlint copyright docker]
 
 task :init_hooks do
   next if File.file?(".git/hooks/commit-msg")
