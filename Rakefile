@@ -93,6 +93,7 @@ end
 
 # @todo #/DEV Enable xcop when xml/html files will be added to the project. So far there is no
 #  profit.
+#
 # require "xcop/rake_task"
 # desc "Validate all XML/XSL/XSD/HTML files for formatting"
 # Xcop::RakeTask.new :xcop do |task|
