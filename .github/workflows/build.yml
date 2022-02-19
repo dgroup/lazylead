@@ -28,11 +28,3 @@ jobs:
         run: bundle install
       - name: Run tests
         run: bundle exec rake -A
-      - name: Notify Telegram group
-        uses: yanzay/notify-telegram@v0.1.0
-        if: always()
-        with:
-          chat: ${{ secrets.TELEGRAM_CHAT }} # user id or channel name secret
-          token: ${{ secrets.TELEGRAM_TOKEN }} # token secret
-          status: ${{ job.status }} # do not modify this line
-

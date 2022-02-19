@@ -28,6 +28,14 @@ I think you remember how [static code analysis](https://en.wikipedia.org/wiki/St
  
 Join our telegram chat [lazylead](https://t.me/lazyleads) for discussions.
 
+*Legend*
+
+- 🚴🏽 in-progress 
+- ⌛ planned 
+- ✅ implemented 
+- 🌵 implemented, but not tested
+- ❌ not supported/planned
+
 | Daily annoying task                                                                 | Jira  | Github | Trello | SVN | Git |
 | :---------------------------------------------------------------------------------- | :---: | :----: | :----: | :----: | :----: |
 | [Notify ticket's assignee](lib/lazylead/task/alert/alert.rb)                        | ✅ | ⌛ | ⌛ | ❌ | ❌ |  
@@ -67,8 +75,6 @@ Join our telegram chat [lazylead](https://t.me/lazyleads) for discussions.
 | GitHub                                                | VCS + CI/CD   | ⌛ |
 | GitLab                                                | VCS + CI/CD   | ⌛ |
 | BitBucket                                             | VCS + CI/CD   | ⌛ |
-
-🚴🏽 - in-progress, ⌛ - planned, ✅ - implemented, 🌵 - implemented, but not tested, ❌ - not supported/planned.
 
 New ideas, bugs, suggestions or questions are welcome [via GitHub issues](https://github.com/dgroup/lazylead/issues/new)!
 
