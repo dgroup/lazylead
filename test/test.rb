@@ -199,8 +199,7 @@ module Lazylead
     # Ensure that text is blank.
     def assert_blank(text)
       assert_respond_to text, :blank?, "Text has no method :blank?"
-      assert text.blank?, "Text isn't blank"
+      assert_predicate text, :blank?, "Text isn't blank"
     end
   end
 end
-
