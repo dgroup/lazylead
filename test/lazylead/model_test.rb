@@ -80,7 +80,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
-      refute ORM::Task.find(260).to_h?
+      refute_predicate ORM::Task.find(260), :to_h?
     end
 
     test "second ticketing system is found" do

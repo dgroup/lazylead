@@ -166,10 +166,9 @@ module Lazylead
     end
 
     test "field not found" do
-      assert NoAuthJira.new("https://jira.spring.io")
-                       .issues("key=DATAJDBC-480")
-                       .first["absent field"]
-                       .blank?
+      assert_predicate NoAuthJira.new("https://jira.spring.io")
+                                 .issues("key=DATAJDBC-480")
+                                 .first["absent field"], :blank?
     end
 
     test "labels found" do

@@ -36,19 +36,19 @@ module Lazylead
     # 'PullRequest' label is used here as we don't have 0%, 10%, etc.
     # on https://jira.spring.io.
     test "grid label found" do
-      assert Labels.new(
+      assert_predicate Labels.new(
         NoAuthJira.new("https://jira.spring.io").issues("key=XD-3725").first,
         Opts.new("grid" => "PullRequest,  ,")
-      ).exists?
+      ), :exists?
     end
 
     test "grid label set by ll" do
-      assert Labels.new(
+      assert_predicate Labels.new(
         NoAuthJira.new("https://jira.spring.io")
                   .issues("key=XD-3725", expand: "changelog")
                   .first,
         Opts.new("grid" => "PullRequest", "author" => "grussell")
-      ).valid?
+      ), :valid?
     end
 
     test "email notification" do
