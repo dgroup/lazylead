@@ -68,7 +68,7 @@ module Lazylead
       opts.each_with_object({}) do |e, o|
         k = e[0]
         v = e[1]
-        v = ENV[v.slice(2, v.length - 3)] if v.respond_to?(:start_with?) && v.start_with?("${")
+        v = ENV.fetch(v.slice(2, v.length - 3), nil) if v.respond_to?(:start_with?) && v.start_with?("${")
         o[k] = v
       end
     end

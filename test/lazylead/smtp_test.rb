@@ -46,14 +46,14 @@ module Lazylead
       skip "Not implemented yet" unless env? "LL_SMTP_HOST", "LL_SMTP_USER"
       Smtp.new(
         Log.new, NoSalt.new,
-        smtp_host: ENV["LL_SMTP_HOST"],
-        smtp_port: ENV["LL_SMTP_PORT"],
-        smtp_user: ENV["LL_SMTP_USER"],
-        smtp_pass: ENV["LL_SMTP_PASS"]
+        smtp_host: ENV.fetch("LL_SMTP_HOST", nil),
+        smtp_port: ENV.fetch("LL_SMTP_PORT", nil),
+        smtp_user: ENV.fetch("LL_SMTP_USER", nil),
+        smtp_pass: ENV.fetch("LL_SMTP_PASS", nil)
       ).enable
       Mail.deliver do
-        from ENV["LL_SMTP_FROM"]
-        to ENV["LL_SMTP_TO"]
+        from ENV.fetch("LL_SMTP_FROM", nil)
+        to ENV.fetch("LL_SMTP_TO", nil)
         subject "Testing"
         body "Good, it works"
       end

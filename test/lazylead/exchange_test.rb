@@ -39,7 +39,7 @@ module Lazylead
                                                              "exchange_to"
       Exchange.new(Log.new, NoSalt.new).send(
         Opts.new(
-          to: ENV["exchange_to"],
+          to: ENV.fetch("exchange_to", nil),
           tickets: NoAuthJira.new("https://jira.spring.io")
                              .issues("key = DATAJDBC-480"),
           "subject" => "[DD] PDTN!",
@@ -57,12 +57,12 @@ module Lazylead
       Exchange.new(
         Log.new,
         Salt.new("exchange_salt"),
-        "exchange_url" => ENV["exchange_url"],
-        "exchange_user" => ENV["enc_exchange_usr"],
-        "exchange_password" => ENV["enc_exchange_psw"]
+        "exchange_url" => ENV.fetch("exchange_url", nil),
+        "exchange_user" => ENV.fetch("enc_exchange_usr", nil),
+        "exchange_password" => ENV.fetch("enc_exchange_psw", nil)
       ).send(
         Opts.new(
-          to: ENV["exchange_to"],
+          to: ENV.fetch("exchange_to", nil),
           tickets: NoAuthJira.new("https://jira.spring.io")
                              .issues("key = DATAJDBC-480"),
           "subject" => "[DD] Enc PDTN!",
@@ -79,12 +79,12 @@ module Lazylead
       Exchange.new(
         Log.new,
         Salt.new("exchange_salt"),
-        "exchange_url" => ENV["exchange_url"],
-        "exchange_user" => ENV["enc_exchange_usr"],
-        "exchange_password" => ENV["enc_exchange_psw"]
+        "exchange_url" => ENV.fetch("exchange_url", nil),
+        "exchange_user" => ENV.fetch("enc_exchange_usr", nil),
+        "exchange_password" => ENV.fetch("enc_exchange_psw", nil)
       ).send(
         Opts.new(
-          to: ENV["exchange_to"],
+          to: ENV.fetch("exchange_to", nil),
           "attachments" => "readme.md",
           "subject" => "[LL] Attachments",
           "template" => "lib/messages/savepoint.erb"

@@ -46,8 +46,8 @@ module Lazylead
         Opts.new(
           "from" => "svnlog@test.com",
           "svn_url" => "https://svn.riouxsvn.com/touch4ll",
-          "svn_user" => ENV["svn_log_user"],
-          "svn_password" => ENV["svn_log_password"],
+          "svn_user" => ENV.fetch("svn_log_user", nil),
+          "svn_password" => ENV.fetch("svn_log_password", nil),
           "commit_url" => "https://view.commit.com?rev=",
           "user" => "https://user.com?id=",
           "to" => "lead@fake.com",
@@ -73,22 +73,22 @@ module Lazylead
       Lazylead::Smtp.new(
         Log.new.verbose,
         NoSalt.new,
-        smtp_host: ENV["LL_SMTP_HOST"],
-        smtp_port: ENV["LL_SMTP_PORT"],
-        smtp_user: ENV["LL_SMTP_USER"],
-        smtp_pass: ENV["LL_SMTP_PASS"]
+        smtp_host: ENV.fetch("LL_SMTP_HOST", nil),
+        smtp_port: ENV.fetch("LL_SMTP_PORT", nil),
+        smtp_user: ENV.fetch("LL_SMTP_USER", nil),
+        smtp_pass: ENV.fetch("LL_SMTP_PASS", nil)
       ).enable
       Task::Svn::Diff.new.run(
         [],
         Postman.new,
         Opts.new(
-          "from" => ENV["LL_SMTP_FROM"],
+          "from" => ENV.fetch("LL_SMTP_FROM", nil),
           "svn_url" => "https://svn.riouxsvn.com/touch4ll",
-          "svn_user" => ENV["svn_log_user"],
-          "svn_password" => ENV["svn_log_password"],
+          "svn_user" => ENV.fetch("svn_log_user", nil),
+          "svn_password" => ENV.fetch("svn_log_password", nil),
           "commit_url" => "https://view.commit.com?rev=",
           "user" => "https://user.com?id=",
-          "to" => ENV["LL_SMTP_TO"],
+          "to" => ENV.fetch("LL_SMTP_TO", nil),
           "since_rev" => "1",
           "subject" => "[SVN] Changed since rev1",
           "template" => "lib/messages/svn_diff.erb",

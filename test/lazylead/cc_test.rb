@@ -115,18 +115,18 @@ module Lazylead
     #  lead's email, thus, its took few minutes for huge projects.
     test "cc by component is found" do
       skip "Disabled due to performance issue with Jira API"
-      assert_equal ENV["cc_email"],
+      assert_equal ENV.fetch("cc_email", nil),
                    ComponentCC.new(
-                     ENV["cc_project"],
+                     ENV.fetch("cc_project", nil),
                      Jira.new(
                        {
-                         username: ENV["JIRA_USER"],
-                         password: ENV["JIRA_PASS"],
-                         site: ENV["JIRA_URL"],
+                         username: ENV.fetch("JIRA_USER", nil),
+                         password: ENV.fetch("JIRA_PASS", nil),
+                         site: ENV.fetch("JIRA_URL", nil),
                          context_path: ""
                        }
                      )
-                   ).cc(ENV["cc_component"])
+                   ).cc(ENV.fetch("cc_component", nil))
     end
 
     test "detect plain cc" do

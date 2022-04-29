@@ -41,7 +41,7 @@ module Lazylead
         f << "EnvTest=value"
         f.flush
         IniFile.new(filename: f).each { |_, k, v| ENV[k] = v }
-        assert_equal "value", ENV["EnvTest"]
+        assert_equal "value", ENV.fetch("EnvTest", nil)
       end
     end
     test "ini file not found" do

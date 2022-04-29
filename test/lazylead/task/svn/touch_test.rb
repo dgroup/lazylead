@@ -40,8 +40,8 @@ module Lazylead
         Postman.new,
         Opts.new(
           "svn_url" => "https://svn.riouxsvn.com/touch4ll",
-          "svn_user" => ENV["svn_touch_user"],
-          "svn_password" => ENV["svn_touch_password"],
+          "svn_user" => ENV.fetch("svn_touch_user", nil),
+          "svn_password" => ENV.fetch("svn_touch_password", nil),
           "commit_url" => "https://view.commit.com?rev=",
           "user" => "https://user.com?id=",
           "to" => "lead@fake.com",
@@ -63,8 +63,8 @@ module Lazylead
       assert_array %w[branches/0.13.x/readme.md trunk/readme.md],
                    Task::Svn::Touch.new.locations(
                      Opts.new("svn_url" => "https://svn.riouxsvn.com/touch4ll",
-                              "svn_user" => ENV["svn_touch_user"],
-                              "svn_password" => ENV["svn_touch_password"],
+                              "svn_user" => ENV.fetch("svn_touch_user", nil),
+                              "svn_password" => ENV.fetch("svn_touch_password", nil),
                               "files" => "readme.md")
                    )
     end
@@ -75,8 +75,8 @@ module Lazylead
       assert_equal 6,
                    Task::Svn::Touch.new.svn_log(
                      Opts.new("svn_url" => "https://svn.riouxsvn.com/touch4ll",
-                              "svn_user" => ENV["svn_touch_user"],
-                              "svn_password" => ENV["svn_touch_password"],
+                              "svn_user" => ENV.fetch("svn_touch_user", nil),
+                              "svn_password" => ENV.fetch("svn_touch_password", nil),
                               "files" => "readme.md",
                               "now" => "2020-08-17T00:00:00+01:00",
                               "period" => "864000")
@@ -95,8 +95,8 @@ module Lazylead
         },
         Task::Svn::Touch.new.touch(
           Opts.new("svn_url" => "https://svn.riouxsvn.com/touch4ll",
-                   "svn_user" => ENV["svn_touch_user"],
-                   "svn_password" => ENV["svn_touch_password"],
+                   "svn_user" => ENV.fetch("svn_touch_user", nil),
+                   "svn_password" => ENV.fetch("svn_touch_password", nil),
                    "files" => "readme.md",
                    "now" => "2022-02-17T00:00:00+01:00",
                    "period" => "8640")
@@ -116,8 +116,8 @@ module Lazylead
         },
         Task::Svn::Touch.new.touch(
           Opts.new("svn_url" => "https://svn.riouxsvn.com/touch4ll",
-                   "svn_user" => ENV["svn_touch_user"],
-                   "svn_password" => ENV["svn_touch_password"],
+                   "svn_user" => ENV.fetch("svn_touch_user", nil),
+                   "svn_password" => ENV.fetch("svn_touch_password", nil),
                    "files" => "readme.md",
                    "now" => "2022-02-17T00:00:00+01:00",
                    "period" => "8640",

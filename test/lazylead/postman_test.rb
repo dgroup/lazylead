@@ -41,15 +41,15 @@ module Lazylead
       Smtp.new(
         Log.new,
         NoSalt.new,
-        smtp_host: ENV["LL_SMTP_HOST"],
-        smtp_port: ENV["LL_SMTP_PORT"],
-        smtp_user: ENV["LL_SMTP_USER"],
-        smtp_pass: ENV["LL_SMTP_PASS"]
+        smtp_host: ENV.fetch("LL_SMTP_HOST", nil),
+        smtp_port: ENV.fetch("LL_SMTP_PORT", nil),
+        smtp_user: ENV.fetch("LL_SMTP_USER", nil),
+        smtp_pass: ENV.fetch("LL_SMTP_PASS", nil)
       ).enable
       Postman.new.send(
         Opts.new(
-          "to" => ENV["LL_SMTP_TO"],
-          "from" => ENV["LL_SMTP_FROM"],
+          "to" => ENV.fetch("LL_SMTP_TO", nil),
+          "from" => ENV.fetch("LL_SMTP_FROM", nil),
           "attachments" => ["readme.md"],
           "subject" => "[LL] Attachments",
           "template" => "lib/messages/savepoint.erb"
