@@ -91,10 +91,10 @@ cmd = lambda do
     Lazylead::Schedule.new(log: log),
     Lazylead::Smtp.new(
       log, Lazylead::Salt.new("smtp_salt"),
-      smtp_host: ENV["smtp_host"],
-      smtp_port: ENV["smtp_port"],
-      smtp_user: ENV["smtp_user"],
-      smtp_pass: ENV["smtp_pass"]
+      smtp_host: ENV.fetch("smtp_host", nil),
+      smtp_port: ENV.fetch("smtp_port", nil),
+      smtp_user: ENV.fetch("smtp_user", nil),
+      smtp_pass: ENV.fetch("smtp_pass", nil)
     )
   ).run(opts.to_h)
   return 0

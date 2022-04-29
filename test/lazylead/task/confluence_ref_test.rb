@@ -47,17 +47,17 @@ module Lazylead
                                                       "JIRA_PASS"
       Task::ConfluenceRef.new.run(
         Jira.new(
-          username: ENV["JIRA_USER"],
-          password: ENV["JIRA_PASS"],
-          site: ENV["JIRA_URL"],
+          username: ENV.fetch("JIRA_USER", nil),
+          password: ENV.fetch("JIRA_PASS", nil),
+          site: ENV.fetch("JIRA_URL", nil),
           context_path: ""
         ), "",
-        "jql" => ENV["CONFLUENCE_JQL"],
+        "jql" => ENV.fetch("CONFLUENCE_JQL", nil),
         "confluences" => [
           {
-            "url" => ENV["CONFLUENCE_URL"], "app" => ENV["CONFLUENCE_APP_ID"],
-            "name" => ENV["CONFLUENCE_NAME"], "type" => "com.atlassian.confluence",
-            "user" => ENV["CONFLUENCE_USER"], "pass" => ENV["CONFLUENCE_PASS"]
+            "url" => ENV.fetch("CONFLUENCE_URL", nil), "app" => ENV.fetch("CONFLUENCE_APP_ID", nil),
+            "name" => ENV.fetch("CONFLUENCE_NAME", nil), "type" => "com.atlassian.confluence",
+            "user" => ENV.fetch("CONFLUENCE_USER", nil), "pass" => ENV.fetch("CONFLUENCE_PASS", nil)
           }
         ].to_json
       )

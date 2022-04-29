@@ -16,19 +16,15 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/e873a41b1c76d7b2d6ae/maintainability)](https://codeclimate.com/github/dgroup/lazylead/maintainability)
 [![codecov](https://codecov.io/gh/dgroup/lazylead/branch/master/graph/badge.svg)](https://codecov.io/gh/dgroup/lazylead)
 
-[![DevOps By Rultor.com](http://www.rultor.com/b/dgroup/lazylead)](http://www.rultor.com/p/dgroup/lazylead)
-[![EO badge](http://www.elegantobjects.org/badge.svg)](http://www.elegantobjects.org/#principles)
-
 ### Overview
 Ticketing systems (Github, Jira, etc.) are strongly integrated into our processes and everyone understands their necessity. As soon as a developer becomes a lead/technical manager, he or she faces a set of routine tasks that are related to ticketing work. On large projects this becomes a problem, more and more you spend time running around on dashboards and tickets, looking for incorrect deviations in tickets and performing routine tasks instead of solving technical problems.
 
-The idea of automatic management is not new, for example [Zerocracy](https://www.zerocracy.com/) is available on the market. 
-I like this idea, but large companies/projects are not ready yet for such a decisive breakthrough and need step-by-step solutions such as [lazylead](https://github.com/dgroup/lazylead). 
-I think you remember how [static code analysis](https://en.wikipedia.org/wiki/Static_program_analysis) treated at in the past; today we have a huge toolkit (pmd, checkstyle, qulice, rubocop, peon, etc) for each language that allows you to avoid routine issues and remove from the code reviewer the unnecessary load.
+The idea of automatic management is not new, but large companies/projects are not ready yet for such a decisive breakthrough and need step-by-step solutions such as [lazylead](https://github.com/dgroup/lazylead). 
+I think you remember how [static code analysis](https://en.wikipedia.org/wiki/Static_program_analysis) treated at in the past; today we have a huge toolkit (pmd, checkstyle, qulice, rubocop, peon, etc) for each language that allows you to avoid routine issues and remove from the code reviewer the unnecessary load. The same logic we can apply to our day-to-day ticket management activities - let's reduce or even remove unnecessary routine actions.
  
 Join our telegram chat [lazylead](https://t.me/lazyleads) for discussions.
 
-*Legend*
+Legend:
 
 - 🚴🏽 in-progress 
 - ⌛ planned 
@@ -185,7 +181,7 @@ For simplicity, we are using [docker-compose](https://docs.docker.com/compose/):
 
 <a href="https://www.buymeacoffee.com/lazylead" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
-[Pull requests](http://www.elegantobjects.org/#principles) are welcome! Don't forget to add your name to contribution section and run this, beforehand:
+Pull requests are welcome! Don't forget to add your name to contribution section and run this, beforehand:
 ```ruby
 rake -A
 ```
