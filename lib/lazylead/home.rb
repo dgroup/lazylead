@@ -32,7 +32,7 @@ module Lazylead
   # License:: MIT
   class Home
     def dir
-      ENV["LL_HOME"].nil? ? Dir.pwd : ENV["LL_HOME"]
+      ENV["LL_HOME"].nil? ? Dir.pwd : ENV.fetch("LL_HOME", nil)
     end
   end
 end
