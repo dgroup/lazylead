@@ -52,7 +52,6 @@ tasks instead of solving technical problems."
   If you have any issues, report to our GitHub repo: https://github.com/dgroup/lazylead"
   s.files = `git ls-files`.split($RS)
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  s.test_files = s.files.grep(%r{^(test|features)/})
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[readme.md license.txt]
   s.add_runtime_dependency "activerecord", "6.1.3"
