@@ -1,6 +1,7 @@
 [![Versions](https://img.shields.io/badge/semver-2.0-green)](https://semver.org/spec/v2.0.0.html)
 [![Gem Version](https://badge.fury.io/rb/lazylead.svg)](https://rubygems.org/gems/lazylead)
-[![Downloads](https://ruby-gem-downloads-badge.herokuapp.com/lazylead?type=total)](https://rubygems.org/gems/lazylead)
+
+[![Downloads](https://img.shields.io/gem/dt/lazylead)](https://rubygems.org/gems/lazylead)
 [![](https://img.shields.io/docker/pulls/dgroup/lazylead.svg)](https://hub.docker.com/r/dgroup/lazylead "Image pulls")
 [![](https://images.microbadger.com/badges/image/dgroup/lazylead.svg)](https://microbadger.com/images/dgroup/lazylead "Image layers")
 [![Commit activity](https://img.shields.io/github/commit-activity/y/dgroup/lazylead.svg?style=flat-square)](https://github.com/dgroup/lazylead/graphs/commit-activity)
