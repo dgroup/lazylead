@@ -133,7 +133,7 @@ module Lazylead
     # Assemble file name where email to be print
     def filename(opts)
       dir = @env.fetch("file_postman_dir", ".")
-      FileUtils.mkdir_p(dir) unless File.exist?(dir)
+      FileUtils.mkdir_p(dir)
       File.join(dir, Zaru.sanitize!("#{Time.now.nsec}-#{opts['subject']}.html"))
     end
   end
