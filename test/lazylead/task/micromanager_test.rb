@@ -35,14 +35,14 @@ module Lazylead
     test "alert in case duedate changed by not authorized person" do
       Lazylead::Smtp.new.enable
       Task::Micromanager.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "to" => "lead@company.com",
           "from" => "ll@company.com",
-          "jql" => "key in ('STS-3599','SPR-6541') and duedate is not empty",
+          "jql" => "duedate is not EMPTY and key in (DOCS-194, DOCS-144, DOCS-143)",
           "fields" => "assignee,duedate,priority,created,summary,reporter",
-          "allowed" => "tom,mike,bob",
+          "allowed" => "matulef,mike,bob",
           "period" => "86400",
           "now" => "2009-12-10T00:04:00.000+0000",
           "subject" => "DD: How dare you?",
@@ -50,7 +50,7 @@ module Lazylead
         )
       )
       assert_email "DD: How dare you?",
-                   "SPR-6541", "Major", "(kdonald)", "2009-12-10", "Spring's Maven Central", "tom,mike,bob"
+                   "DOCS-144", "Major - P3", "2012-03-01", "New Documentation Review: Glossary", "matulef,mike,bob"
     end
 
     test "since for past 1 min" do

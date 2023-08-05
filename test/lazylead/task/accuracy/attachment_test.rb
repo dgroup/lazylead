@@ -35,14 +35,14 @@ module Lazylead
       end
 
       def matches?(attach)
-        "ConfigServerLogWithException.txt".eql? attach.attrs["filename"]
+        "Main.java".eql? attach.attrs["filename"]
       end
     end
 
     test "attachment is present" do
       assert Txt.new.passed(
-        NoAuthJira.new("https://jira.spring.io")
-                  .issues("key=XD-3761", fields: ["attachment"])
+        NoAuthJira.new("https://jira.mongodb.org")
+                  .issues("key=JAVA-8", fields: ["attachment"])
                   .first
       )
     end
