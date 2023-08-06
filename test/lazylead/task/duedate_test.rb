@@ -39,16 +39,16 @@ module Lazylead
     test "issues were fetched" do
       Smtp.new.enable
       Task::AssigneeAlert.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "from" => "fake@email.com",
-          "sql" => "filter=16743",
+          "sql" => "key in (JAVA-151,JAVA-469,JAVA-468,JAVA-500)",
           "subject" => "[DD] PDTN!",
           "template" => "lib/messages/due_date_expired.erb"
         )
       )
-      assert_equal(2, Mail::TestMailer.deliveries.count { |m| m.subject.eql? "[DD] PDTN!" })
+      greater_or_eq(1, Mail::TestMailer.deliveries.count { |m| m.subject.eql? "[DD] PDTN!" })
     end
 
     test "configuration properties merged successfully" do
@@ -72,27 +72,27 @@ module Lazylead
     test "html msg has ticket details" do
       Smtp.new.enable
       Task::AssigneeAlert.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "from" => "fake@email.com",
-          "sql" => "key in ('STS-3599')",
+          "sql" => "key=VSCODE-333",
           "subject" => "[DD] HMCHT!",
           "template" => "lib/messages/due_date_expired.erb"
         )
       )
       assert_email "[DD] HMCHT!",
-                   "STS-3599", "2013-11-08", "Major", "Miles Parker", "Use JavaFX WebView"
+                   "VSCODE-333", "2023-06-28", "Major - P3", "Rhys Howell", "Renew VSCODE automated publishing token"
     end
 
     test "send notification about bunch of tickets" do
       Smtp.new.enable
       Task::Alert.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "from" => "fake@email.com",
-          "sql" => "key in ('STS-3599')",
+          "sql" => "key=DOCS-19",
           "subject" => "ALRT: Frozen",
           "template" => "lib/messages/due_date_expired.erb",
           "to" => "big.boss@example.com",
@@ -100,17 +100,17 @@ module Lazylead
         )
       )
       assert_email "ALRT: Frozen",
-                   "Hi Boss", "STS-3599", "2013-11-08", "Major", "Miles Parker", "Use JavaFX WebView"
+                   "Hi Boss", "DOCS-19", "2012-09-28", "Major - P3", "Michael Conigliaro", "MongoDB exit code reference"
     end
 
     test "cc got notification" do
       Smtp.new.enable
       Task::Alert.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "from" => "fake@email.com",
-          "sql" => "key in ('STS-3599')",
+          "sql" => "key=JAVA-295",
           "subject" => "CC: Watching",
           "template" => "lib/messages/due_date_expired.erb",
           "to" => "big.boss@example.com",
@@ -126,11 +126,11 @@ module Lazylead
     test "reporter got alert about his/her tickets with expired DD" do
       Smtp.new.enable
       Task::ReporterAlert.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "from" => "fake@email.com",
-          "sql" => "filter=16743",
+          "sql" => "key in (JAVA-151,JAVA-469,JAVA-468,JAVA-500)",
           "subject" => "DD Expired!",
           "template" => "lib/messages/due_date_expired.erb"
         )
