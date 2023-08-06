@@ -36,20 +36,20 @@ module Lazylead
     test "last change to Done" do
       Smtp.new.enable
       Lazylead::Task::AlertIf.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
-          "to_status" => "Done",
+          "to_status" => "Closed",
           "to" => "lead@company.com",
           "from" => "ll@company.com",
           "rules" => "Lazylead::ToStatus",
-          "jql" => "key=XD-3064",
+          "jql" => "key=JAVA-500",
           "subject" => "[LL] alert if",
           "template" => "lib/messages/alertif.erb"
         )
       )
       assert_email "[LL] alert if",
-                   "XD-3064", "Critical", "Done", "Glenn Renfro", "Thomas Risberg", "HdfsMongoDB"
+                   "JAVA-500", "Major - P3", "Closed", "Uladzimir Mihura", "Jeffrey Yemin", "m/r out:db and out:sharded options"
     end
   end
 end

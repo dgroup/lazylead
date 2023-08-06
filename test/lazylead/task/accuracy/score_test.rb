@@ -79,10 +79,10 @@ module Lazylead
     end
 
     test "detect non-system reporter" do
-      assert_equal "grussell",
+      assert_equal "tszming",
                    Score.new(
-                     NoAuthJira.new("https://jira.spring.io")
-                               .issues("key=INT-4116", expand: "changelog")
+                     NoAuthJira.new("https://jira.mongodb.org")
+                               .issues("key=JAVA-151", expand: "changelog")
                                .first,
                      Opts.new("system-users" => "abilan")
                    ).reporter
