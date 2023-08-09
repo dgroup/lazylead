@@ -35,7 +35,7 @@ module Lazylead
     test "detect affected build" do
       Lazylead::Smtp.new.enable
       Task::Accuracy.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "from" => "ll@fake.com",
@@ -54,14 +54,14 @@ module Lazylead
             "90-100" => "https://meme.com?id=wow.gif"
           }.to_json.to_s,
           "docs" => "https://github.com/dgroup/lazylead/blob/master/.github/ISSUE_TEMPLATE/bug_report.md",
-          "jql" => "key in (DATAJDBC-490, DATAJDBC-492, DATAJDBC-493)",
+          "jql" => "key=JAVA-151",
           "max_results" => 200,
           "subject" => "[LL] Raised tickets",
           "template" => "lib/messages/accuracy.erb"
         )
       )
       assert_email "[LL] Raised tickets",
-                   "DATAJDBC-493", "0.5", "100%", "MyeongHyeonLee", "Deadlock occurs"
+                   "JAVA-151", "0.5", "100%", "Tsz Ming Wong", "Dot allowed in key names"
     end
 
     test "construct accuracy from orm" do
@@ -79,7 +79,7 @@ module Lazylead
       Lazylead::Smtp.new.enable
       assert_equal 1,
                    Task::Accuracy.new.run(
-                     NoAuthJira.new("https://jira.spring.io"),
+                     NoAuthJira.new("https://jira.mongodb.org"),
                      Postman.new,
                      Opts.new(
                        "from" => "ll@fake.com",
@@ -90,7 +90,7 @@ module Lazylead
                          "0" => "#FF4F33",
                          "57" => "#19DD1E"
                        }.to_json.to_s,
-                       "jql" => "key > DATAJDBC-490",
+                       "jql" => "key > JAVA-500",
                        "limit" => "1",
                        "subject" => "[LL] Raised tickets",
                        "template" => "lib/messages/accuracy.erb"
@@ -101,7 +101,7 @@ module Lazylead
     test "score is correct" do
       Lazylead::Smtp.new.enable
       Task::Accuracy.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "from" => "ll@fake.com",
@@ -113,14 +113,14 @@ module Lazylead
             "30" => "#FEC15E",
             "50" => "#19DD1E"
           }.to_json.to_s,
-          "jql" => "key=DATAMONGO-1532",
+          "jql" => "key=JAVA-4344",
           "silent" => "true",
-          "subject" => "[LL] Check DATAMONGO-1532",
+          "subject" => "[LL] Check JAVA-4344",
           "template" => "lib/messages/accuracy.erb"
         )
       )
-      assert_email "[LL] Check DATAMONGO-1532",
-                   "DATAMONGO-1532", "3", "42.86%"
+      assert_email "[LL] Check JAVA-4344",
+                   "JAVA-4344", "3", "42.86%"
     end
   end
 end

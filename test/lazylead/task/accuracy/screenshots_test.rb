@@ -47,8 +47,8 @@ module Lazylead
 
     test "issue has several .png attachments mentioned using !xxx|thumbnail! option" do
       assert Screenshots.new.passed(
-        NoAuthJira.new("https://jira.spring.io")
-                  .issues("key=SPR-15729", fields: %w[attachment description])
+        NoAuthJira.new("https://jira.mongodb.org")
+                  .issues("key=JAVA-4903", fields: %w[attachment description])
                   .first
       )
     end
