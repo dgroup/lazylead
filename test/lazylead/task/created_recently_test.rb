@@ -37,18 +37,18 @@ module Lazylead
     test "issues were fetched" do
       Smtp.new.enable
       Task::Alert.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "from" => "fake@email.com",
           "to" => "my@team.com",
-          "sql" => "labels=xd and key in (XD-3766, SGF-726)",
+          "sql" => "key in (JAVA-4403, JAVA-4417)",
           "subject" => "[CR] 20min ago!",
           "template" => "lib/messages/created_recently.erb"
         )
       )
       assert_email "[CR] 20min ago!",
-                   "XD-3766", "SGF-726"
+                   "JAVA-4403", "JAVA-4417"
     end
   end
 end
