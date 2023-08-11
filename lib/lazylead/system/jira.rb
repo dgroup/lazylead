@@ -132,6 +132,8 @@ module Lazylead
     end
 
     def email
+      return @usr["emailAddress"] unless @usr["emailAddress"].nil?
+      return id if id.include?("@")
       @usr["emailAddress"]
     end
 

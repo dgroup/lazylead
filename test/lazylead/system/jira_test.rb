@@ -31,9 +31,9 @@ require_relative "../../../lib/lazylead/system/jira"
 module Lazylead
   class JiraTest < Lazylead::Test
     test "found issue by id" do
-      assert_equal "DATAJDBC-480",
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key in ('DATAJDBC-480')")
+      assert_equal "JAVA-150",
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key in ('JAVA-150')")
                              .first
                              .key
     end
@@ -46,20 +46,20 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
-      assert_equal "DATAJDBC-500",
+      assert_equal "JAVA-150",
                    ORM::Task.find(4)
                             .system
                             .connect
-                            .issues("key in ('DATAJDBC-500')")
+                            .issues("key in ('JAVA-150')")
                             .first
                             .key,
-                   "Id mismatch for https://jira.spring.io/browse/DATAJDBC-500"
+                   "Id mismatch for https://jira.mongodb.org/browse/JAVA-150"
     end
 
     test "group by assignee" do
       assert_equal 2,
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("filter=16743")
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("filter=46202")
                              .group_by(&:assignee)
                              .min_by { |a| a.first.id }
                              .length,
@@ -67,58 +67,58 @@ module Lazylead
     end
 
     test "issue reporter fetched successfully" do
-      assert_equal "Mark Paluch",
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key in ('DATAJDBC-480')")
+      assert_equal "Joseph Wang",
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key in ('JAVA-150')")
                              .first
                              .reporter
                              .name
     end
 
     test "issue url fetched successfully" do
-      assert_equal "https://jira.spring.io/browse/DATAJDBC-480",
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key in ('DATAJDBC-480')")
+      assert_equal "https://jira.mongodb.org/browse/JAVA-150",
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key in ('JAVA-150')")
                              .first
                              .url
     end
 
     test "issue history found" do
-      greater_or_eq 8,
-                    NoAuthJira.new("https://jira.spring.io")
-                              .issues("key='DATAJDBC-480'", expand: "changelog")
+      greater_or_eq 10,
+                    NoAuthJira.new("https://jira.mongodb.org")
+                              .issues("key='JAVA-150'", expand: "changelog")
                               .first
                               .history
                               .size
     end
 
     test "issue history not found" do
-      assert_empty NoAuthJira.new("https://jira.spring.io")
-                             .issues("key='DATAJDBC-480'")
+      assert_empty NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key='JAVA-150'")
                              .first
                              .history
     end
 
     test "2nd issue history item is correct" do
-      assert_equal "396918",
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key='DATAJDBC-480'", expand: "changelog")
+      assert_equal "24893",
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key='JAVA-150'", expand: "changelog")
                              .first
                              .history[2]["id"]
     end
 
     test "issue has expected status" do
       assert_equal "Closed",
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key='DATAJDBC-480'")
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key='JAVA-150'")
                              .first
                              .status
     end
 
     test "issue has 1 field" do
       assert_equal 1,
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key='DATAJDBC-480'", fields: ["summary"])
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key='JAVA-150'", fields: ["summary"])
                              .first
                              .fields
                              .size
@@ -143,46 +143,46 @@ module Lazylead
     end
 
     test "description is correct" do
-      assert_words ["DATACMNS-1639 moved entity instantiators"],
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key=DATAJDBC-480")
+      assert_words ["We've multiple colos"],
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key=JAVA-150")
                              .first
                              .description
     end
 
     test "component is correct" do
-      assert_equal ["Stream Module"],
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key=XD-3766")
+      assert_equal ["GridFS"],
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key=JAVA-192")
                              .first
                              .components
     end
 
-    test "field found" do
-      assert_includes NoAuthJira.new("https://jira.spring.io")
-                                .issues("key=DATAJDBC-480")
+    test "description available as field" do
+      assert_includes NoAuthJira.new("https://jira.mongodb.org")
+                                .issues("key=JAVA-192")
                                 .first["description"],
-                      "DATACMNS-1639 moved "
+                      ".files.drop() + .chunks.drop()"
     end
 
     test "field not found" do
-      assert_predicate NoAuthJira.new("https://jira.spring.io")
-                                 .issues("key=DATAJDBC-480")
+      assert_predicate NoAuthJira.new("https://jira.mongodb.org")
+                                 .issues("key=JAVA-150")
                                  .first["absent field"], :blank?
     end
 
     test "labels found" do
-      assert_includes NoAuthJira.new("https://jira.spring.io")
-                                .issues("key=XD-3766")
+      assert_includes NoAuthJira.new("https://jira.mongodb.org")
+                                .issues("key=JAVA-295")
                                 .first
                                 .labels,
-                      "Spring"
+                      "android"
     end
 
     test "bulk search in few iterations" do
       assert_equal 3,
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key>DATAJDBC-500 and key < DATAJDBC-504", max_results: 1)
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key>JAVA-150 and key < JAVA-154", max_results: 1)
                              .size
     end
 
@@ -190,23 +190,23 @@ module Lazylead
       refute_empty Jira.new(
         "username" => nil,
         "password" => nil,
-        "site" => "https://jira.spring.io",
+        "site" => "https://jira.mongodb.org",
         "context_path" => ""
-      ).issues("key=DATAJDBC-480")
+      ).issues("key=JAVA-150")
     end
 
     test "sprint is found" do
-      assert_equal "Sprint 68",
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key=XD-3744", fields: ["customfield_10480"])
+      assert_equal "Java Sprint 25",
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key=JAVA-192", fields: ["customfield_10557"])
                              .first
-                             .sprint("customfield_10480")
+                             .sprint("customfield_10557")
     end
 
     test "bulk search in few iterations with limit" do
       assert_equal 3,
-                   NoAuthJira.new("https://jira.spring.io")
-                             .issues("key > DATAJDBC-500", max_results: 1, "limit" => 3)
+                   NoAuthJira.new("https://jira.mongodb.org")
+                             .issues("key > JAVA-150", max_results: 1, "limit" => 3)
                              .size
     end
   end

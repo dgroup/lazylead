@@ -34,34 +34,34 @@ module Lazylead
     # In current tests the grid label is 'PullRequest'.
     # The default grid labels are 0%, 10%, 20%, etc., the reason why
     # 'PullRequest' label is used here as we don't have 0%, 10%, etc.
-    # on https://jira.spring.io.
+    # on https://jira.mongodb.org.
     test "grid label found" do
       assert_predicate Labels.new(
-        NoAuthJira.new("https://jira.spring.io").issues("key=XD-3725").first,
-        Opts.new("grid" => "PullRequest,  ,")
+        NoAuthJira.new("https://jira.mongodb.org").issues("key=JAVA-295").first,
+        Opts.new("grid" => "android,  ,")
       ), :exists?
     end
 
     test "grid label set by ll" do
       assert_predicate Labels.new(
-        NoAuthJira.new("https://jira.spring.io")
-                  .issues("key=XD-3725", expand: "changelog")
+        NoAuthJira.new("https://jira.mongodb.org")
+                  .issues("key=JAVA-4190", expand: "changelog")
                   .first,
-        Opts.new("grid" => "PullRequest", "author" => "grussell")
+        Opts.new("grid" => "QP-priority", "author" => "JIRAUSER1263031")
       ), :valid?
     end
 
     test "email notification" do
       Lazylead::Smtp.new.enable
       Lazylead::Task::OnlyLL.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "from" => "ll@fake.com",
           "to" => "lead@fake.com",
-          "grid" => "PullRequest",
+          "grid" => "android",
           "author" => "LL",
-          "jql" => "key=XD-3725",
+          "jql" => "key=JAVA-295",
           "max_results" => 200,
           "subject" => "[LL] Only",
           "fields" => "priority,summary,reporter,labels",
@@ -69,18 +69,18 @@ module Lazylead
         )
       )
       assert_email "[LL] Only",
-                   "XD-3725", "Blocker", "EmbeddedHeadersMessageConverter"
+                   "JAVA-295", "Major - P3", "Support Android platform"
     end
 
-    test "detect score" do
-      assert_equal "PullRequest",
+    test "detect score label" do
+      assert_equal "QP-priority",
                    Labels.new(
-                     NoAuthJira.new("https://jira.spring.io")
-                               .issues("key=XD-3725", expand: "changelog")
+                     NoAuthJira.new("https://jira.mongodb.org")
+                               .issues("key=JAVA-4190", expand: "changelog")
                                .first,
                      Opts.new(
-                       "grid" => "PullRequest",
-                       "author" => "grussell"
+                       "grid" => "QP-priority",
+                       "author" => "JIRAUSER1263031"
                      )
                    ).score
     end

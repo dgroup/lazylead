@@ -35,20 +35,20 @@ module Lazylead
     test "alert in case assignee changed by not authorized person" do
       Lazylead::Smtp.new.enable
       Task::Assignment.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "to" => "lead@company.com",
           "from" => "ll@company.com",
-          "jql" => "key in ('DATAJDBC-480') and assignee is not empty",
+          "jql" => "key=JAVA-4190",
           "allowed" => "tom,mike,bob",
           "subject" => "Assignment: How dare you?",
           "template" => "lib/messages/illegal_assignee_change.erb"
         )
       )
       assert_email "Assignment: How dare you?",
-                   "DATAJDBC-480", "01-Apr", "Minor", "Mark Paluch", "tom,mike,bob",
-                   "EntityInstantiators"
+                   "JAVA-4190", "Jeffrey Yemin",	"Valentin Kavalenka",
+                   "Client side builder for operators supported by $search", "Nihal Jain"
     end
   end
 end

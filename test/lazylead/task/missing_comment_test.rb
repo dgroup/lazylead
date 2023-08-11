@@ -35,13 +35,13 @@ module Lazylead
     test "alert in case missing comment" do
       Lazylead::Smtp.new.enable
       Task::MissingComment.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "to" => "lead@company.com",
           "addressee" => "Tom",
           "from" => "ll@company.com",
-          "jql" => "key=DATAJDBC-523",
+          "jql" => "key=JAVA-65",
           "text" => "ftp.com/demo.avi",
           "details" => "reference to <code>ftp.com/demo.avi</code>",
           "subject" => "Expected ftp link is missing",
@@ -50,7 +50,7 @@ module Lazylead
         )
       )
       assert_email "Expected ftp link is missing",
-                   "DATAJDBC-523", "Major", "Mark Paluch", "https://github.com/spring-projects/spring-data-jdbc/commit/aadbb667ed1d61139d5ac51a06eb3dd1b39316db#diff-510a5041bb8a0575e97fedf105606b83R130"
+                   "JAVA-65", "Minor - P4", "http://github.com/mongodb/mongo-java-driver/commit/729fc494e5305d362eea95b01c381f2a7daf2652"
     end
   end
 end

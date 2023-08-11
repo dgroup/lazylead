@@ -30,12 +30,12 @@ require_relative "../../../../lib/lazylead/task/alert/changed_to"
 
 module Lazylead
   class ToStatusTest < Lazylead::Test
-    test "last change to Done" do
+    test "last change to Closed" do
       assert Lazylead::ToStatus.new.passed(
-        NoAuthJira.new("https://jira.spring.io")
-                  .issues("key=XD-3064", Opts.new.jira_defaults.merge(expand: "changelog"))
+        NoAuthJira.new("https://jira.mongodb.org")
+                  .issues("key=JAVA-151", Opts.new.jira_defaults.merge(expand: "changelog"))
                   .first,
-        Opts.new("to_status" => "Done")
+        Opts.new("to_status" => "Closed")
       )
     end
   end

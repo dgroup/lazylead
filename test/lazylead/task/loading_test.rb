@@ -35,15 +35,15 @@ module Lazylead
     test "notify about team loading" do
       Lazylead::Smtp.new.enable
       Task::Loading.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "to" => "lead@company.com",
           "from" => "ll@company.com",
-          "jql" => "key in (STS-3599, XD-3739, XD-3744)",
-          "team" => "mclaren:Tom McLaren,milesparker:Mi Pa,grussell:Gary Ru",
+          "jql" => "key in (JAVA-2515, JAVA-2514, JAVA-2142, JAVA-2139, JAVA-2137)",
+          "team" => "ross@mongodb.com:Ross Lawley,jeff.yemin@mongodb.com:Jeffrey Yemin,mclaren:Tom McLaren",
           "user_link" => "https://user.com?id=",
-          "search_link" => "https://jira.spring.io/issues/?jql=",
+          "search_link" => "https://jira.mongodb.org/issues/?jql=",
           "fields" => "assignee,duedate,customfield_10480",
           "sprint" => "customfield_10480",
           "subject" => "[LL] Team loading",
@@ -51,8 +51,8 @@ module Lazylead
         )
       )
       assert_email "[LL] Team loading",
-                   "grussell", "Gary Ru", "Sprint 68", "1",
-                   "Miles Parker", "No sprint: 1", "2013-11-08",
+                   "ross@mongodb.com", "Ross Lawley", "No sprint: 1",
+                   "jeff.yemin@mongodb.com", "Jeffrey Yemin", "No sprint: 4",
                    "Tom McLaren", "0"
     end
   end
