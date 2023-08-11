@@ -98,8 +98,8 @@ module Lazylead
       comment = [
         "Hi [~#{reporter}],",
         "",
-        "The triage accuracy is '{color:#{color}}#{@score}{color}'" \
-        " (~{color:#{color}}#{@accuracy}%{color}), here are the reasons why:",
+        "The triage accuracy is '{color:#{color}}#{@score}{color}' " \
+        "(~{color:#{color}}#{@accuracy}%{color}), here are the reasons why:",
         "|| Ticket requirement || Status || Field ||"
       ]
       @opts[:rules].each do |r|

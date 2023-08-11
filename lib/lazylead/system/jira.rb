@@ -47,8 +47,8 @@ module Lazylead
       @salt = salt
       @log = log
       @log.debug "Initiate a Jira client using following opts: " \
-                 "#{@opts.except 'password', :password} " \
-                 " and salt #{@salt.id} (found=#{@salt.specified?})"
+                 "#{@opts.except 'password', :password}  " \
+                 "and salt #{@salt.id} (found=#{@salt.specified?})"
     end
 
     # Find the jira issues by 'JQL'

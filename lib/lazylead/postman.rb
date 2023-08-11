@@ -54,8 +54,8 @@ module Lazylead
     # :opts   :: the mail configuration like to, from, cc, subject, template.
     def send(opts)
       if opts.msg_to.empty?
-        @log.warn "ll-013: Email can't be sent to '#{opts.msg_to}," \
-                  " more: '#{opts}'"
+        @log.warn "ll-013: Email can't be sent to '#{opts.msg_to}, " \
+                  "more: '#{opts}'"
       else
         mail = make_email(opts)
         mail.deliver
