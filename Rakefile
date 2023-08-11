@@ -48,6 +48,7 @@ end
 
 task default: %i[init_hooks clean rubocop test sqlint docker]
 # @todo #/DEV Update copyright to 2023, so far lets disable this task for separate PR
+
 # task default: %i[init_hooks clean rubocop test sqlint copyright docker]
 
 task :init_hooks do
