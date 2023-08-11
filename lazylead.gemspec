@@ -28,8 +28,6 @@ lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |s|
-  s.specification_version = 2 if s.respond_to? :specification_version=
-  s.rubygems_version = "2.2"
   s.required_ruby_version = ">=2.6.5"
   s.name = "lazylead"
   s.version = "0.0.0"
@@ -93,7 +91,7 @@ tasks instead of solving technical problems."
   s.add_development_dependency "rdoc", "6.4.0"
   s.add_development_dependency "rubocop", "1.50.2"
   s.add_development_dependency "rubocop-minitest", "0.20.1"
-  s.add_development_dependency "rubocop-performance", "1.14.2"
+  s.add_development_dependency "rubocop-performance", "1.16.0"
   s.add_development_dependency "rubocop-rake", "0.6.0"
   s.add_development_dependency "rubocop-rspec", "2.11.1"
   s.add_development_dependency "ruby-prof", "1.4.3"

@@ -78,7 +78,7 @@ module Lazylead
       words.each_with_index do |e, i|
         next unless e.start_with? text
         pair = snippets.last
-        pair << i if pair.size.zero? || pair.size == 1
+        pair << i if pair.empty? || pair.size == 1
         snippets[-1] = pair
         snippets << [] if pair.size == 2
       end

@@ -154,6 +154,10 @@ Style/SwapValues: # (new in 1.1)
   Enabled: true
 Style/HashConversion: # (new in 1.10)
   Enabled: true
+Style/RedundantStringEscape: # (new in 1.7)
+  Enabled: true
+  Exclude:
+    - "test/lazylead/task/svn/grep_test.rb"
 Minitest/AssertInDelta: # (new in 0.10)
   Enabled: true
 Minitest/AssertionInLifecycleHook: # (new in 0.10)
@@ -210,7 +214,7 @@ Performance/RedundantEqualityComparisonBlock: # (new in 1.10)
   Enabled: true
 Performance/RedundantSplitRegexpArgument: # (new in 1.10)
   Enabled: true
-Gemspec/DateAssignment: # (new in 1.10)
+Gemspec/DeprecatedAttributeAssignment: # (new in 1.10)
   Enabled: true
 Gemspec/RequireMFA:
   Enabled: false
