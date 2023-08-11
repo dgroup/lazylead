@@ -35,12 +35,12 @@ module Lazylead
     test "alert in case fixvesion changed by not authorized person" do
       Lazylead::Smtp.new.enable
       Task::FixVersion.new.run(
-        NoAuthJira.new("https://jira.spring.io"),
+        NoAuthJira.new("https://jira.mongodb.org"),
         Postman.new,
         Opts.new(
           "to" => "lead@company.com",
           "from" => "ll@company.com",
-          "jql" => "key in ('DATAJDBC-480') and fixVersion is not empty",
+          "jql" => "key=JAVA-5020",
           "allowed" => "tom,mike,bob",
           "fields" => "description,reporter,priority,summary,created,fixVersions",
           "subject" => "FixVersion: How dare you?",
@@ -48,8 +48,9 @@ module Lazylead
         )
       )
       assert_email "FixVersion: How dare you?",
-                   "DATAJDBC-480", "01-Apr-2020", "Minor", "Mark Paluch", "tom,mike,bob",
-                   "EntityInstantiators"
+                   "JAVA-5020", "Minor - P4", "4.10.0", "16-Jun-2023 04:53:47 PM",
+                   "Replace @Evolving with @Sealed where appropriate and possible",
+                   "tom,mike,bob"
     end
   end
 end
