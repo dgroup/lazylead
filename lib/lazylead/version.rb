@@ -23,5 +23,5 @@
 # OR OTHER DEALINGS IN THE SOFTWARE.
 
 module Lazylead
-  VERSION = "0.0.0"
+  VERSION = "0.13.0"
 end
