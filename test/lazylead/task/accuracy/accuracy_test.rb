@@ -56,11 +56,11 @@ module Lazylead
           "docs" => "https://github.com/dgroup/lazylead/blob/master/.github/ISSUE_TEMPLATE/bug_report.md",
           "jql" => "key=JAVA-151",
           "max_results" => 200,
-          "subject" => "[LL] Raised tickets",
+          "subject" => "[LL] Estimated accuracy for reported tickets",
           "template" => "lib/messages/accuracy.erb"
         )
       )
-      assert_email "[LL] Raised tickets",
+      assert_email "[LL] Estimated accuracy for reported tickets",
                    "JAVA-151", "0.5", "100%", "Tsz Ming Wong", "Dot allowed in key names"
     end
 
