@@ -47,6 +47,7 @@ module Lazylead
           "template" => "lib/messages/created_recently.erb"
         )
       )
+
       assert_email "[CR] 20min ago!",
                    "JAVA-4403", "JAVA-4417"
     end

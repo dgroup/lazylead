@@ -38,6 +38,7 @@ module Lazylead
         subject "The fake!"
         body "Fake body"
       end
+
       assert_equal(1, Mail::TestMailer.deliveries.count { |m| m.subject.eql? "The fake!" })
     end
 

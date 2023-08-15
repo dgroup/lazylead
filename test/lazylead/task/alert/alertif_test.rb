@@ -48,6 +48,7 @@ module Lazylead
           "template" => "lib/messages/alertif.erb"
         )
       )
+
       assert_email "[LL] alert if",
                    "JAVA-500", "Major - P3", "Closed", "Uladzimir Mihura", "Jeffrey Yemin", "m/r out:db and out:sharded options"
     end

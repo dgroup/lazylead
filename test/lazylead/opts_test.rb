@@ -38,6 +38,7 @@ module Lazylead
     test "able to write by key" do
       opts = Opts.new
       opts["key"] = "value"
+
       assert_equal "value", opts["key"]
     end
 

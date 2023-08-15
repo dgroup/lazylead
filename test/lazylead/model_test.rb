@@ -37,6 +37,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_equal "${usr}", ORM::Team.find(1).to_hash["usr"]
     end
 
@@ -48,6 +49,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_equal "Mike",
                    ORM::Team.find(1).env(ORM::Team.find(1).to_hash)["usr"]
     end
@@ -59,6 +61,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_kind_of Lazylead::Postman, ORM::Task.find(5).postman
     end
 
@@ -70,6 +73,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_equal "value", ORM::Task.find(171).props["envkey"]
     end
 
@@ -80,6 +84,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       refute_predicate ORM::Task.find(260), :to_h?
     end
 
@@ -90,6 +95,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_kind_of Jira, ORM::Task.find(270).second_sys
     end
   end

@@ -46,6 +46,7 @@ module Lazylead
           "template" => "lib/messages/illegal_assignee_change.erb"
         )
       )
+
       assert_email "Assignment: How dare you?",
                    "JAVA-4190", "Jeffrey Yemin",	"Valentin Kavalenka",
                    "Client side builder for operators supported by $search", "Nihal Jain"
