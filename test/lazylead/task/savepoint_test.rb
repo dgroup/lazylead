@@ -44,6 +44,7 @@ module Lazylead
           "to" => "big.boss@example.com"
         )
       )
+
       assert_equal 'text/markdown; filename="readme.md"',
                    Mail::TestMailer.deliveries
                                    .find { |m| m.subject.eql? "[LL] Configuration backup" }

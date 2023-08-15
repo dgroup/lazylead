@@ -41,6 +41,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_equal "lead@fake.com", ORM::Task.find(154).props["cc"]
     end
   end

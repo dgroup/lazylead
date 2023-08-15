@@ -36,6 +36,7 @@ module Lazylead
           sqlite: "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
           vcs4sql: "upgrades/sqlite"
         )
+
         assert_tables "test/resources/#{no_ext(__FILE__)}.#{__method__}.db",
                       systems: %w[id properties],
                       teams: %w[id name properties],
@@ -52,6 +53,7 @@ module Lazylead
           vcs4sql: "upgrades/sqlite",
           testdata: true
         )
+
         assert_equal "BA squad",
                      ORM::Team.find(1).name,
                      "Required team record wasn't found in the database"
@@ -65,6 +67,7 @@ module Lazylead
           testdata: true
         )
         sleep 0.4
+
         assert (Time.now - 5.seconds) < Time.parse(File.open("test/resources/echo.txt").first),
                "Scheduled task wasn't executed few seconds ago"
       end

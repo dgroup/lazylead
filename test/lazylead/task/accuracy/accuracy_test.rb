@@ -56,11 +56,12 @@ module Lazylead
           "docs" => "https://github.com/dgroup/lazylead/blob/master/.github/ISSUE_TEMPLATE/bug_report.md",
           "jql" => "key=JAVA-151",
           "max_results" => 200,
-          "subject" => "[LL] Raised tickets",
+          "subject" => "[LL] Estimated accuracy for reported tickets",
           "template" => "lib/messages/accuracy.erb"
         )
       )
-      assert_email "[LL] Raised tickets",
+
+      assert_email "[LL] Estimated accuracy for reported tickets",
                    "JAVA-151", "0.5", "100%", "Tsz Ming Wong", "Dot allowed in key names"
     end
 
@@ -71,12 +72,14 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_kind_of Lazylead::Task::Accuracy,
                      ORM::Task.find(195).action.constantize.new
     end
 
     test "one ticket found" do
       Lazylead::Smtp.new.enable
+
       assert_equal 1,
                    Task::Accuracy.new.run(
                      NoAuthJira.new("https://jira.mongodb.org"),
@@ -119,6 +122,7 @@ module Lazylead
           "template" => "lib/messages/accuracy.erb"
         )
       )
+
       assert_email "[LL] Check JAVA-4344",
                    "JAVA-4344", "3", "42.86%"
     end

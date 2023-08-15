@@ -55,6 +55,7 @@ module Lazylead
           "template" => "lib/messages/svn_grep.erb"
         )
       )
+
       assert_email_line "[SVN] Changes with text",
                         %w[r2 by dgroup at 2020-08-16]
     end

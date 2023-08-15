@@ -115,6 +115,7 @@ module Lazylead
     #  lead's email, thus, its took few minutes for huge projects.
     test "cc by component is found" do
       skip "Disabled due to performance issue with Jira API"
+
       assert_equal ENV.fetch("cc_email", nil),
                    ComponentCC.new(
                      ENV.fetch("cc_project", nil),
@@ -136,6 +137,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_equal %w[leelakenny@mail.com maciecrane@mail.com],
                    ORM::Task.find(3).detect_cc(nil)["cc"].cc
     end
@@ -147,6 +149,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_equal %w[tom@fake.com mike@fake.com],
                    ORM::Task.find(165).detect_cc(nil)["cc"].cc("jvm", "jdbc")
     end

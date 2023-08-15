@@ -68,6 +68,7 @@ module Lazylead
           "template" => "lib/messages/only_ll.erb"
         )
       )
+
       assert_email "[LL] Only",
                    "JAVA-295", "Major - P3", "Support Android platform"
     end

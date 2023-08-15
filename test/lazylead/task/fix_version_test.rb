@@ -47,6 +47,7 @@ module Lazylead
           "template" => "lib/messages/illegal_fixversion_change.erb"
         )
       )
+
       assert_email "FixVersion: How dare you?",
                    "JAVA-5020", "Minor - P4", "4.10.0", "16-Jun-2023 04:53:47 PM",
                    "Replace @Evolving with @Sealed where appropriate and possible",

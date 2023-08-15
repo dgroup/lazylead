@@ -97,6 +97,7 @@ module Lazylead
     # Assert that text contains expected words
     def assert_words(*words, text)
       words = [words] unless words.respond_to? :each
+
       words.first.each do |w|
         assert_includes text, w
       end
@@ -123,6 +124,7 @@ module Lazylead
       refute_empty words, "No words provided to match"
       email = Mail::TestMailer.deliveries
                               .find { |m| m.subject.eql? subject }
+
       refute_nil email, "No email found with subject: #{subject}"
       assert_words words, email.body.parts.first.body.raw_source
     end
@@ -133,12 +135,14 @@ module Lazylead
     #  symbol '\n' to each line for email during unit testing.
     def assert_email_line(subject, words)
       words = [words] unless words.respond_to? :each
+
       assert_email subject, words
       mail = Mail::TestMailer.deliveries
                              .find { |m| m.subject.eql? subject }
                              .body.parts.first.body.raw_source
                              .split("\n")
                              .reject(&:blank?)
+
       assert mail.any? { |line| words.all? { |w| line.include? w } },
              "Words '#{words.join(',')}' wasn't found in '#{mail.join('\n')}'"
     end
@@ -150,6 +154,7 @@ module Lazylead
                               .select do |p|
         p.header.fields.any? { |f| f.value.start_with? "attachment" }
       end
+
       refute_empty parts, "No attachments found within the email"
       assert parts.first.header.fields.any? { |f| f.value.match regexp },
              "No attachments found matches to '#{regexp}' in #{subject}"

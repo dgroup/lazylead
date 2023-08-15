@@ -49,6 +49,7 @@ module Lazylead
           "template_details" => "reference to <a href='file://ftp/path'>ftp</a>"
         )
       )
+
       assert_email "Expected ftp link is missing",
                    "JAVA-65", "Minor - P4", "http://github.com/mongodb/mongo-java-driver/commit/729fc494e5305d362eea95b01c381f2a7daf2652"
     end

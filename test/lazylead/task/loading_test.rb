@@ -50,6 +50,7 @@ module Lazylead
           "template" => "lib/messages/loading.erb"
         )
       )
+
       assert_email "[LL] Team loading",
                    "ross@mongodb.com", "Ross Lawley", "No sprint: 1",
                    "jeff.yemin@mongodb.com", "Jeffrey Yemin", "No sprint: 4",

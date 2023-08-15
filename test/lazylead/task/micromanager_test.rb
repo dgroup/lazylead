@@ -49,6 +49,7 @@ module Lazylead
           "template" => "lib/messages/illegal_duedate_change.erb"
         )
       )
+
       assert_email "DD: How dare you?",
                    "DOCS-144", "Major - P3", "2012-03-01", "New Documentation Review: Glossary", "matulef,mike,bob"
     end

@@ -57,6 +57,7 @@ module Lazylead
           "template-attachment" => "lib/messages/svn_diff_attachment.erb"
         )
       )
+
       assert_email_line "[SVN] Changed since rev1", %w[r2 by dgroup at 16-08-2020]
       # assert_attachment "[SVN] Changed since rev1", /^.*svn-log-.*.html.zip$/
     end
