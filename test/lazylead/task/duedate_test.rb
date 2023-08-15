@@ -58,6 +58,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_entries(
         {
           "sql" => "filter=100500",
@@ -81,6 +82,7 @@ module Lazylead
           "template" => "lib/messages/due_date_expired.erb"
         )
       )
+
       assert_email "[DD] HMCHT!",
                    "VSCODE-333", "2023-06-28", "Major - P3", "Rhys Howell", "Renew VSCODE automated publishing token"
     end
@@ -99,6 +101,7 @@ module Lazylead
           "addressee" => "Boss"
         )
       )
+
       assert_email "ALRT: Frozen",
                    "Hi Boss", "DOCS-19", "2012-09-28", "Major - P3", "Michael Conigliaro", "MongoDB exit code reference"
     end
@@ -118,6 +121,7 @@ module Lazylead
           "cc" => "another.boss@example.com,mom@home.com"
         )
       )
+
       assert_equal %w[another.boss@example.com mom@home.com],
                    Mail::TestMailer.deliveries
                                    .find { |m| m.subject.eql? "CC: Watching" }.cc
@@ -135,6 +139,7 @@ module Lazylead
           "template" => "lib/messages/due_date_expired.erb"
         )
       )
+
       assert_equal(2, Mail::TestMailer.deliveries.count { |m| m.subject.eql? "DD Expired!" })
     end
   end

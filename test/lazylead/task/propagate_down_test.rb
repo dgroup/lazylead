@@ -71,6 +71,7 @@ module Lazylead
           "propagate" => "customfield_101,customfield_102"
         )
       )
+
       assert_entries(
         {
           "customfield_101" => "Tomorrow",

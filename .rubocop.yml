@@ -182,6 +182,10 @@ Minitest/RefutePathExists: # (new in 0.10)
   Enabled: true
 Minitest/TestMethodName: # (new in 0.10)
   Enabled: true
+Minitest/TestFileName:
+  Enabled: true
+  Exclude:
+    - "test/test.rb"
 Minitest/UnspecifiedException: # (new in 0.10)
   Enabled: true
 Performance/AncestorsInclude: # (new in 1.7)

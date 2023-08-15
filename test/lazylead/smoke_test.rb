@@ -31,6 +31,7 @@ module Lazylead
     test "ENV has keys" do
       ENV["a"] = "aaa"
       ENV["b"] = "bbb"
+
       assert env? "a", "b"
     end
     test "ENV has no key" do
@@ -41,6 +42,7 @@ module Lazylead
         f << "EnvTest=value"
         f.flush
         IniFile.new(filename: f).each { |_, k, v| ENV[k] = v }
+
         assert_equal "value", ENV.fetch("EnvTest", nil)
       end
     end

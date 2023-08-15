@@ -46,6 +46,7 @@ module Lazylead
         vcs4sql: "upgrades/sqlite",
         testdata: true
       )
+
       assert_equal "JAVA-150",
                    ORM::Task.find(4)
                             .system
@@ -139,6 +140,7 @@ module Lazylead
         end
       end.new
       Issue.new(issue, Fake.new).post("Hi there!")
+
       assert_equal "Hi there!", issue.comment[:body]
     end
 
