@@ -53,7 +53,7 @@ tasks instead of solving technical problems."
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[readme.md license.txt]
   s.add_runtime_dependency "activerecord", "6.1.3"
-  s.add_runtime_dependency "backtrace", "0.3"
+  s.add_runtime_dependency "backtrace", "0.4.0"
   s.add_runtime_dependency "colorize", "1.1.0"
   s.add_runtime_dependency "faraday", "2.3.0"
   s.add_runtime_dependency "get_process_mem", "0.2.7"
